@@ -8,7 +8,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 /**
  * The opening activity which gives user the option to either register or log-in.
  */
-class MainActivity : AppCompatActivity() {
+class LoginMainActivity : AppCompatActivity() {
 
     /**
      * On creation, it binds the register and login buttons.
