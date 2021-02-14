@@ -2,27 +2,22 @@ package com.example.login
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "question_list")
-data class Question (
-
-    @PrimaryKey (autoGenerate = true) val uid: Int,
-    @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "completed") var completed: Boolean = false,
-    @ColumnInfo(name = "favorite") var favorite: Boolean = false,
-    @ColumnInfo(name = "content") val content: String = "",
-    @ColumnInfo(name = "url") val url: String = "",
-    @ColumnInfo(name = "companies") val companies: String,
-    @ColumnInfo(name = "role") val role: String,
-    @ColumnInfo(name = "frequency") val frequency: Double,
-    @ColumnInfo(name = "topics") val topics: String,
-    @ColumnInfo(name = "college") val college: String,
-    @ColumnInfo(name = "trending") val trending: Boolean,
-    @ColumnInfo(name = "difficulty") val difficulty: String,
-    @ColumnInfo(name = "acceptance_rate") val acceptance_rate: Double,
+data class Question(
+    val uid: Int = 0,
+    val title: String = "",
+    var completed: Boolean = false,
+    var favorite: Boolean = false,
+    val content: String = "",
+    val url: String = "",
+    val companies: String = "",
+    val role: String = "",
+    val frequency: Double = 0.0,
+    val topics: String = "",
+    val college: String = "",
+    val trending: Boolean = false,
+    val difficulty: String = "",
+    val acceptance_rate: Double = 0.0,
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -40,8 +35,7 @@ data class Question (
         parcel.readByte() != 0.toByte(),
         parcel.readString()!!,
         parcel.readDouble()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(uid)
@@ -65,9 +59,6 @@ data class Question (
     }
 
     companion object CREATOR : Parcelable.Creator<Question> {
-
-        val filters = listOf("Companies", "Role", "Frequency", "Topics", "College")
-        val sort = listOf("Latest", "Oldest", "Most Asked", "Least Asked")
 
         override fun createFromParcel(parcel: Parcel): Question {
             return Question(parcel)

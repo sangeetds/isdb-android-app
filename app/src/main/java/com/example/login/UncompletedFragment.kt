@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,23 +14,18 @@ class UncompletedFragment : Fragment() {
 
     lateinit var questionAdapter: QuestionAdapter
     private var searchView: SearchView? = null
-    private lateinit var questionDataBase: QuestionDataBase
-    private lateinit var repository: QuestionRepository
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        questionDataBase = QuestionDataBase.getDatabase(context!!)!!
-        repository = QuestionRepository(questionDataBase.questionDao())
 
         val rootView = inflater.inflate(R.layout.fragment_uncompleted, container, false)
         val questionView = rootView.findViewById<RecyclerView>(R.id.questionList)
         questionView.setHasFixedSize(true)
 
-        val questionList = getListOfNames()
-        questionAdapter = QuestionAdapter(context, questionList.toMutableList())
+        questionAdapter = QuestionAdapter(context, mutableListOf())
         questionView.adapter = questionAdapter
 
         questionView.layoutManager = LinearLayoutManager(context)
@@ -39,14 +33,14 @@ class UncompletedFragment : Fragment() {
         questionAdapter.onComplete = {
             val question = it
             question.completed = true
-            repository.removeQuestion(it)
-            repository.addQuestion(question)
         }
 
         return rootView
     }
 
-    private fun getListOfNames() = repository.uncompletedQuestions
+    private fun getListOfNames() {
+
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)

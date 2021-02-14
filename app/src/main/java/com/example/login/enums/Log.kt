@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.enums
 
 /**
  * Simple enum class to reduce dependency on hard-coded strings.

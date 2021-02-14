@@ -1,4 +1,4 @@
-package com.example.demuz
+package com.example.login
 
 import android.app.SearchManager
 import android.content.Context
@@ -17,10 +17,6 @@ class SongsActivity : AppCompatActivity() {
 
     private var toolbar: Toolbar? = null
     lateinit var questionAdapter: QuestionAdapter
-
-    init {
-        instance = this
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +38,7 @@ class SongsActivity : AppCompatActivity() {
         val questionView = findViewById<RecyclerView>(R.id.questionList)
         questionView.setHasFixedSize(true)
 
-        val questionList = listOf(Song())
+        val questionList = listOf(Question())
         questionAdapter = QuestionAdapter(this, questionList.toMutableList())
         questionView.adapter = questionAdapter
         questionView.layoutManager = LinearLayoutManager(this)
@@ -87,12 +83,6 @@ class SongsActivity : AppCompatActivity() {
     }
 
     private fun showBottomSheetFilterFragment() {
-
-    }
-
-    companion object {
-
-        private var instance: MainActivity? = null
 
     }
 }

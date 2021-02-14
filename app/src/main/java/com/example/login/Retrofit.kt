@@ -13,7 +13,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 class Retrofit {
     companion object {
 
-        fun getRetrofitClient(url: String): LoginService {
+        fun getRetrofitClient(url: String, javaClass: Class<*>): Any {
             val httpClient = OkHttpClient.Builder().build()
 
             /**
@@ -29,7 +29,7 @@ class Retrofit {
                 .client(httpClient)
                 .build()
 
-            return retrofit.create(LoginService::class.java)
+            return retrofit.create(javaClass)
         }
     }
 }

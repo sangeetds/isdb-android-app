@@ -17,7 +17,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/statusText"
         app:layout_constraintTop_toTopOf="@+id/statusText"
-        app:layout_constraintVertical_bias="0.062" />
+        app:layout_constraintVertical_bias="0.062"
+        android:contentDescription="@string/loading_screen_image" />
 
     <TextView
         android:id="@+id/statusText"

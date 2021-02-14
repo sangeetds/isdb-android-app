@@ -6,6 +6,7 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
 import android.widget.*
+import com.example.login.enums.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**

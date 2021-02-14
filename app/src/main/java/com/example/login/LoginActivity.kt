@@ -9,6 +9,7 @@ import android.util.Patterns
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
+import com.example.login.enums.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
@@ -81,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
         val password = passwordText.text.toString()
         val user = User(username = username, password = password)
 
-        val progressDialog = LoadDialog(this, user, getString(R.string.url), Log.LOGIN)
+        val progressDialog = LoadDialog(this, user, getString(R.string.loginUrl), Log.LOGIN)
         progressDialog.show()
     }
 
