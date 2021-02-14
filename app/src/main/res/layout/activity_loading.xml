@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:layout_gravity="center"
+>
+
+    <ImageView
+        android:id="@+id/cancelButton"
+        android:elevation="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_outline_cancel_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/statusText"
+        app:layout_constraintTop_toTopOf="@+id/statusText"
+        app:layout_constraintVertical_bias="0.062" />
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="@string/loading"
+        android:textColor="#FFF"
+        android:textSize="36sp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
