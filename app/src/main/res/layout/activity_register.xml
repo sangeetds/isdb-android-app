@@ -7,13 +7,14 @@
     android:orientation="vertical">
 
     <ImageButton
-        android:id="@+id/backToMain"
+        android:id="@+id/btn_back"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         android:layout_gravity="start"
-        android:background="@drawable/ic_baseline_keyboard_backspace_24" />
+        android:background="@drawable/ic_baseline_keyboard_backspace_24"
+        android:contentDescription="@string/image_for_back_button" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,7 +50,7 @@
             android:layout_marginBottom="8dp"
             android:hint="@string/name"
             android:inputType="textCapWords"
-            />
+            android:autofillHints="@string/name" />
 
         <EditText
             android:id="@+id/input_email"
@@ -58,7 +59,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:autofillHints="@string/emailHint" />
 
         <EditText
             android:id="@+id/input_password"
@@ -67,7 +69,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:autofillHints="@string/passwordHint" />
 
         <CheckBox
             android:id="@+id/checkPasswordRegister"
@@ -88,5 +91,6 @@
         android:layout_gravity="end"
         android:layout_marginTop="86dp"
         android:layout_marginEnd="20dp"
-        android:padding="12dp"/>
+        android:padding="12dp"
+        android:contentDescription="@string/button_to_login" />
 </LinearLayout>

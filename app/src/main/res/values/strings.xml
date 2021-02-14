@@ -25,4 +25,6 @@
     <string name="username">Username</string>
     <string name="show_password">Show Password</string>
     <string name="loading_screen_image">Loading screen image</string>
+    <string name="image_for_back_button">Image for back button</string>
+    <string name="button_to_login">Button to login</string>
 </resources>

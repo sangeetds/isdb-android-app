@@ -2,10 +2,14 @@ package com.example.login
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import com.example.login.enums.Log
+import com.example.login.enums.Status
+import com.example.login.models.User
 import kotlinx.coroutines.*
 
 /**
@@ -21,6 +25,9 @@ class LoadDialog(
     private val type: Log
 ) : Dialog(context) {
 
+
+    var statusText: TextView? = null
+
     /**
      * On creation of the dialog, it binds the text and button, which is used to
      * exit from the dialog.
@@ -29,8 +36,9 @@ class LoadDialog(
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
 
-        val statusText = findViewById<TextView>(R.id.statusText)
+        statusText = findViewById(R.id.statusText)
         val cancelButton = findViewById<ImageView>(R.id.cancelButton)
+
         cancelButton.setOnClickListener {
             dismiss()
         }
@@ -48,21 +56,33 @@ class LoadDialog(
      * @param retrofitService the API request interface
      */
     private fun update(statusText: TextView, retrofitService: LoginService) {
-        GlobalScope.launch {
-            val text =
-                if (type == Log.LOGIN) logIn(retrofitService, user).body() else createAccount(
-                    retrofitService,
-                    user
-                ).body()
+//        runBlocking {
+            val text = Status.SUCCESS
+//                if (type == Log.LOGIN) {
+//                    Thread.sleep(1000)
+////                    logIn(retrofitService, user)
+//                    Status.SUCCESS
+//                }
+//                else {
+////                    createAccount(retrofitService, user)
+//                    Status.SUCCESS
+//                }
 
+//            if (!text.isSuccessful || text.errorBody() != null) {
+//                statusText.text = context.getString(R.string.logInError)
+//            }
+//            else {
             when (text) {
                 Status.SUCCESS -> {
-                    statusText.text = if (type == Log.LOGIN) context.getString(R.string.loggedIn)
-                    else context.getString(R.string.created)
+                    statusText.text =
+                        if (type == Log.LOGIN) {
+                            context.getString(R.string.loggedIn)
+                        } else context.getString(R.string.created)
                 }
                 Status.FAILURE -> statusText.text = context.getString(R.string.logInError)
                 else -> statusText.text = context.getString(R.string.existAlready)
             }
-        }
+//            }
+//        }
     }
 }

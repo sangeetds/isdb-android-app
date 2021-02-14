@@ -1,5 +1,7 @@
 package com.example.login
 
+import com.example.login.enums.Status
+import com.example.login.models.User
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body

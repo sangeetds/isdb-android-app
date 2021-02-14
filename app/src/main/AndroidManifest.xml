@@ -14,6 +14,7 @@
         android:networkSecurityConfig="@xml/security">
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".LoginActivity" />
+        <activity android:name=".SongsActivity" />
         <activity android:name=".LoginMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

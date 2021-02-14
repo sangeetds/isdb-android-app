@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 class SongsActivity : AppCompatActivity() {
 
     private var toolbar: Toolbar? = null
-    lateinit var questionAdapter: QuestionAdapter
+//    lateinit var questionAdapter: QuestionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,18 +30,13 @@ class SongsActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val filterButton = findViewById<Button>(R.id.filterButton)
-        filterButton.setOnClickListener {
-            showBottomSheetFilterFragment()
-        }
-
-        val questionView = findViewById<RecyclerView>(R.id.questionList)
-        questionView.setHasFixedSize(true)
-
-        val questionList = listOf(Question())
-        questionAdapter = QuestionAdapter(this, questionList.toMutableList())
-        questionView.adapter = questionAdapter
-        questionView.layoutManager = LinearLayoutManager(this)
+//        val questionView = findViewById<RecyclerView>(R.id.questionList)
+//        questionView.setHasFixedSize(true)
+//
+//        val questionList = listOf(Question())
+//        questionAdapter = QuestionAdapter(this, questionList.toMutableList())
+//        questionView.adapter = questionAdapter
+//        questionView.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -55,34 +50,30 @@ class SongsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.action_search)
-            .actionView as SearchView
-        searchView.setSearchableInfo(
-            searchManager
-                .getSearchableInfo(componentName)
-        )
-        searchView.maxWidth = Int.MAX_VALUE
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                questionAdapter.filter.filter(query)
-                return false
-            }
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                questionAdapter.filter.filter(query)
-                return false
-            }
-        })
-
-        return true
-    }
-
-    private fun showBottomSheetFilterFragment() {
-
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.menu, menu)
+//
+//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+//        val searchView = menu.findItem(R.id.action_search)
+//            .actionView as SearchView
+//        searchView.setSearchableInfo(
+//            searchManager
+//                .getSearchableInfo(componentName)
+//        )
+//        searchView.maxWidth = Int.MAX_VALUE
+//
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                questionAdapter.filter.filter(query)
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(query: String?): Boolean {
+//                questionAdapter.filter.filter(query)
+//                return false
+//            }
+//        })
+//
+//        return true
+//    }
 }

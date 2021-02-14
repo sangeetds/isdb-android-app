@@ -7,7 +7,9 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
 import android.widget.*
 import com.example.login.enums.Log
+import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.delay
 
 /**
  * Class where user enter his/her login credentials to register to the service
@@ -37,7 +39,7 @@ class RegisterActivity : AppCompatActivity() {
         nameText = findViewById(R.id.input_name)
         emailText = findViewById(R.id.input_email)
         passwordText = findViewById(R.id.input_password)
-        backButton = findViewById(R.id.backToMain)
+        backButton = findViewById(R.id.btn_back)
         showPasswordButton = findViewById(R.id.checkPasswordRegister)
 
         signUpButton.setOnClickListener { signUp() }

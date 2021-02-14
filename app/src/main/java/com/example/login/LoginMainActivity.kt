@@ -15,7 +15,7 @@ class LoginMainActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login_main)
 
         val loginButton = findViewById<ExtendedFloatingActionButton>(R.id.signInButton)
         val registerButton = findViewById<ExtendedFloatingActionButton>(R.id.createAccButton)

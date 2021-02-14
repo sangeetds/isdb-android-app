@@ -1,15 +1,19 @@
 package com.example.login
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
-import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.CheckBox
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.login.enums.Log
+import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
@@ -39,11 +43,8 @@ class LoginActivity : AppCompatActivity() {
         userNameText = findViewById(R.id.input_username)
         passwordText = findViewById(R.id.input_password)
         loginButton = findViewById(R.id.btn_login)
-        backButton = findViewById(R.id.backToMain)
-        showPasswordButton = findViewById(R.id.checkPasswordLogin)
-
-        userNameText.setAutofillHints(View.AUTOFILL_HINT_EMAIL_ADDRESS)
-        passwordText.setAutofillHints(View.AUTOFILL_HINT_PASSWORD)
+        backButton = findViewById(R.id.btn_back)
+        showPasswordButton = findViewById(R.id.check_password_login)
 
         loginButton.setOnClickListener {
             login()
@@ -59,8 +60,7 @@ class LoginActivity : AppCompatActivity() {
         showPasswordButton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 passwordText.transformationMethod = HideReturnsTransformationMethod.getInstance()
-            }
-            else passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
+            } else passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
         }
     }
 
@@ -84,6 +84,17 @@ class LoginActivity : AppCompatActivity() {
 
         val progressDialog = LoadDialog(this, user, getString(R.string.loginUrl), Log.LOGIN)
         progressDialog.show()
+
+        val statusText = progressDialog.statusText
+        while (statusText == null) {
+            Thread.sleep(1)
+        }
+
+        if (statusText.text == getString(R.string.loggedIn)) {
+            val songsActivity = Intent(this, SongsActivity::class.java)
+            startActivity(songsActivity)
+            onDestroy()
+        }
     }
 
     /**

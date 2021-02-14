@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.enums
 
 import com.squareup.moshi.Json
 
