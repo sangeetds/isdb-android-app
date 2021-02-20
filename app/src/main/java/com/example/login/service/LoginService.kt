@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.service
 
 import com.example.login.enums.Status
 import com.example.login.models.User

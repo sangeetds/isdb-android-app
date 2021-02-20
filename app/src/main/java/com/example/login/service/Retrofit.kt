@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.service
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

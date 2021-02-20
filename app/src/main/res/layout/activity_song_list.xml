@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SongsActivity">
+    tools:context=".activity.SongsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
@@ -22,7 +22,15 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/isdb"
+                android:textSize="30sp"
+                />
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -35,46 +43,13 @@
             app:tabTextColor="#FFF" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="422dp"
-        android:layout_height="567dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#abc"
+        android:layout_height="600dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/sortButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:background="#abc"
-            android:text="SORT" />
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <Button
-            android:id="@+id/filterButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:background="#abc"
-            android:text="FILTER" />
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

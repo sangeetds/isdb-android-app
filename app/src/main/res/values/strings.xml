@@ -27,4 +27,6 @@
     <string name="loading_screen_image">Loading screen image</string>
     <string name="image_for_back_button">Image for back button</string>
     <string name="button_to_login">Button to login</string>
+    <string name="isdb">isdb</string>
+    <string name="song_image">song image</string>
 </resources>

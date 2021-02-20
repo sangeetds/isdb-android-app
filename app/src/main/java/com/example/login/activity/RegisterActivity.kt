@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,10 +6,11 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
 import android.widget.*
+import com.example.login.LoadDialog
+import com.example.login.R
 import com.example.login.enums.Log
 import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.delay
 
 /**
  * Class where user enter his/her login credentials to register to the service

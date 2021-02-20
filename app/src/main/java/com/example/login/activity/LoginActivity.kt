@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.activity
 
 import android.content.Intent
 import android.os.Build
@@ -12,6 +12,8 @@ import android.widget.ImageButton
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.example.login.LoadDialog
+import com.example.login.R
 import com.example.login.enums.Log
 import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -89,11 +91,13 @@ class LoginActivity : AppCompatActivity() {
         while (statusText == null) {
             Thread.sleep(1)
         }
-
+//
         if (statusText.text == getString(R.string.loggedIn)) {
             val songsActivity = Intent(this, SongsActivity::class.java)
+            Thread.sleep(1000)
             startActivity(songsActivity)
-            onDestroy()
+            progressDialog.dismiss()
+//            onDestroy()
         }
     }
 

@@ -2,15 +2,14 @@ package com.example.login
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import com.example.login.enums.Log
 import com.example.login.enums.Status
 import com.example.login.models.User
-import kotlinx.coroutines.*
+import com.example.login.service.LoginService
+import com.example.login.service.Retrofit
 
 /**
  * Opens a dialog which tells user about the status of their login/register attempt

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#0091EA"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".activity.LoginActivity">
 
     <ImageButton
         android:id="@+id/btn_back"

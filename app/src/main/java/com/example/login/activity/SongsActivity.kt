@@ -1,26 +1,25 @@
-package com.example.login
+package com.example.login.activity
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.login.R
+import com.example.login.SongAdapter
+import com.example.login.models.Song
 
 
 class SongsActivity : AppCompatActivity() {
 
     private var toolbar: Toolbar? = null
-//    lateinit var questionAdapter: QuestionAdapter
+    private lateinit var songAdapter: SongAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_song_list)
+
+        val songs = listOf(Song(id = 0, name = "Hello World Song", album = "Sangeet's album", releaseDate = "2017", userRatings = 4.8, criticsRatings = 3.6))
+        this.songAdapter = SongAdapter(songs = songs)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Title"

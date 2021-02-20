@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme"
         android:networkSecurityConfig="@xml/security">
-        <activity android:name=".RegisterActivity"/>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SongsActivity" />
-        <activity android:name=".LoginMainActivity">
+        <activity android:name=".activity.RegisterActivity"/>
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.SongsActivity" />
+        <activity android:name=".activity.LoginMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
