@@ -23,16 +23,19 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="6dp">
 
             <!-- Title, secondary and supporting text -->
 
             <TextView
-                android:maxLength="25"
                 android:id="@+id/song_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                android:maxLength="25"
                 android:text="@string/song_name"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -44,48 +47,73 @@
                 android:id="@+id/album_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginEnd="104dp"
                 android:text="@string/album_name"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/song_name" />
+
+            <TextView
+                android:id="@+id/album_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="6dp"
+                android:text=""
+                app:layout_constraintStart_toEndOf="@+id/album_name"
+                app:layout_constraintTop_toBottomOf="@+id/song_name" />
 
             <TextView
                 android:id="@+id/release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
                 android:text="@string/release_date"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBaseline_toBaselineOf="@+id/album_name"
                 app:layout_constraintEnd_toStartOf="@+id/album_name"
                 app:layout_constraintHorizontal_bias="0.137"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/song_name"
-                app:layout_constraintVertical_bias="0.047" />
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/release_date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text=""
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBaseline_toBaselineOf="@+id/album_name_text"
+                app:layout_constraintStart_toEndOf="@+id/release_date" />
 
             <TextView
                 android:id="@+id/critic_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
                 android:text="@string/critic_s_score"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBaseline_toBaselineOf="@+id/fan_score"
                 app:layout_constraintEnd_toStartOf="@+id/fan_score"
                 app:layout_constraintHorizontal_bias="0.137"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/release_date"
-                app:layout_constraintVertical_bias="0.058" />
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/critic_score_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text=""
+                app:layout_constraintBaseline_toBaselineOf="@+id/critic_score"
+                app:layout_constraintStart_toEndOf="@+id/critic_score" />
 
             <TextView
                 android:id="@+id/fan_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="118dp"
                 android:layout_marginBottom="12dp"
                 android:text="@string/fan_s_score"
@@ -93,6 +121,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/album_name"
                 app:layout_constraintVertical_bias="0.7" />
+
+            <TextView
+                android:id="@+id/fan_score_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text=""
+                app:layout_constraintBaseline_toBaselineOf="@+id/fan_score"
+                app:layout_constraintStart_toEndOf="@+id/fan_score" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

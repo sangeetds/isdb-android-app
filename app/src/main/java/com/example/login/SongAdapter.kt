@@ -1,7 +1,5 @@
 package com.example.login
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.models.Song
-import kotlinx.coroutines.*
-import java.net.URL
+import com.squareup.picasso.Picasso
 
 
 class SongAdapter(songs: List<Song>) :
@@ -30,9 +27,10 @@ class SongAdapter(songs: List<Song>) :
     class SongViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
         val image: ImageView = cardView.findViewById(R.id.song_image)
         val songName: TextView = cardView.findViewById(R.id.song_name)
-        val releaseDate: TextView = cardView.findViewById(R.id.release_date)
-        val criticScore: TextView = cardView.findViewById(R.id.critic_score)
-        val fanScore: TextView = cardView.findViewById(R.id.fan_score)
+        val albumName: TextView = cardView.findViewById(R.id.album_name_text)
+        val releaseDate: TextView = cardView.findViewById(R.id.release_date_text)
+        val criticScore: TextView = cardView.findViewById(R.id.critic_score_text)
+        val fanScore: TextView = cardView.findViewById(R.id.fan_score_text)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
@@ -45,26 +43,14 @@ class SongAdapter(songs: List<Song>) :
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val song = this.songList[position]
-        val res = holder.itemView.context.resources
-
-        val icon = getIcon(song.image)
 
         holder.songName.text = song.name
         holder.releaseDate.text = song.releaseDate
+        holder.albumName.text = song.album
         holder.criticScore.text = song.criticsRatings.toString()
         holder.fanScore.text = song.userRatings.toString()
-        holder.image.setImageBitmap(icon)
-    }
 
-    private fun getIcon(url: String?): Bitmap? {
-        var icon: Bitmap? = null
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val newUrl = URL(url)
-            icon = BitmapFactory.decodeStream(newUrl.openConnection().getInputStream())
-        }
-
-        return icon
+        Picasso.get().load(song.image).into(holder.image)
     }
 
     override fun getItemCount(): Int = this.songList.size

@@ -30,8 +30,8 @@
     <string name="isdb">isdb</string>
     <string name="song_image">song image</string>
     <string name="song_name">song name</string>
-    <string name="album_name">album name</string>
-    <string name="release_date">release date</string>
-    <string name="critic_s_score">critic\'s score</string>
-    <string name="fan_s_score">fan\'s score</string>
+    <string name="album_name">album name:</string>
+    <string name="release_date">release date:</string>
+    <string name="critic_s_score">critic\'s score:</string>
+    <string name="fan_s_score">fan\'s score:</string>
 </resources>
