@@ -91,13 +91,18 @@ class LoginActivity : AppCompatActivity() {
         while (statusText == null) {
             Thread.sleep(1)
         }
+//        progressDialog.dismiss()
+//        finish()
+//        while (progressDialog.isShowing) {
+//            Thread.sleep(1)
+//        }
 //
         if (statusText.text == getString(R.string.loggedIn)) {
             val songsActivity = Intent(this, SongsActivity::class.java)
             Thread.sleep(1000)
             startActivity(songsActivity)
             progressDialog.dismiss()
-//            onDestroy()
+            finish()
         }
     }
 

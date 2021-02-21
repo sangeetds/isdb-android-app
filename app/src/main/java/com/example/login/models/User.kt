@@ -8,7 +8,7 @@ import com.squareup.moshi.Json
  * Moshi helps converting the an object of this class into a JSON.
  */
 data class User(
-    @field:Json(name = "username") val username: String,
-    @field:Json(name = "password") var password: String,
-    @field:Json(name = "email") val email: String? = null
+    @Json(name = "username") val username: String,
+    @Json(name = "password") var password: String,
+    @Json(name = "email") val email: String? = null
 )

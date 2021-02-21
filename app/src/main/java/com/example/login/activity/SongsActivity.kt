@@ -2,11 +2,19 @@ package com.example.login.activity
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R
 import com.example.login.SongAdapter
 import com.example.login.models.Song
+import com.example.login.service.Retrofit
+import com.example.login.service.SongService
+import com.example.login.service.getSongsList
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class SongsActivity : AppCompatActivity() {
@@ -18,8 +26,42 @@ class SongsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song_list)
 
-        val songs = listOf(Song(id = 0, name = "Hello World Song", album = "Sangeet's album", releaseDate = "2017", userRatings = 4.8, criticsRatings = 3.6))
+        val songs = listOf(
+            Song(
+                id = 1,
+                name = "Horses (with PnB Rock, Kodak Black & A Boogie Wit da Hoodie)",
+                album = "Horses",
+                image = "https://i.scdn.co/image/ab67616d0000b273a2c31c39d559355168b4cd2e",
+                releaseDate = "2017",
+                criticsRatings = 4.0,
+                userRatings = 4.0,
+                votes = 1
+            ), Song(
+                id = 2,
+                name = "A Horse with No Name",
+                album = "Horses",
+                image = "https://i.scdn.co/image/ab67616d0000b273afb855e6461310dff4046c56",
+                releaseDate = "2007",
+                criticsRatings = 4.0,
+                userRatings = 3.0,
+                votes = 1
+            ), Song(
+                id = 1,
+                name = "PnB Rock, Kodak Black",
+                album = "Horses",
+                image = "https://i.scdn.co/image/ab67616d0000b273a2c31c39d559355168b4cd2e",
+                releaseDate = "2017",
+                criticsRatings = 2.0,
+                userRatings = 4.0,
+                votes = 1
+            )
+        )
+        println(songs)
         this.songAdapter = SongAdapter(songs = songs)
+        val recyclerView = findViewById<View>(R.id.recyclerview) as RecyclerView
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = songAdapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Title"
@@ -28,14 +70,22 @@ class SongsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
-//        val questionView = findViewById<RecyclerView>(R.id.questionList)
-//        questionView.setHasFixedSize(true)
-//
-//        val questionList = listOf(Question())
-//        questionAdapter = QuestionAdapter(this, questionList.toMutableList())
-//        questionView.adapter = questionAdapter
-//        questionView.layoutManager = LinearLayoutManager(this)
+    private fun getSongList(): List<Song> {
+        val retrofitService = Retrofit.getRetrofitClient(
+            "http://localhost:8080",
+            SongService::class.java
+        ) as SongService
+        val songList = mutableListOf<Song>()
+
+        GlobalScope.launch {
+            val songResponse = getSongsList(retrofitService, null)
+
+            songList.addAll(songResponse.body()!!)
+        }
+
+        return songList
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

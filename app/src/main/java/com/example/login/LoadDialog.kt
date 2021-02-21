@@ -10,6 +10,11 @@ import com.example.login.enums.Status
 import com.example.login.models.User
 import com.example.login.service.LoginService
 import com.example.login.service.Retrofit
+import com.example.login.service.createAccount
+import com.example.login.service.logIn
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * Opens a dialog which tells user about the status of their login/register attempt
@@ -35,16 +40,18 @@ class LoadDialog(
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
 
-        statusText = findViewById(R.id.statusText)
+        statusText = findViewById<TextView>(R.id.statusText)
         val cancelButton = findViewById<ImageView>(R.id.cancelButton)
 
         cancelButton.setOnClickListener {
             dismiss()
         }
 
-        val retrofitService = Retrofit.getRetrofitClient(url, LoginService::class.java)
+        Thread.sleep(1000)
+//        statusText?.text = "Logged in"
+        val retrofitService = Retrofit.getRetrofitClient(url, LoginService::class.java) as LoginService
 
-        update(statusText!!, retrofitService as LoginService)
+        update(statusText!!, retrofitService)
     }
 
     /**
@@ -55,17 +62,19 @@ class LoadDialog(
      * @param retrofitService the API request interface
      */
     private fun update(statusText: TextView, retrofitService: LoginService) {
-//        runBlocking {
-            val text = Status.SUCCESS
-//                if (type == Log.LOGIN) {
-//                    Thread.sleep(1000)
-////                    logIn(retrofitService, user)
-//                    Status.SUCCESS
-//                }
-//                else {
-////                    createAccount(retrofitService, user)
-//                    Status.SUCCESS
-//                }
+//        GlobalScope.launch {
+            val text =
+//                Status.SUCCESS
+                if (type == Log.LOGIN) {
+                    Thread.sleep(1000)
+//                    logIn(retrofitService, user)
+                    Status.SUCCESS
+                }
+                else {
+                    Thread.sleep(1000)
+//                    createAccount(retrofitService, user)
+                    Status.SUCCESS
+                }
 
 //            if (!text.isSuccessful || text.errorBody() != null) {
 //                statusText.text = context.getString(R.string.logInError)
@@ -82,6 +91,6 @@ class LoadDialog(
                 else -> statusText.text = context.getString(R.string.existAlready)
             }
 //            }
-//        }
-    }
+        }
+//    }
 }
