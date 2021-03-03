@@ -9,7 +9,7 @@
     <string name="logInError">Cannot log in :(</string>
     <string name="created">User Registered</string>
     <string name="existAlready">User Already Exists. Do you want to log in?</string>
-    <string name="loginUrl">https://localhost:8080</string>
+    <string name="baseUrl">https://pure-ridge-30175.herokuapp.com</string>
     <string name="create_account">Create Account</string>
     <string name="email">Email</string>
     <string name="emailHint">Email</string>

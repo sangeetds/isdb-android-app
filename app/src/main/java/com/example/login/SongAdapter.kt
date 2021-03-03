@@ -19,11 +19,6 @@ class SongAdapter(songs: List<Song>) :
             notifyDataSetChanged()
         }
 
-    init {
-        println("Songs at adapter")
-        println(songList)
-    }
-
     class SongViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
         val image: ImageView = cardView.findViewById(R.id.song_image)
         val songName: TextView = cardView.findViewById(R.id.song_name)
@@ -37,6 +32,10 @@ class SongAdapter(songs: List<Song>) :
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater
             .inflate(R.layout.song_item_view, parent, false)
+
+        view.setOnClickListener {
+
+        }
 
         return SongViewHolder(view)
     }

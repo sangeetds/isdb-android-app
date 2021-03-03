@@ -12,7 +12,7 @@ import android.widget.ImageButton
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.example.login.LoadDialog
+import com.example.login.dialog.LoadDialog
 import com.example.login.R
 import com.example.login.enums.Log
 import com.example.login.models.User
@@ -84,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
         val password = passwordText.text.toString()
         val user = User(username = username, password = password)
 
-        val progressDialog = LoadDialog(this, user, getString(R.string.loginUrl), Log.LOGIN)
+        val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN)
         progressDialog.show()
 
         val statusText = progressDialog.statusText

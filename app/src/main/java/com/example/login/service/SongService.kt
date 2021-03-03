@@ -9,8 +9,8 @@ import retrofit2.http.Query
 interface SongService {
 
     @GET("/tracks")
-    suspend fun getSongs(@Query("search") songName: String?): Call<List<Song>>
+    fun getSongs(@Query("search") songName: String?): Call<List<Song>>
 }
 
-suspend fun getSongsList(service: SongService, songName: String?): Response<List<Song>> =
+fun getSongsList(service: SongService, songName: String?): Response<List<Song>> =
     service.getSongs(songName = songName).execute()

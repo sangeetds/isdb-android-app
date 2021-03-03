@@ -5,34 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="300dp"
     android:layout_gravity="center"
->
+    >
 
     <ImageView
-        android:id="@+id/cancelButton"
+        android:id="@+id/cancel_ratings_button"
         android:elevation="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_outline_cancel_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/statusText"
-        app:layout_constraintTop_toTopOf="@+id/statusText"
+        app:layout_constraintEnd_toEndOf="@+id/dialog"
+        app:layout_constraintTop_toTopOf="@+id/dialog"
         app:layout_constraintVertical_bias="0.062"
         android:contentDescription="@string/loading_screen_image" />
 
     <TextView
-        android:id="@+id/statusText"
+        android:id="@+id/dialog"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/colorAccent"
-        android:gravity="center"
-        android:text="@string/loading"
-        android:textColor="#FFF"
-        android:textSize="36sp"
+        android:background="?attr/colorButtonNormal"
+        />
+
+    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+        android:id="@+id/star_ratings"
+        style="@style/Widget.MaterialRatingBar.RatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/dialog"
+        app:layout_constraintStart_toStartOf="@+id/dialog"
+        app:layout_constraintTop_toTopOf="@+id/dialog"
+        android:numStars="5"
+        android:stepSize="0.5"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

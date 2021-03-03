@@ -1,12 +1,13 @@
 package com.example.login.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
 import android.widget.*
-import com.example.login.LoadDialog
+import com.example.login.dialog.LoadDialog
 import com.example.login.R
 import com.example.login.enums.Log
 import com.example.login.models.User
@@ -84,8 +85,26 @@ class RegisterActivity : AppCompatActivity() {
         val email = emailText.text.toString()
         val user = User(username = username, password = password, email)
 
-        val progressDialog = LoadDialog(this, user, getString(R.string.url), Log.REGISTER)
+        val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.REGISTER)
         progressDialog.show()
+
+        val statusText = progressDialog.statusText
+        while (statusText == null) {
+            Thread.sleep(1)
+        }
+//        progressDialog.dismiss()
+//        finish()
+//        while (progressDialog.isShowing) {
+//            Thread.sleep(1)
+//        }
+//
+        if (statusText.text == getString(R.string.loggedIn)) {
+            val songsActivity = Intent(this, SongsActivity::class.java)
+            Thread.sleep(1000)
+            startActivity(songsActivity)
+            progressDialog.dismiss()
+            finish()
+        }
     }
 
     private fun onSignUpFailed() {
