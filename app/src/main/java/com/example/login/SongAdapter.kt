@@ -1,16 +1,19 @@
 package com.example.login
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.login.dialog.RatingsDialog
 import com.example.login.models.Song
 import com.squareup.picasso.Picasso
 
 
-class SongAdapter(songs: List<Song>) :
+class SongAdapter(songs: List<Song>, val context: Context) :
     RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
 
     private var songList = songs
@@ -26,6 +29,7 @@ class SongAdapter(songs: List<Song>) :
         val releaseDate: TextView = cardView.findViewById(R.id.release_date_text)
         val criticScore: TextView = cardView.findViewById(R.id.critic_score_text)
         val fanScore: TextView = cardView.findViewById(R.id.fan_score_text)
+        val rateButton: Button = cardView.findViewById(R.id.rate)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
@@ -48,6 +52,11 @@ class SongAdapter(songs: List<Song>) :
         holder.albumName.text = song.album
         holder.criticScore.text = song.criticsRatings.toString()
         holder.fanScore.text = song.userRatings.toString()
+
+        holder.rateButton.setOnClickListener {
+            val rateDialog = RatingsDialog(context = this.context)
+            rateDialog.show()
+        }
 
         Picasso.get().load(song.image).into(holder.image)
     }

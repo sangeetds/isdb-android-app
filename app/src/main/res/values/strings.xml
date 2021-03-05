@@ -34,4 +34,5 @@
     <string name="release_date">release date:</string>
     <string name="critic_s_score">critic\'s score:</string>
     <string name="fan_s_score">fan\'s score:</string>
+    <string name="rate">Rate the song</string>
 </resources>
