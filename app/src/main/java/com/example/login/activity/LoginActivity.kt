@@ -82,28 +82,28 @@ class LoginActivity : AppCompatActivity() {
 
         val username = userNameText.text.toString()
         val password = passwordText.text.toString()
-        val user = User(username = username, password = password)
+        val user = User(email = username, password = password)
 
-        val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN)
-        progressDialog.show()
-
-        val statusText = progressDialog.statusText
-        while (statusText == null) {
-            Thread.sleep(1)
-        }
+//        val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN)
+//        progressDialog.show()
+//
+//        val statusText = progressDialog.statusText
+//        while (statusText == null) {
+//            Thread.sleep(1)
+//        }
 //        progressDialog.dismiss()
 //        finish()
 //        while (progressDialog.isShowing) {
 //            Thread.sleep(1)
 //        }
 //
-        if (statusText.text == getString(R.string.loggedIn)) {
+//        if (statusText.text == getString(R.string.loggedIn)) {
             val songsActivity = Intent(this, SongsActivity::class.java)
-            Thread.sleep(1000)
+//            Thread.sleep(1000)
             startActivity(songsActivity)
-            progressDialog.dismiss()
+//            progressDialog.dismiss()
             finish()
-        }
+//        }
     }
 
     /**
@@ -120,8 +120,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Returns true or false depending on whether the credentials are according to some
-     * pre-defined rules.
+     * Validates the credentials according to some pre-defined rules.
      */
     private fun validate(): Boolean {
         var valid = true

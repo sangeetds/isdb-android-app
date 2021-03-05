@@ -23,7 +23,7 @@
     <TextView
         android:id="@+id/dialog"
         android:layout_width="300dp"
-        android:layout_height="match_parent"
+        android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,12 +36,11 @@
         style="@style/Widget.MaterialRatingBar.RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/dialog"
-        app:layout_constraintStart_toStartOf="@+id/dialog"
-        app:layout_constraintTop_toTopOf="@+id/dialog"
         android:numStars="5"
         android:stepSize="0.5"
-        />
+        app:layout_constraintBottom_toBottomOf="@+id/dialog"
+        app:layout_constraintEnd_toEndOf="@+id/dialog"
+        app:layout_constraintStart_toStartOf="@+id/dialog"
+        app:layout_constraintTop_toTopOf="@+id/dialog" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

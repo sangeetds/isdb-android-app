@@ -15,7 +15,7 @@ import com.example.login.service.createAccount
 import com.example.login.service.logIn
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import retrofit2.Response
+import kotlinx.coroutines.runBlocking
 
 /**
  * Opens a dialog which tells user about the status of their login/register attempt
@@ -51,7 +51,9 @@ class LoadDialog(
         val retrofitService =
             Retrofit.getRetrofitClient(url, LoginService::class.java) as LoginService
 
-        update(statusText!!, retrofitService)
+        val status = update(retrofitService)
+
+        statusText!!.text = status
     }
 
     /**
@@ -61,7 +63,9 @@ class LoadDialog(
      * @param statusText the text to keep track of the login/register status
      * @param retrofitService the API request interface
      */
-    private fun update(statusText: TextView, retrofitService: LoginService) {
+    fun update(retrofitService: LoginService): String {
+        var statusText = ""
+
         GlobalScope.launch {
             val response = if (type == Log.LOGIN) {
                 logIn(retrofitService, user)
@@ -69,20 +73,21 @@ class LoadDialog(
                 createAccount(retrofitService, user)
             }
 
-            if (response.isSuccessful && response.errorBody() == null) {
+            statusText = if (response.isSuccessful && response.errorBody() == null) {
                 when (response.body()) {
                     Status.SUCCESS -> {
-                        statusText.text =
-                            if (type == Log.LOGIN) {
-                                context.getString(R.string.loggedIn)
-                            } else context.getString(R.string.created)
+                        if (type == Log.LOGIN) {
+                            context.getString(R.string.loggedIn)
+                        } else context.getString(R.string.created)
                     }
-                    Status.FAILURE -> statusText.text = context.getString(R.string.logInError)
-                    else -> statusText.text = context.getString(R.string.existAlready)
+                    Status.FAILURE -> context.getString(R.string.logInError)
+                    else -> context.getString(R.string.existAlready)
                 }
             } else {
-                statusText.text = context.getString(R.string.logInError)
+                context.getString(R.string.logInError)
             }
         }
+
+        return statusText
     }
 }
