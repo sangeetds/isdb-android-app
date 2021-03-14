@@ -5,10 +5,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tag">TAGS:</string>
-    <string name="loggedIn">Successfully Logged In</string>
-    <string name="logInError">Cannot log in :(</string>
     <string name="created">User Registered</string>
-    <string name="existAlready">User Already Exists. Do you want to log in?</string>
     <string name="baseUrl">https://pure-ridge-30175.herokuapp.com</string>
     <string name="create_account">Create Account</string>
     <string name="email">Email</string>

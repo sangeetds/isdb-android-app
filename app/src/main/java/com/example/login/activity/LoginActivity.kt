@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.login.dialog.LoadDialog
 import com.example.login.R
+import com.example.login.enums.Constants
 import com.example.login.enums.Log
 import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -84,25 +85,25 @@ class LoginActivity : AppCompatActivity() {
         val password = passwordText.text.toString()
         val user = User(email = username, password = password)
 
-//        val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN)
-//        progressDialog.show()
-//
-//        val statusText = progressDialog.statusText
+        val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN)
+        progressDialog.show()
+
+        val statusText = progressDialog.statusText
+
 //        while (statusText == null) {
 //            Thread.sleep(1)
 //        }
-//        progressDialog.dismiss()
-//        finish()
+
 //        while (progressDialog.isShowing) {
 //            Thread.sleep(1)
 //        }
 //
-//        if (statusText.text == getString(R.string.loggedIn)) {
-            val songsActivity = Intent(this, SongsActivity::class.java)
+//        if (statusText?.text == Constants.loginMessage) {
+//            val songsActivity = Intent(this, SongsActivity::class.java)
 //            Thread.sleep(1000)
-            startActivity(songsActivity)
+//            startActivity(songsActivity)
 //            progressDialog.dismiss()
-            finish()
+//            finish()
 //        }
     }
 
@@ -143,3 +144,5 @@ class LoginActivity : AppCompatActivity() {
         return valid
     }
 }
+
+data class LoginMessages(val loginMessage: String, val errorMessage: String, val userAlreadyExistsMessage: String)

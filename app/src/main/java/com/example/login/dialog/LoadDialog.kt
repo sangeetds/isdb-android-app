@@ -13,9 +13,9 @@ import com.example.login.service.LoginService
 import com.example.login.service.Retrofit
 import com.example.login.service.createAccount
 import com.example.login.service.logIn
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import retrofit2.await
+import java.util.logging.Logger
 
 /**
  * Opens a dialog which tells user about the status of their login/register attempt
@@ -41,7 +41,6 @@ class LoadDialog(
         super.onCreate(savedInstanceState)
         setContentView(R.layout.loading_dialog)
 
-        statusText = findViewById(R.id.dialog)
         val cancelButton = findViewById<ImageView>(R.id.cancel_ratings_button)
 
         cancelButton.setOnClickListener {
@@ -51,43 +50,36 @@ class LoadDialog(
         val retrofitService =
             Retrofit.getRetrofitClient(url, LoginService::class.java) as LoginService
 
-        val status = update(retrofitService)
-
-        statusText!!.text = status
+        GlobalScope.launch {
+            update(retrofitService)
+        }
     }
 
     /**
      * Function to make API requests asynchronously, which is done with the help of
      * Kotlin coroutines
      *
-     * @param statusText the text to keep track of the login/register status
      * @param retrofitService the API request interface
      */
-    fun update(retrofitService: LoginService): String {
-        var statusText = ""
+    private suspend fun update(retrofitService: LoginService) {
+        var status: Status? = null
 
-        GlobalScope.launch {
-            val response = if (type == Log.LOGIN) {
-                logIn(retrofitService, user)
-            } else {
-                createAccount(retrofitService, user)
-            }
-
-            statusText = if (response.isSuccessful && response.errorBody() == null) {
-                when (response.body()) {
-                    Status.SUCCESS -> {
-                        if (type == Log.LOGIN) {
-                            context.getString(R.string.loggedIn)
-                        } else context.getString(R.string.created)
-                    }
-                    Status.FAILURE -> context.getString(R.string.logInError)
-                    else -> context.getString(R.string.existAlready)
-                }
-            } else {
-                context.getString(R.string.logInError)
+        val job = GlobalScope.launch {
+            status = when (type) {
+                Log.LOGIN -> logIn(retrofitService, user = user).body()
+                else -> createAccount(retrofitService, user = user).body()
             }
         }
 
-        return statusText
+        job.join()
+
+        Logger.getAnonymousLogger().info("asdadasd")
+        Logger.getAnonymousLogger().info("$status")
+
+        when(status) {
+            Status.SUCCESS -> statusText?.text = "Successfully Logged In"
+            Status.USER_ALREADY_EXISTS -> statusText?.text = "Exists"
+            else -> statusText?.text = "Error"
+        }
     }
 }

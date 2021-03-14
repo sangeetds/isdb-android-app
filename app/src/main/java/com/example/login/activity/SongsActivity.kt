@@ -18,6 +18,7 @@ import com.example.login.service.Retrofit
 import com.example.login.service.SongService
 import com.example.login.service.getSongsList
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 
@@ -31,37 +32,37 @@ class SongsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_song_list)
 
         val songs =
-//            getSongList()
-            listOf(
-            Song(
-                id = 1,
-                name = "Horses (with PnB Rock, Kodak Black & A Boogie Wit da Hoodie)",
-                album = "Horses",
-                image = "https://i.scdn.co/image/ab67616d0000b273a2c31c39d559355168b4cd2e",
-                releaseDate = "2017",
-                criticsRatings = 4.0,
-                userRatings = 4.0,
-                votes = 1
-            ), Song(
-                id = 2,
-                name = "A Horse with No Name",
-                album = "Horses",
-                image = "https://i.scdn.co/image/ab67616d0000b273afb855e6461310dff4046c56",
-                releaseDate = "2007",
-                criticsRatings = 4.0,
-                userRatings = 3.0,
-                votes = 1
-            ), Song(
-                id = 1,
-                name = "PnB Rock, Kodak Black",
-                album = "Horses",
-                image = "https://i.scdn.co/image/ab67616d0000b273a2c31c39d559355168b4cd2e",
-                releaseDate = "2017",
-                criticsRatings = 2.0,
-                userRatings = 4.0,
-                votes = 1
-            )
-        )
+            getSongList()
+//            listOf(
+//            Song(
+//                id = 1,
+//                name = "Horses (with PnB Rock, Kodak Black & A Boogie Wit da Hoodie)",
+//                album = "Horses",
+//                image = "https://i.scdn.co/image/ab67616d0000b273a2c31c39d559355168b4cd2e",
+//                releaseDate = "2017",
+//                criticsRatings = 4.0,
+//                userRatings = 4.0,
+//                votes = 1
+//            ), Song(
+//                id = 2,
+//                name = "A Horse with No Name",
+//                album = "Horses",
+//                image = "https://i.scdn.co/image/ab67616d0000b273afb855e6461310dff4046c56",
+//                releaseDate = "2007",
+//                criticsRatings = 4.0,
+//                userRatings = 3.0,
+//                votes = 1
+//            ), Song(
+//                id = 1,
+//                name = "PnB Rock, Kodak Black",
+//                album = "Horses",
+//                image = "https://i.scdn.co/image/ab67616d0000b273a2c31c39d559355168b4cd2e",
+//                releaseDate = "2017",
+//                criticsRatings = 2.0,
+//                userRatings = 4.0,
+//                votes = 1
+//            )
+//        )
         println(songs)
         this.songAdapter = SongAdapter(songs = songs, context = this)
         val recyclerView = findViewById<View>(R.id.recyclerview) as RecyclerView
@@ -86,7 +87,8 @@ class SongsActivity : AppCompatActivity() {
         val songList = mutableListOf<Song>()
 
         GlobalScope.launch {
-            val songResponse = getSongsList(retrofitService, null)
+            val songRequest = async {  getSongsList(retrofitService, null) }
+            val songResponse = songRequest.await()
 
             songList.addAll(songResponse.body()!!)
         }

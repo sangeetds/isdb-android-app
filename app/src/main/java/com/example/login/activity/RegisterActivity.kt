@@ -9,6 +9,7 @@ import android.util.Patterns
 import android.widget.*
 import com.example.login.dialog.LoadDialog
 import com.example.login.R
+import com.example.login.enums.Constants
 import com.example.login.enums.Log
 import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -98,7 +99,7 @@ class RegisterActivity : AppCompatActivity() {
 //            Thread.sleep(1)
 //        }
 //
-        if (statusText.text == getString(R.string.loggedIn)) {
+        if (statusText.text == Constants.registeredMessage) {
             val songsActivity = Intent(this, SongsActivity::class.java)
             Thread.sleep(1000)
             startActivity(songsActivity)
