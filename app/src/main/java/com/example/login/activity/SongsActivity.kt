@@ -29,38 +29,7 @@ class SongsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song_list)
-
-//        val songs =
-//            listOf(
-//            Song(
-//                id = 1,
-//                name = "Horses (with PnB Rock, Kodak Black & A Boogie Wit da Hoodie)",
-//                album = "Horses",
-//                image = "https://i.scdn.co/image/ab67616d0000b273a2c31c39d559355168b4cd2e",
-//                releaseDate = "2017",
-//                criticsRatings = 4.0,
-//                userRatings = 4.0,
-//                votes = 1
-//            ), Song(
-//                id = 2,
-//                name = "A Horse with No Name",
-//                album = "Horses",
-//                image = "https://i.scdn.co/image/ab67616d0000b273afb855e6461310dff4046c56",
-//                releaseDate = "2007",
-//                criticsRatings = 4.0,
-//                userRatings = 3.0,
-//                votes = 1
-//            ), Song(
-//                id = 1,
-//                name = "PnB Rock, Kodak Black",
-//                album = "Horses",
-//                image = "https://i.scdn.co/image/ab67616d0000b273a2c31c39d559355168b4cd2e",
-//                releaseDate = "2017",
-//                criticsRatings = 2.0,
-//                userRatings = 4.0,
-//                votes = 1
-//            )
-//        )
+             
         this.songAdapter = SongAdapter(context = this)
         val recyclerView = findViewById<View>(R.id.recyclerview) as RecyclerView
         recyclerView.setHasFixedSize(true)

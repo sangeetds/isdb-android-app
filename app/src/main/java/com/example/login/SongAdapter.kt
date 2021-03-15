@@ -49,6 +49,10 @@ class SongAdapter(val context: Context) :
         val view = layoutInflater
             .inflate(R.layout.song_item_view, parent, false)
 
+        view.setOnClickListener {
+
+        }
+
         return SongViewHolder(view)
     }
 
@@ -84,5 +88,6 @@ class SongAdapter(val context: Context) :
             }
 
             songList.addAll(list!!)
+            notifyDataSetChanged()
         }
 }
