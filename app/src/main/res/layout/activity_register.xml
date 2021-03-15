@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
@@ -14,18 +15,19 @@
             android:id="@+id/btn_back"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_gravity="start"
             android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
-            android:layout_gravity="start"
             android:background="@drawable/ic_baseline_keyboard_backspace_24"
             android:contentDescription="@string/image_for_back_button" />
 
         <ImageView
-            android:layout_marginTop="120dp"
-            android:layout_marginStart="20dp"
             android:layout_width="240dp"
             android:layout_height="240dp"
-            android:src="@drawable/valid_app_logo_please_load" />
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="120dp"
+            android:src="@drawable/valid_app_logo_please_load"
+            android:contentDescription="@string/app_logo" />
 
     </LinearLayout>
 
@@ -40,11 +42,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
             android:text="@string/register"
             android:textColor="#000000"
-            android:textSize="36sp"
-            android:layout_marginBottom="12dp"
-            />
+            android:textSize="36sp" />
 
         <EditText
             android:id="@+id/input_name"
@@ -52,49 +53,57 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:autofillHints="@string/name"
             android:hint="@string/name"
-            android:inputType="textCapWords"
-            android:autofillHints="@string/name" />
+            android:inputType="textCapWords" />
 
-        <EditText
-            android:id="@+id/input_email"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:autofillHints="@string/emailHint" />
+            app:boxBackgroundColor="#FFF">
 
-        <EditText
-            android:id="@+id/input_password"
+            <EditText
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="@string/emailHint"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:autofillHints="@string/passwordHint" />
+            app:boxBackgroundColor="#FFF"
+            app:endIconMode="password_toggle">
 
-        <CheckBox
-            android:id="@+id/checkPasswordRegister"
-            android:layout_width="180dp"
-            android:layout_height="40dp"
-            android:layout_gravity="start"
-            android:textColor="#000"
-            android:text="@string/show_password" />
+            <EditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="@string/passwordHint"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                app:endIconMode="password_toggle"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_signup"
-            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             android:backgroundTint="#DDF5EF"
+            android:contentDescription="@string/button_to_login"
             android:padding="12dp"
-            android:contentDescription="@string/button_to_login" />
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
 
     </LinearLayout>
 </LinearLayout>

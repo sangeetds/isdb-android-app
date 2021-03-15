@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,21 +13,22 @@
         android:background="@drawable/logo_app">
 
         <ImageButton
-        android:id="@+id/btn_back"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_gravity="start"
-        android:background="@drawable/ic_baseline_keyboard_backspace_24"
-        android:contentDescription="@string/image_for_back_button" />
+            android:id="@+id/btn_back"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_baseline_keyboard_backspace_24"
+            android:contentDescription="@string/image_for_back_button" />
 
         <ImageView
-            android:layout_marginTop="120dp"
-            android:layout_marginStart="20dp"
             android:layout_width="240dp"
             android:layout_height="240dp"
-            android:src="@drawable/valid_app_logo_please_load" />
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="120dp"
+            android:src="@drawable/valid_app_logo_please_load"
+            android:contentDescription="@string/app_logo" />
 
     </LinearLayout>
 
@@ -42,54 +44,61 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_gravity="start"
-            android:layout_marginBottom="24dp"
             android:layout_marginStart="2dp"
+            android:layout_marginBottom="24dp"
             android:text="@string/login"
             android:textColor="#000"
-            android:textSize="36sp"/>
+            android:textSize="36sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="#FFF">
 
         <EditText
             android:id="@+id/input_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/username"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:inputType="textEmailAddress"
-            android:autofillHints="@string/username" />
+            android:layout_marginBottom="8dp"
+            android:autofillHints="@string/username"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="password_toggle"
+            app:boxBackgroundColor="#FFF">
+
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:autofillHints="@string/password"
             android:ems="10"
             android:hint="@string/passwordHint"
             android:inputType="textPassword"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:autofillHints="@string/password" />
+            app:passwordToggleEnabled="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <CheckBox
-            android:id="@+id/check_password_login"
-            android:layout_width="180dp"
-            android:layout_height="32dp"
-            android:layout_gravity="start"
-            android:text="@string/show_password"
-            android:textColor="#000" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-            android:id="@+id/btn_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="#DDF5EF"
-            android:background="#00BFA5"
-            android:layout_gravity="end"
-            android:contentDescription="@string/button_to_login" />
+        android:id="@+id/btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="#00BFA5"
+        android:backgroundTint="#DDF5EF"
+        android:contentDescription="@string/button_to_login"
+        android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
 
-    </LinearLayout>
-</LinearLayout>
+</LinearLayout></LinearLayout>

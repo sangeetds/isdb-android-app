@@ -17,6 +17,8 @@ import com.example.login.R
 import com.example.login.enums.Log
 import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 /**
  * Class where user enter his/her login credentials to log in to the service
@@ -28,10 +30,9 @@ class LoginActivity : AppCompatActivity() {
      * and showing passwords.
      */
     private lateinit var userNameText: EditText
-    private lateinit var passwordText: EditText
+    private lateinit var passwordText: TextInputEditText
     private lateinit var loginButton: FloatingActionButton
     private lateinit var backButton: ImageButton
-    private lateinit var showPasswordButton: CheckBox
     private lateinit var loadSongList: () -> Unit
 
     /**
@@ -47,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
         passwordText = findViewById(R.id.input_password)
         loginButton = findViewById(R.id.btn_login)
         backButton = findViewById(R.id.btn_back)
-        showPasswordButton = findViewById(R.id.check_password_login)
 
         loginButton.setOnClickListener {
             login()
@@ -55,14 +55,6 @@ class LoginActivity : AppCompatActivity() {
 
         backButton.setOnClickListener {
             onBackPressed()
-        }
-        /**
-         * Simple workaround to show/hide password
-         */
-        showPasswordButton.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                passwordText.transformationMethod = HideReturnsTransformationMethod.getInstance()
-            } else passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
         }
     }
 

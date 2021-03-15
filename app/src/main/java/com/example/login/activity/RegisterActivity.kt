@@ -12,6 +12,8 @@ import com.example.login.R
 import com.example.login.enums.Log
 import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 /**
  * Class where user enter his/her login credentials to register to the service
@@ -25,9 +27,8 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var emailText: EditText
     private lateinit var signUpButton: FloatingActionButton
     private lateinit var nameText: EditText
-    private lateinit var passwordText: EditText
+    private lateinit var passwordText: TextInputEditText
     private lateinit var backButton: ImageButton
-    private lateinit var showPasswordButton: CheckBox
     private lateinit var loadLoginScreen: () -> Unit
 
     /**
@@ -43,20 +44,9 @@ class RegisterActivity : AppCompatActivity() {
         emailText = findViewById(R.id.input_email)
         passwordText = findViewById(R.id.input_password)
         backButton = findViewById(R.id.btn_back)
-        showPasswordButton = findViewById(R.id.checkPasswordRegister)
 
         signUpButton.setOnClickListener { signUp() }
         backButton.setOnClickListener { onBackPressed() }
-
-        /**
-         * Simple workaround to show/hide password
-         */
-        showPasswordButton.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                passwordText.transformationMethod = HideReturnsTransformationMethod.getInstance()
-            }
-            else passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
-        }
     }
 
     /**
