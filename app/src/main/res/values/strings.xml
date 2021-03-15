@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Demuz</string>
+    <string name="app_name">ISDb</string>
     <string name="start_coding">Start Coding</string>
     <string name="done">Done</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -36,4 +36,7 @@
     <string name="critic_s_score">critic\'s score:</string>
     <string name="fan_s_score">fan\'s score:</string>
     <string name="rate">Rate the song</string>
+    <string name="home">home</string>
+    <string name="search">search</string>
+    <string name="user">user</string>
 </resources>
