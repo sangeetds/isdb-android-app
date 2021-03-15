@@ -39,4 +39,6 @@
     <string name="home">home</string>
     <string name="search">search</string>
     <string name="user">user</string>
+    <string name="full_score">/5.0</string>
+    <string name="image_for_ratings">image for ratings</string>
 </resources>

@@ -29,7 +29,8 @@ class SongsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song_list)
-             
+
+        getSongList()
         this.songAdapter = SongAdapter(context = this)
         val recyclerView = findViewById<View>(R.id.recyclerview) as RecyclerView
         recyclerView.setHasFixedSize(true)
@@ -55,4 +56,20 @@ class SongsActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
+
+    private fun getSongList() =
+        CoroutineScope(Dispatchers.Main).launch {
+            var list: List<Song>?
+            val retrofitService = Retrofit.getRetrofitClient(
+                getString(R.string.baseUrl),
+                SongService::class.java
+            ) as SongService
+
+            withContext(Dispatchers.IO) {
+                list = getSongsList(retrofitService, null).body()
+            }
+
+            songAdapter.songList.addAll(list!!)
+            songAdapter.notifyDataSetChanged()
+        }
 }

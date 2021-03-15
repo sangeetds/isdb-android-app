@@ -5,35 +5,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="#0091EA"
+    android:orientation="vertical"
     tools:context=".activity.LoginMainActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:background="@drawable/logo_app">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="start"
+            android:background="@drawable/ic_baseline_keyboard_backspace_24"
+            android:contentDescription="@string/image_for_back_button" />
+
+        <ImageView
+            android:layout_marginTop="120dp"
+            android:layout_marginStart="20dp"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:src="@drawable/valid_app_logo_please_load" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="24dp"
-        android:paddingTop="150dp"
+        android:paddingTop="80dp"
         android:paddingRight="24dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="72dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="48dp"
-            android:textColor="#FFF"
-            android:textSize="48sp"
-            android:text="@string/welcome"
-            />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/signInButton"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="24dp"
             android:padding="18dp"
+            android:backgroundTint="#DDF5EF"
             android:text="@string/sign_in"
             android:textSize="24sp"
             android:textAlignment="center"
@@ -48,6 +62,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:padding="18dp"
+            android:backgroundTint="#DDF5EF"
             android:text="@string/create_account"
             android:textSize="24sp"
             android:textAlignment="center"

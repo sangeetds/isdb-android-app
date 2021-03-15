@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:maxLength="24"
+                android:maxLength="32"
                 android:text="@string/song_name"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 app:layout_constraintStart_toStartOf="parent"
@@ -57,26 +57,27 @@
                 android:text="@string/rate" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="120dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginEnd="2dp"
-                android:src="@drawable/star_icon" />
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="128dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_star_icon"
+                android:contentDescription="@string/image_for_ratings" />
 
             <TextView
                 android:id="@+id/fan_score_text"
                 style="@style/MyMaterialTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4.0" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/fan_score_text_2"
                 style="@style/MyMaterialTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="/5.0" />
+                android:text="@string/full_score" />
         </LinearLayout>
     </LinearLayout>
 

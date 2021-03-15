@@ -19,19 +19,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.logging.Logger
 
 
 class SongAdapter(val context: Context) :
     androidx.recyclerview.widget.ListAdapter<Song, SongAdapter.SongViewHolder>(DiffCallback()) {
-    private var songList = mutableListOf<Song>()
+
+    var songList = mutableListOf<Song>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
-    init {
-        getSongList()
-    }
 
     class SongViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
         val image: ImageView = cardView.findViewById(R.id.song_image)
@@ -67,22 +65,6 @@ class SongAdapter(val context: Context) :
     }
 
     override fun getItemCount(): Int = this.songList.size
-
-    private fun getSongList() =
-        CoroutineScope(Dispatchers.Main).launch {
-            val retrofitService = Retrofit.getRetrofitClient(
-                context.getString(R.string.baseUrl),
-                SongService::class.java
-            ) as SongService
-            var list: List<Song>?
-
-            withContext(Dispatchers.IO) {
-                list = getSongsList(retrofitService, null).body()
-            }
-
-            songList.addAll(list!!)
-            notifyDataSetChanged()
-        }
 }
 
 class DiffCallback : DiffUtil.ItemCallback<Song>() {

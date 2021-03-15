@@ -2,6 +2,7 @@ package com.example.login.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.login.R
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -20,6 +21,7 @@ class LoginMainActivity : AppCompatActivity() {
 
         val loginButton = findViewById<ExtendedFloatingActionButton>(R.id.signInButton)
         val registerButton = findViewById<ExtendedFloatingActionButton>(R.id.createAccButton)
+        val backButton = findViewById<ImageButton>(R.id.btn_back)
 
         loginButton.setOnClickListener {
             val loginActivity = Intent(this, LoginActivity::class.java)
@@ -29,6 +31,10 @@ class LoginMainActivity : AppCompatActivity() {
         registerButton.setOnClickListener {
             val registerActivity = Intent(this, RegisterActivity::class.java)
             startActivity(registerActivity)
+        }
+
+        backButton.setOnClickListener {
+            finish()
         }
     }
 }
