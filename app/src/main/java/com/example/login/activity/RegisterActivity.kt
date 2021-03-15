@@ -3,8 +3,6 @@ package com.example.login.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
 import android.widget.*
 import com.example.login.dialog.LoadDialog
@@ -13,7 +11,6 @@ import com.example.login.enums.Log
 import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 /**
  * Class where user enter his/her login credentials to register to the service
@@ -77,7 +74,7 @@ class RegisterActivity : AppCompatActivity() {
         val user = User(username = username, password = password, email)
 
         loadLoginScreen = {
-            val songsActivity = Intent(this, SongsActivity::class.java)
+            val songsActivity = Intent(this, HomeScreenActivity::class.java)
             Thread.sleep(1000)
             startActivity(songsActivity)
             finish()

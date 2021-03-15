@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def kotlinCoroutineVersion = '1.4.2'
     def moshiVersion = "1.11.0"
     def retrofitVersion = "2.9.0"
