@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.login.dialog.LoadDialog
 import com.example.login.R
-import com.example.login.enums.Constants
 import com.example.login.enums.Log
 import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -33,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginButton: FloatingActionButton
     private lateinit var backButton: ImageButton
     private lateinit var showPasswordButton: CheckBox
+    private lateinit var loadSongList: () -> Unit
 
     /**
      * On creation of the view, respective bindings are done and the button have been assigned
@@ -56,7 +56,6 @@ class LoginActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             onBackPressed()
         }
-
         /**
          * Simple workaround to show/hide password
          */
@@ -85,26 +84,16 @@ class LoginActivity : AppCompatActivity() {
         val password = passwordText.text.toString()
         val user = User(email = username, password = password)
 
-        val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN)
+        loadSongList = {
+            val songsActivity = Intent(this, SongsActivity::class.java)
+            Thread.sleep(1000)
+            startActivity(songsActivity)
+            finish()
+        }
+
+
+        val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN, loadSongList)
         progressDialog.show()
-
-        val statusText = progressDialog.statusText
-
-//        while (statusText == null) {
-//            Thread.sleep(1)
-//        }
-
-//        while (progressDialog.isShowing) {
-//            Thread.sleep(1)
-//        }
-//
-//        if (statusText?.text == Constants.loginMessage) {
-//            val songsActivity = Intent(this, SongsActivity::class.java)
-//            Thread.sleep(1000)
-//            startActivity(songsActivity)
-//            progressDialog.dismiss()
-//            finish()
-//        }
     }
 
     /**

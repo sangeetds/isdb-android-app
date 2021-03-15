@@ -9,7 +9,6 @@ import android.util.Patterns
 import android.widget.*
 import com.example.login.dialog.LoadDialog
 import com.example.login.R
-import com.example.login.enums.Constants
 import com.example.login.enums.Log
 import com.example.login.models.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -29,6 +28,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var passwordText: EditText
     private lateinit var backButton: ImageButton
     private lateinit var showPasswordButton: CheckBox
+    private lateinit var loadLoginScreen: () -> Unit
 
     /**
      * On creation of the view, respective bindings are done and the button have been assigned
@@ -86,25 +86,25 @@ class RegisterActivity : AppCompatActivity() {
         val email = emailText.text.toString()
         val user = User(username = username, password = password, email)
 
-        val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.REGISTER)
+        loadLoginScreen = {
+            val songsActivity = Intent(this, SongsActivity::class.java)
+            Thread.sleep(1000)
+            startActivity(songsActivity)
+            finish()
+        }
+
+        val progressDialog = LoadDialog(
+            this,
+            user,
+            getString(R.string.baseUrl),
+            Log.REGISTER,
+            loadLoginScreen
+        )
         progressDialog.show()
 
         val statusText = progressDialog.statusText
         while (statusText == null) {
             Thread.sleep(1)
-        }
-//        progressDialog.dismiss()
-//        finish()
-//        while (progressDialog.isShowing) {
-//            Thread.sleep(1)
-//        }
-//
-        if (statusText.text == Constants.registeredMessage) {
-            val songsActivity = Intent(this, SongsActivity::class.java)
-            Thread.sleep(1000)
-            startActivity(songsActivity)
-            progressDialog.dismiss()
-            finish()
         }
     }
 

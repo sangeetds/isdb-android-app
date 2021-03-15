@@ -10,17 +10,29 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.dialog.RatingsDialog
 import com.example.login.models.Song
+import com.example.login.service.Retrofit
+import com.example.login.service.SongService
+import com.example.login.service.getSongsList
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.logging.Logger
 
 
-class SongAdapter(songs: List<Song>, val context: Context) :
+class SongAdapter(val context: Context) :
     RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
 
-    private var songList = songs
+    private var songList = mutableListOf<Song>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    init {
+        getSongList()
+    }
 
     class SongViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
         val image: ImageView = cardView.findViewById(R.id.song_image)
@@ -36,10 +48,6 @@ class SongAdapter(songs: List<Song>, val context: Context) :
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater
             .inflate(R.layout.song_item_view, parent, false)
-
-        view.setOnClickListener {
-
-        }
 
         return SongViewHolder(view)
     }
@@ -62,4 +70,19 @@ class SongAdapter(songs: List<Song>, val context: Context) :
     }
 
     override fun getItemCount(): Int = this.songList.size
+
+    private fun getSongList() =
+        CoroutineScope(Dispatchers.Main).launch {
+            val retrofitService = Retrofit.getRetrofitClient(
+                context.getString(R.string.baseUrl),
+                SongService::class.java
+            ) as SongService
+            var list: List<Song>?
+
+            withContext(Dispatchers.IO) {
+                list = getSongsList(retrofitService, null).body()
+            }
+
+            songList.addAll(list!!)
+        }
 }

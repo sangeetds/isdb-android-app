@@ -17,9 +17,8 @@ import com.example.login.models.Song
 import com.example.login.service.Retrofit
 import com.example.login.service.SongService
 import com.example.login.service.getSongsList
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.util.logging.Logger
 
 
 class SongsActivity : AppCompatActivity() {
@@ -31,8 +30,7 @@ class SongsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song_list)
 
-        val songs =
-            getSongList()
+//        val songs =
 //            listOf(
 //            Song(
 //                id = 1,
@@ -63,8 +61,7 @@ class SongsActivity : AppCompatActivity() {
 //                votes = 1
 //            )
 //        )
-        println(songs)
-        this.songAdapter = SongAdapter(songs = songs, context = this)
+        this.songAdapter = SongAdapter(context = this)
         val recyclerView = findViewById<View>(R.id.recyclerview) as RecyclerView
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = songAdapter
@@ -77,23 +74,6 @@ class SongsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    private fun getSongList(): List<Song> {
-        val retrofitService = Retrofit.getRetrofitClient(
-            getString(R.string.baseUrl),
-            SongService::class.java
-        ) as SongService
-        val songList = mutableListOf<Song>()
-
-        GlobalScope.launch {
-            val songRequest = async {  getSongsList(retrofitService, null) }
-            val songResponse = songRequest.await()
-
-            songList.addAll(songResponse.body()!!)
-        }
-
-        return songList
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
