@@ -6,16 +6,16 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/isdb_launcher_round"
+        android:icon="@mipmap/isdb_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/security"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".adapters.SearchAdapter"></activity>
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.HomeScreenActivity" />
+        <activity android:name=".activity.HomeScreenActivity" >
+        </activity>
         <activity android:name=".activity.LoginMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

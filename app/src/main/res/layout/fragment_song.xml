@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     android:layout_marginTop="50dp"
     android:layout_marginBottom="75dp"
+    tools:context=".fragments.SongFragment"
 >
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/song_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="600dp" />
 </FrameLayout>

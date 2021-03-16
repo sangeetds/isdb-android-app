@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.logging.Logger
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,10 +53,11 @@ class SongFragment : Fragment() {
         val inflate = inflater.inflate(R.layout.fragment_song, container, false)
 
         this.songAdapter = SongAdapter(context = context!!)
-        val recyclerView = container?.findViewById<RecyclerView>(R.id.recyclerview)
-        recyclerView?.setHasFixedSize(true)
-        recyclerView?.adapter = songAdapter
-        recyclerView?.layoutManager = LinearLayoutManager(context!!)
+        val recyclerView = inflate.findViewById<RecyclerView>(R.id.song_recycler_view)
+        recyclerView.adapter = songAdapter
+        recyclerView.layoutManager = LinearLayoutManager(context!!)
+        recyclerView.setHasFixedSize(true)
+
         return inflate
     }
 

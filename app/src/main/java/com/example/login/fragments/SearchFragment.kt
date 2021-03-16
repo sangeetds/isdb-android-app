@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R
 import com.example.login.adapters.SearchAdapter
+import java.util.logging.Logger
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -45,20 +46,22 @@ class SearchFragment : Fragment() {
         val inflate = inflater.inflate(R.layout.fragment_search, container, false)
 
         songSearchAdapter = SearchAdapter(context = context!!)
-        val recyclerView = container?.findViewById<RecyclerView>(R.id.searchRecyclerView)
-        recyclerView?.setHasFixedSize(true)
-        recyclerView?.adapter = songSearchAdapter
-        recyclerView?.layoutManager = LinearLayoutManager(context!!)
+        val recyclerView = inflate.findViewById<RecyclerView>(R.id.search_recycler_view)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = songSearchAdapter
+        recyclerView.layoutManager = LinearLayoutManager(context!!)
 
         val songSearchView = container?.findViewById<SearchView>(R.id.song_search_view)
 
         songSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                Logger.getAnonymousLogger().info("Are we hitting submit?")
                 songSearchAdapter.filter.filter(query)
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
+                Logger.getAnonymousLogger().info("Are we hitting change?")
                 songSearchAdapter.filter.filter(newText)
                 return false
             }

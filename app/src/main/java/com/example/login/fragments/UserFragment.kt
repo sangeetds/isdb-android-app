@@ -39,11 +39,11 @@ class UserFragment : Fragment() {
         // Inflate the layout for this fragment
         val inflate = inflater.inflate(R.layout.fragment_user, container, false)
 
-        val userEmail = container?.findViewById<TextView>(R.id.user_email)
-        userEmail?.text = user?.email
+        val userEmail = inflate.findViewById<TextView>(R.id.user_email)
+        userEmail.text = user?.email
 
-        val userName = container?.findViewById<TextView>(R.id.user_name)
-        userName?.text = user?.username
+        val userName = inflate.findViewById<TextView>(R.id.user_name)
+        userName.text = user?.username
 
         return inflate
     }

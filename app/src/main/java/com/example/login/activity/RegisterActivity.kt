@@ -24,7 +24,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var emailText: EditText
     private lateinit var signUpButton: FloatingActionButton
     private lateinit var nameText: EditText
-    private lateinit var passwordText: TextInputEditText
+    private lateinit var passwordText: EditText
     private lateinit var backButton: ImageButton
     private lateinit var loadLoginScreen: () -> Unit
 

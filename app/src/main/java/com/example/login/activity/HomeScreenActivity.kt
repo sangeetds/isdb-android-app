@@ -24,7 +24,7 @@ class HomeScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
 
-        user = intent.extras?.getParcelable<User>("user")!!
+        user = intent.extras?.getParcelable("user")!!
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -49,9 +49,10 @@ class HomeScreenActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+
     private fun openFragment(fragment: Fragment) {
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
+        transaction.replace(R.id.fragment_container, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
