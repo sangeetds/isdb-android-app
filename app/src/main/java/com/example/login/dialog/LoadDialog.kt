@@ -81,7 +81,6 @@ class LoadDialog(
                 }
                 Status.USER_ALREADY_EXISTS -> {
                     statusText?.text = context.getString(R.string.existAlready)
-                    finishActivity()
                     dismiss()
                 }
                 else -> statusText?.text = context.getString(R.string.logInError)

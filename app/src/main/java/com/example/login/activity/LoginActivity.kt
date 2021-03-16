@@ -74,11 +74,10 @@ class LoginActivity : AppCompatActivity() {
 
         loadSongList = {
             val songsActivity = Intent(this, HomeScreenActivity::class.java)
-            Thread.sleep(1000)
+            songsActivity.putExtra("user", user)
             startActivity(songsActivity)
             finish()
         }
-
 
         val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN, loadSongList)
         progressDialog.show()
@@ -121,5 +120,3 @@ class LoginActivity : AppCompatActivity() {
         return valid
     }
 }
-
-data class LoginMessages(val loginMessage: String, val errorMessage: String, val userAlreadyExistsMessage: String)

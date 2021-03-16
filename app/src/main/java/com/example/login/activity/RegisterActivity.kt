@@ -75,7 +75,7 @@ class RegisterActivity : AppCompatActivity() {
 
         loadLoginScreen = {
             val songsActivity = Intent(this, HomeScreenActivity::class.java)
-            Thread.sleep(1000)
+            songsActivity.putExtra("user", user)
             startActivity(songsActivity)
             finish()
         }

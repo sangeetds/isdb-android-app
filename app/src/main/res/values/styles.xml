@@ -17,5 +17,9 @@
     <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
     </style>
 
+    <style name="ShapeAppearanceOverlay.CornerSize">
+        <item name="cornerSize">50%</item>
+    </style>
+
 
 </resources>

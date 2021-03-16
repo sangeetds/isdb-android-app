@@ -8,7 +8,7 @@
     <string name="loggedIn">Successfully Logged In</string>
     <string name="registerSuccess">Registered Successfully</string>
     <string name="logInError">Cannot log in :(</string>
-    <string name="existAlready">User Already Exists. Do you want to log in?</string>
+    <string name="existAlready">User Already Exists. Please log in</string>
     <string name="created">User Registered</string>
     <string name="baseUrl">https://pure-ridge-30175.herokuapp.com</string>
     <string name="create_account">Create Account</string>
@@ -42,4 +42,5 @@
     <string name="full_score">/5.0</string>
     <string name="image_for_ratings">image for ratings</string>
     <string name="app_logo">app logo</string>
+    <string name="user_image">user image</string>
 </resources>

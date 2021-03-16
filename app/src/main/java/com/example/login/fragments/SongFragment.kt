@@ -5,6 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
+import com.example.login.R
+import com.example.login.adapters.SongAdapter
+import com.example.login.models.Song
+import com.example.login.service.Retrofit
+import com.example.login.service.SongService
+import com.example.login.service.getSongsList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,8 +33,10 @@ class SongFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var songAdapter: SongAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        getSongList()
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -34,8 +49,31 @@ class SongFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_song, container, false)
+        val inflate = inflater.inflate(R.layout.fragment_song, container, false)
+
+        this.songAdapter = SongAdapter(context = context!!)
+        val recyclerView = container?.findViewById<RecyclerView>(R.id.recyclerview)
+        recyclerView?.setHasFixedSize(true)
+        recyclerView?.adapter = songAdapter
+        recyclerView?.layoutManager = LinearLayoutManager(context!!)
+        return inflate
     }
+
+    private fun getSongList() =
+        CoroutineScope(Dispatchers.Main).launch {
+            var list: List<Song>?
+            val retrofitService = Retrofit.getRetrofitClient(
+                getString(R.string.baseUrl),
+                SongService::class.java
+            ) as SongService
+
+            withContext(Dispatchers.IO) {
+                list = getSongsList(retrofitService, null).body()
+            }
+
+            songAdapter.songList.addAll(list!!)
+            songAdapter.notifyDataSetChanged()
+        }
 
     companion object {
         /**

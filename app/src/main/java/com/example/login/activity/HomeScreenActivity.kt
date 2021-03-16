@@ -6,17 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R
-import com.example.login.SongAdapter
 import com.example.login.fragments.SearchFragment
 import com.example.login.fragments.SongFragment
 import com.example.login.fragments.UserFragment
-import com.example.login.models.Song
-import com.example.login.service.Retrofit
-import com.example.login.service.SongService
-import com.example.login.service.getSongsList
+import com.example.login.models.User
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*
 
@@ -24,18 +18,13 @@ import kotlinx.coroutines.*
 class HomeScreenActivity : AppCompatActivity() {
 
     private var toolbar: Toolbar? = null
-    private lateinit var songAdapter: SongAdapter
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
 
-        getSongList()
-        this.songAdapter = SongAdapter(context = this)
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = songAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        user = intent.extras?.getParcelable<User>("user")!!
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -79,26 +68,10 @@ class HomeScreenActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.nav_user -> {
-                    openFragment(UserFragment.newInstance("", ""))
+                    openFragment(UserFragment.newInstance("", user))
                     return@OnNavigationItemSelectedListener true
                 }
             }
             false
-        }
-
-    private fun getSongList() =
-        CoroutineScope(Dispatchers.Main).launch {
-            var list: List<Song>?
-            val retrofitService = Retrofit.getRetrofitClient(
-                getString(R.string.baseUrl),
-                SongService::class.java
-            ) as SongService
-
-            withContext(Dispatchers.IO) {
-                list = getSongsList(retrofitService, null).body()
-            }
-
-            songAdapter.songList.addAll(list!!)
-            songAdapter.notifyDataSetChanged()
         }
 }

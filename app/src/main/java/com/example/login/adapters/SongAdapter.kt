@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,22 +8,16 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.dialog.RatingsDialog
 import com.example.login.models.Song
-import com.example.login.service.Retrofit
-import com.example.login.service.SongService
-import com.example.login.service.getSongsList
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.logging.Logger
 
+import com.example.login.R
 
 class SongAdapter(val context: Context) :
-    androidx.recyclerview.widget.ListAdapter<Song, SongAdapter.SongViewHolder>(DiffCallback()) {
+    ListAdapter<Song, SongAdapter.SongViewHolder>(SongCallBack()) {
 
     var songList = mutableListOf<Song>()
         set(value) {
@@ -67,7 +61,7 @@ class SongAdapter(val context: Context) :
     override fun getItemCount(): Int = this.songList.size
 }
 
-class DiffCallback : DiffUtil.ItemCallback<Song>() {
+class SongCallBack : DiffUtil.ItemCallback<Song>() {
     override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
         return oldItem.id == newItem.id
     }
@@ -76,3 +70,4 @@ class DiffCallback : DiffUtil.ItemCallback<Song>() {
         return oldItem == newItem
     }
 }
+

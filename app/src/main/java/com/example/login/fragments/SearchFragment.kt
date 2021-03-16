@@ -1,10 +1,16 @@
 package com.example.login.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.login.R
+import com.example.login.adapters.SearchAdapter
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,9 +23,11 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SearchFragment : Fragment() {
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var songSearchAdapter: SearchAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +42,29 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        val inflate = inflater.inflate(R.layout.fragment_search, container, false)
+
+        songSearchAdapter = SearchAdapter(context = context!!)
+        val recyclerView = container?.findViewById<RecyclerView>(R.id.searchRecyclerView)
+        recyclerView?.setHasFixedSize(true)
+        recyclerView?.adapter = songSearchAdapter
+        recyclerView?.layoutManager = LinearLayoutManager(context!!)
+
+        val songSearchView = container?.findViewById<SearchView>(R.id.song_search_view)
+
+        songSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                songSearchAdapter.filter.filter(query)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                songSearchAdapter.filter.filter(newText)
+                return false
+            }
+        })
+
+        return inflate
     }
 
     companion object {
