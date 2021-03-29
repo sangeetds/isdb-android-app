@@ -8,47 +8,54 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R
+import com.example.login.dialog.RatingsDialog
 import com.example.login.models.SongDTO
 import com.squareup.picasso.Picasso
-import java.util.logging.Logger
 
 class SearchAdapter(val context: Context) :
-    RecyclerView.Adapter<SearchAdapter.SongSearchViewHolder>() {
+  RecyclerView.Adapter<SearchAdapter.SongSearchViewHolder>() {
 
-    var songList = mutableListOf<SongDTO>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    class SongSearchViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
-        val image: ImageView = cardView.findViewById(R.id.small_song_image)
-        val songName: TextView = cardView.findViewById(R.id.search_song_name)
-        val albumName: TextView = cardView.findViewById(R.id.search_album_name)
+  var songList = mutableListOf<SongDTO>()
+    set(value) {
+      field = value
+      notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongSearchViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater
-            .inflate(R.layout.search_song_list_view, parent, false)
+  class SongSearchViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
+    val image: ImageView = cardView.findViewById(R.id.small_song_image)
+    val songName: TextView = cardView.findViewById(R.id.search_song_name)
+    val albumName: TextView = cardView.findViewById(R.id.search_album_name)
+  }
 
-        view.setOnClickListener {
+  override fun onCreateViewHolder(
+      parent: ViewGroup,
+      viewType: Int
+  ): SongSearchViewHolder {
+    val layoutInflater = LayoutInflater.from(parent.context)
+    val view = layoutInflater
+      .inflate(R.layout.search_song_list_view, parent, false)
 
-        }
-
-        return SongSearchViewHolder(view)
+    view.setOnClickListener {
+      val rateDialog = RatingsDialog(context = this.context)
+      rateDialog.show()
     }
 
-    override fun onBindViewHolder(holder: SongSearchViewHolder, position: Int) {
-        val song = songList[position]
+    return SongSearchViewHolder(view)
+  }
 
-        holder.songName.text = song.name
-        holder.albumName.text = song.album
+  override fun onBindViewHolder(
+      holder: SongSearchViewHolder,
+      position: Int
+  ) {
+    val song = songList[position]
 
-        val smallestResolutionImage = song.image.minByOrNull { (_, height, width) -> height / width }!!
+    holder.songName.text = song.name
+    holder.albumName.text = song.album
 
-        Picasso.get().load(smallestResolutionImage.url).into(holder.image)
-    }
+    val smallestResolutionImage = song.image.minByOrNull { (_, height, width) -> height / width }!!
 
-    override fun getItemCount(): Int = this.songList.size
+    Picasso.get().load(smallestResolutionImage.url).into(holder.image)
+  }
+
+  override fun getItemCount(): Int = this.songList.size
 }

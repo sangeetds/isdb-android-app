@@ -11,25 +11,25 @@ import retrofit2.http.POST
  */
 interface LoginService {
 
-    /**
-     * Function to make a post request which returns a response from the register request
-     *
-     * @param user which takes in [User] with the registering credentials
-     */
-    @POST("/users/register")
-    fun createUser(
-        @Body user: User
-    ): Call<User>
+  /**
+   * Function to make a post request which returns a response from the register request
+   *
+   * @param user which takes in [User] with the registering credentials
+   */
+  @POST("/users/register")
+  fun createUser(
+      @Body user: User
+  ): Call<User>
 
-    /**
-     * Function to make a post request which returns a response from the logging request.
-     *
-     * @param user which takes in [User] with the logging credentials
-     */
-    @POST("users/login")
-    fun logInUser(
-        @Body user: User
-    ): Call<User>
+  /**
+   * Function to make a post request which returns a response from the logging request.
+   *
+   * @param user which takes in [User] with the logging credentials
+   */
+  @POST("users/login")
+  fun logInUser(
+      @Body user: User
+  ): Call<User>
 }
 
 /**
@@ -39,9 +39,12 @@ interface LoginService {
  * @param service the interface for making API requests
  * @param user the [User] with the credentials
  */
-fun createAccount(service: LoginService, user: User): Response<User> = service
-    .createUser(user)
-    .execute()
+fun createAccount(
+    service: LoginService,
+    user: User
+): Response<User> = service
+  .createUser(user)
+  .execute()
 
 /**
  * Helper function which implements the LoginService interface methods to make API login request.
@@ -50,9 +53,12 @@ fun createAccount(service: LoginService, user: User): Response<User> = service
  * @param service the interface for making API requests
  * @param user the [User] with the credentials
  */
-fun logIn(service: LoginService, user: User): Response<User> = service
-    .logInUser(user)
-    .execute()
+fun logIn(
+    service: LoginService,
+    user: User
+): Response<User> = service
+  .logInUser(user)
+  .execute()
 
 
 

@@ -5,6 +5,6 @@ package com.example.login.enums
  * Used for distinguishing type of activity i.e., login or register
  */
 enum class Log {
-    LOGIN,
-    REGISTER
+  LOGIN,
+  REGISTER
 }

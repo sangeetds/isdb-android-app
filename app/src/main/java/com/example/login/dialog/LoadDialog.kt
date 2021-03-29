@@ -25,64 +25,64 @@ import retrofit2.Response
  * @param type used to make code re-usable so that one class can suffice for different activity
  */
 class LoadDialog(
-    context: Context,
-    private var user: User,
-    private val url: String,
-    private val type: Log,
-    private val finishActivity: (User) -> Unit
+  context: Context,
+  private var user: User,
+  private val url: String,
+  private val type: Log,
+  private val finishActivity: (User) -> Unit
 ) : Dialog(context) {
 
-    var statusText: TextView? = null
+  var statusText: TextView? = null
 
-    /**
-     * On creation of the dialog, it binds the text and button, which is used to
-     * exit from the dialog.
-     */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.loading_dialog)
+  /**
+   * On creation of the dialog, it binds the text and button, which is used to
+   * exit from the dialog.
+   */
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.loading_dialog)
 
-        statusText = findViewById(R.id.dialog)
-        val cancelButton = findViewById<ImageView>(R.id.cancel_ratings_button)
+    statusText = findViewById(R.id.dialog)
+    val cancelButton = findViewById<ImageView>(R.id.cancel_ratings_button)
 
-        cancelButton.setOnClickListener {
-            dismiss()
-        }
-
-        val retrofitService =
-            Retrofit.getRetrofitClient(url, LoginService::class.java) as LoginService
-        update(retrofitService)
+    cancelButton.setOnClickListener {
+      dismiss()
     }
 
-    /**
-     * Function to make API requests asynchronously, which is done with the help of
-     * Kotlin coroutines
-     *
-     * @param retrofitService the API request interface
-     */
-    private fun update(retrofitService: LoginService) =
-        CoroutineScope(Dispatchers.Main).launch {
-            var response: Response<User>
-            withContext(Dispatchers.IO) {
-                response = when (type) {
-                    Log.LOGIN -> logIn(retrofitService, user = user)
-                    else -> createAccount(retrofitService, user = user)
-                }
-            }
+    val retrofitService =
+      Retrofit.getRetrofitClient(url, LoginService::class.java) as LoginService
+    update(retrofitService)
+  }
 
-            when (response.code()) {
-                200 -> {
-                    statusText?.text =
-                        if (type == Log.LOGIN) context.getString(R.string.loggedIn)
-                        else context.getString(R.string.registerSuccess)
-                    finishActivity(response.body()!!)
-                    dismiss()
-                }
-                400 -> {
-                    statusText?.text = context.getString(R.string.existAlready)
-                    dismiss()
-                }
-                else -> statusText?.text = context.getString(R.string.logInError)
-            }
+  /**
+   * Function to make API requests asynchronously, which is done with the help of
+   * Kotlin coroutines
+   *
+   * @param retrofitService the API request interface
+   */
+  private fun update(retrofitService: LoginService) =
+    CoroutineScope(Dispatchers.Main).launch {
+      var response: Response<User>
+      withContext(Dispatchers.IO) {
+        response = when (type) {
+          Log.LOGIN -> logIn(retrofitService, user = user)
+          else -> createAccount(retrofitService, user = user)
         }
+      }
+
+      when (response.code()) {
+        200 -> {
+          statusText?.text =
+            if (type == Log.LOGIN) context.getString(R.string.loggedIn)
+            else context.getString(R.string.registerSuccess)
+          finishActivity(response.body()!!)
+          dismiss()
+        }
+        400 -> {
+          statusText?.text = context.getString(R.string.existAlready)
+          dismiss()
+        }
+        else -> statusText?.text = context.getString(R.string.logInError)
+      }
+    }
 }

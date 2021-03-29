@@ -22,7 +22,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.logging.Logger
 
-
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -35,88 +34,92 @@ private const val ARG_PARAM2 = "param2"
  */
 class SearchFragment : Fragment() {
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private lateinit var songSearchAdapter: SearchAdapter
+  // TODO: Rename and change types of parameters
+  private var param1: String? = null
+  private var param2: String? = null
+  private lateinit var songSearchAdapter: SearchAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    arguments?.let {
+      param1 = it.getString(ARG_PARAM1)
+      param2 = it.getString(ARG_PARAM2)
+    }
+  }
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    // Inflate the layout for this fragment
+    val inflate = inflater.inflate(R.layout.fragment_search, container, false)
+
+    songSearchAdapter = SearchAdapter(context = context!!)
+    val recyclerView = inflate.findViewById<RecyclerView>(R.id.search_recycler_view)
+    recyclerView.setHasFixedSize(true)
+    recyclerView.adapter = songSearchAdapter
+    recyclerView.layoutManager = LinearLayoutManager(context!!)
+
+    val songSearchView = inflate?.findViewById<EditText>(R.id.song_search_view)
+    val searchParentView = inflate?.findViewById<TextInputLayout>(R.id.search_parent)
+
+    songSearchView?.setOnClickListener {
+      searchParentView?.startIconDrawable?.setVisible(false, true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val inflate = inflater.inflate(R.layout.fragment_search, container, false)
-
-        songSearchAdapter = SearchAdapter(context = context!!)
-        val recyclerView = inflate.findViewById<RecyclerView>(R.id.search_recycler_view)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = songSearchAdapter
-        recyclerView.layoutManager = LinearLayoutManager(context!!)
-
-        val songSearchView = inflate?.findViewById<EditText>(R.id.song_search_view)
-        val searchParentView = inflate?.findViewById<TextInputLayout>(R.id.search_parent)
-
-        songSearchView?.setOnClickListener {
-            searchParentView?.startIconDrawable?.setVisible(false, true)
-        }
-
-        songSearchView?.doOnTextChanged { text, _, _, _ ->
-            text?.toString()?.getSongList()
-        }
-
-        songSearchView?.setOnEditorActionListener { view, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                view.text.toString().getSongList()
-            }
-
-            true
-        }
-
-        return inflate
+    songSearchView?.doOnTextChanged { text, _, _, _ ->
+      text?.toString()?.getSongList()
     }
 
-    private fun String.getSongList() =
-        runBlocking {
-            val list: List<SongDTO>;
-            val retrofitService = Retrofit.getRetrofitClient(
-                context?.getString(R.string.baseUrl)!!,
-                SongService::class.java
-            ) as SongService
+    songSearchView?.setOnEditorActionListener { view, actionId, _ ->
+      if (actionId == EditorInfo.IME_ACTION_DONE) {
+        view.text.toString().getSongList()
+      }
 
-            withContext(Dispatchers.IO) {
-                list = getSongsList(retrofitService, this@getSongList).body()!!
-                Logger.getAnonymousLogger().info("Can we get $list")
-            }
-
-            songSearchAdapter.songList.addAll(list)
-            songSearchAdapter.notifyDataSetChanged()
-        }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+      true
     }
+
+    return inflate
+  }
+
+  private fun String.getSongList() =
+    runBlocking {
+      val list: List<SongDTO>
+      val retrofitService = Retrofit.getRetrofitClient(
+        context?.getString(R.string.baseUrl)!!,
+        SongService::class.java
+      ) as SongService
+
+      withContext(Dispatchers.IO) {
+        list = getSongsList(retrofitService, this@getSongList).body()!!
+        Logger.getAnonymousLogger().info("Can we get $list")
+      }
+
+      songSearchAdapter.songList.addAll(list)
+      songSearchAdapter.notifyDataSetChanged()
+    }
+
+  companion object {
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment SearchFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    @JvmStatic
+    fun newInstance(
+      param1: String,
+      param2: String
+    ) =
+      SearchFragment().apply {
+        arguments = Bundle().apply {
+          putString(ARG_PARAM1, param1)
+          putString(ARG_PARAM2, param2)
+        }
+      }
+  }
 }

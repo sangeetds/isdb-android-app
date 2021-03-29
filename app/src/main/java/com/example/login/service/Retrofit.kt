@@ -11,25 +11,28 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * API requests.
  */
 class Retrofit {
-    companion object {
+  companion object {
 
-        fun getRetrofitClient(url: String, javaClass: Class<*>): Any {
-            val httpClient = OkHttpClient.Builder().build()
+    fun getRetrofitClient(
+        url: String,
+        javaClass: Class<*>
+    ): Any {
+      val httpClient = OkHttpClient.Builder().build()
 
-            /**
-             * Moshi helps in converting JSON objects into Java Classes and parameters.
-             */
-            val moshi = Moshi.Builder()
-                .addLast(KotlinJsonAdapterFactory())
-                .build()
+      /**
+       * Moshi helps in converting JSON objects into Java Classes and parameters.
+       */
+      val moshi = Moshi.Builder()
+        .addLast(KotlinJsonAdapterFactory())
+        .build()
 
-            val retrofit = Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-                .client(httpClient)
-                .build()
+      val retrofit = Retrofit.Builder()
+        .baseUrl(url)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .client(httpClient)
+        .build()
 
-            return retrofit.create(javaClass)
-        }
+      return retrofit.create(javaClass)
     }
+  }
 }
