@@ -24,11 +24,6 @@ class SearchAdapter(
       field = value
       notifyDataSetChanged()
     }
-  var songIdList = mutableListOf<String>()
-    set(value) {
-      field = value
-      notifyDataSetChanged()
-    }
 
   class SongSearchViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
     val image: ImageView = cardView.findViewById(R.id.small_song_image)

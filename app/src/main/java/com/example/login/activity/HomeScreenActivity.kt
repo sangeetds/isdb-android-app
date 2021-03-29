@@ -1,7 +1,6 @@
 package com.example.login.activity
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,7 +13,6 @@ import com.example.login.fragments.UserFragment
 import com.example.login.models.User
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*
-import kotlinx.parcelize.Parcelize
 
 class HomeScreenActivity : AppCompatActivity() {
 
@@ -75,9 +73,4 @@ class HomeScreenActivity : AppCompatActivity() {
       }
       false
     }
-}
-
-@Parcelize
-class Toggle(private val switchFragment: () -> Unit) : Parcelable {
-  fun toggleScreen() = switchFragment
 }

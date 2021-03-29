@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R
-import com.example.login.activity.Toggle
 import com.example.login.adapters.SearchAdapter
 import com.example.login.models.SongDTO
 import com.example.login.models.User
@@ -24,7 +23,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.logging.Logger
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 
@@ -35,7 +33,6 @@ private const val ARG_PARAM1 = "param1"
  */
 class SearchFragment : Fragment() {
 
-  // TODO: Rename and change types of parameters
   private var param1: User? = null
   private lateinit var songSearchAdapter: SearchAdapter
 
@@ -94,7 +91,7 @@ class SearchFragment : Fragment() {
     runBlocking {
       val list: List<SongDTO>
       val retrofitService = Retrofit.getRetrofitClient(
-        context?.getString(R.string.baseUrl)!!,
+        context?.getString(R.string.base_url)!!,
         SongService::class.java
       ) as SongService
 
@@ -115,7 +112,6 @@ class SearchFragment : Fragment() {
      * @param user Parameter.
      * @return A new instance of fragment SearchFragment.
      */
-    // TODO: Rename and change types and number of parameters
     @JvmStatic
     fun newInstance(
       user: User

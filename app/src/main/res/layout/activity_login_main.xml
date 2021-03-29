@@ -28,7 +28,9 @@
             android:layout_marginStart="20dp"
             android:layout_width="240dp"
             android:layout_height="240dp"
-            android:src="@drawable/valid_app_logo_please_load" />
+            android:src="@drawable/valid_app_logo_please_load"
+            android:contentDescription="Logo for the app"
+            />
 
     </LinearLayout>
 

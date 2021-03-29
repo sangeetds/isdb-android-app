@@ -15,7 +15,6 @@ import com.example.login.dialog.RatingsDialog
 import com.example.login.models.SongDTO
 import com.example.login.models.User
 import com.squareup.picasso.Picasso
-import java.text.DecimalFormat
 
 class SongAdapter(
   val context: Context,
@@ -74,7 +73,8 @@ class SongAdapter(
     holder.rateButton.setOnClickListener {
       val rateDialog =
         RatingsDialog(
-          context = this.context, song = song, associatedFunction = removeRatingsButton, user = user!!
+          context = this.context, song = song, associatedFunction = removeRatingsButton,
+          user = user!!
         )
       rateDialog.show()
     }

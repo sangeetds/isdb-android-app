@@ -70,7 +70,7 @@
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="@string/emailHint"
+                android:autofillHints="@string/email_hint"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:autofillHints="@string/passwordHint"
+                android:autofillHints="@string/password_hint"
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 app:endIconMode="password_toggle" />

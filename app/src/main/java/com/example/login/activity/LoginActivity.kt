@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     val progressDialog =
-      LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN, loadSongList)
+      LoadDialog(this, user, getString(R.string.base_url), Log.LOGIN, loadSongList)
     progressDialog.show()
 
     progressDialog.setOnDismissListener {

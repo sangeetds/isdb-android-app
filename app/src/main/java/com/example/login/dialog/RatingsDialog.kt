@@ -25,7 +25,7 @@ class RatingsDialog(
   val user: User
 ) : Dialog(context) {
 
-  private val url = context.getString(R.string.baseUrl)
+  private val url = context.getString(R.string.base_url)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 
@@ -69,7 +68,7 @@ class SongFragment : Fragment() {
       var list: List<SongDTO>?
       var idList: List<String>?
       val retrofitService = Retrofit.getRetrofitClient(
-        getString(R.string.baseUrl),
+        getString(R.string.base_url),
         SongService::class.java
       ) as SongService
 

@@ -34,7 +34,7 @@ class LoadDialog(
   private val finishActivity: (User) -> Unit
 ) : Dialog(context) {
 
-  var statusText: TextView? = null
+  private var statusText: TextView? = null
 
   /**
    * On creation of the dialog, it binds the text and button, which is used to
@@ -76,16 +76,16 @@ class LoadDialog(
         when (response.code()) {
           200 -> {
             statusText?.text =
-              if (type == Log.LOGIN) context.getString(R.string.loggedIn)
-              else context.getString(R.string.registerSuccess)
+              if (type == Log.LOGIN) context.getString(string.logged_In)
+              else context.getString(string.register_success)
             finishActivity(response.body()!!)
             dismiss()
           }
           400 -> {
-            statusText?.text = context.getString(R.string.existAlready)
+            statusText?.text = context.getString(string.exist_already)
             dismiss()
           }
-          else -> statusText?.text = context.getString(R.string.logInError)
+          else -> statusText?.text = context.getString(string.logIn_error)
         }
       } catch (exception: SocketTimeoutException) {
         statusText?.text = context.getString(string.server_down)

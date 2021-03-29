@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import com.example.login.R
 import com.example.login.models.User
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM2 = "param2"
 
@@ -19,7 +18,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class UserFragment : Fragment() {
-  // TODO: Rename and change types of parameters
   private var user: User? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +52,6 @@ class UserFragment : Fragment() {
      * @param param2 Parameter 2.
      * @return A new instance of fragment UserFragment.
      */
-    // TODO: Rename and change types and number of parameters
     @JvmStatic
     fun newInstance(
       param2: User
