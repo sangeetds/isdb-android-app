@@ -27,7 +27,6 @@ import java.util.logging.Logger
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -37,14 +36,12 @@ private const val ARG_PARAM2 = "param2"
 class SearchFragment : Fragment() {
 
   // TODO: Rename and change types of parameters
-  private var param2: Toggle? = null
   private var param1: User? = null
   private lateinit var songSearchAdapter: SearchAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     arguments?.let {
-      param2 = it.getParcelable(ARG_PARAM2)
       param1 = it.getParcelable(ARG_PARAM1)
     }
   }
@@ -57,7 +54,7 @@ class SearchFragment : Fragment() {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_search, container, false)
 
-    songSearchAdapter = SearchAdapter(context = context!!, param2?.toggleScreen(), param1)
+    songSearchAdapter = SearchAdapter(context = context!!, param1)
     val recyclerView = inflate.findViewById<RecyclerView>(R.id.search_recycler_view)
     recyclerView.setHasFixedSize(true)
     recyclerView.adapter = songSearchAdapter
@@ -115,18 +112,16 @@ class SearchFragment : Fragment() {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param2 Parameter 2.
+     * @param user Parameter.
      * @return A new instance of fragment SearchFragment.
      */
     // TODO: Rename and change types and number of parameters
     @JvmStatic
     fun newInstance(
-      param2: Toggle,
       user: User
     ) =
       SearchFragment().apply {
         arguments = Bundle().apply {
-          putParcelable(ARG_PARAM2, param2)
           putParcelable(ARG_PARAM1, user)
         }
       }

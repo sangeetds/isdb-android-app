@@ -49,28 +49,26 @@ class RatingsDialog(
     rating: Float,
     retrofitService: SongService
   ) {
-    val ratings = (((song.userRatings * song.votes) + rating) / (song.votes + 1))
-    song.userRatings = ratings
+    val updateRating = (((song.userRatings * song.votes) + rating) / (song.votes + 1))
+    song.userRatings = updateRating
     song.votes += 1
 
-    associatedFunction?.let {
-      CoroutineScope(Dispatchers.Main).launch {
-        val updatedSongDTO = UserSongDTO(
-          songId  = song.id,
-          userRatings = ratings,
-          criticsRatings = song.criticsRatings,
-          votes = song.votes + 1,
-          spotifyId = song.spotifyId,
-          userId = user.id
-        )
+    CoroutineScope(Dispatchers.Main).launch {
+      val updatedSongDTO = UserSongDTO(
+        songId = song.id,
+        userRatings = updateRating,
+        criticsRatings = song.criticsRatings,
+        votes = song.votes + 1,
+        spotifyId = song.spotifyId,
+        userId = user.id
+      )
 
-        withContext(Dispatchers.IO) {
-          updateSongRatings(service = retrofitService, songDto = updatedSongDTO)
-        }
+      withContext(Dispatchers.IO) {
+        updateSongRatings(service = retrofitService, songDto = updatedSongDTO)
       }
-
-      it()
     }
+
+    associatedFunction?.invoke()
 
     Toast.makeText(context, "Voted $rating", Toast.LENGTH_SHORT).show()
     dismiss()

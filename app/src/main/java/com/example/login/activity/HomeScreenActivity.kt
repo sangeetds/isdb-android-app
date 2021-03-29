@@ -20,7 +20,6 @@ class HomeScreenActivity : AppCompatActivity() {
 
   private var toolbar: Toolbar? = null
   private lateinit var user: User
-  private lateinit var toggle: Toggle
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -38,11 +37,6 @@ class HomeScreenActivity : AppCompatActivity() {
     val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
     bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener)
     openFragment(SongFragment.newInstance(user))
-
-    val toggleHomeScreen = {
-      openFragment(SongFragment.newInstance(user))
-    }
-    toggle = Toggle(toggleHomeScreen)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -71,7 +65,7 @@ class HomeScreenActivity : AppCompatActivity() {
           return@OnNavigationItemSelectedListener true
         }
         R.id.nav_search -> {
-          openFragment(SearchFragment.newInstance(toggle, user))
+          openFragment(SearchFragment.newInstance(user))
           return@OnNavigationItemSelectedListener true
         }
         R.id.nav_user -> {

@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso
 
 class SearchAdapter(
   val context: Context,
-  private val toggleScreen: (() -> Unit)?,
   val user: User?
 ) :
   RecyclerView.Adapter<SearchAdapter.SongSearchViewHolder>() {
@@ -56,7 +55,7 @@ class SearchAdapter(
 
     holder.itemView.setOnClickListener {
       val rateDialog =
-        RatingsDialog(context = this.context, associatedFunction = toggleScreen, song = song, user = user!!)
+        RatingsDialog(context = this.context, associatedFunction = null, song = song, user = user!!)
       rateDialog.show()
     }
 
