@@ -82,11 +82,11 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     val progressDialog = LoadDialog(
-            this,
-            user,
-            getString(R.string.baseUrl),
-            Log.REGISTER,
-            loadLoginScreen
+      this,
+      user,
+      getString(R.string.baseUrl),
+      Log.REGISTER,
+      loadLoginScreen
     )
     progressDialog.show()
 

@@ -40,9 +40,9 @@ class SongFragment : Fragment() {
   }
 
   override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
   ): View? {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_song, container, false)
@@ -60,8 +60,8 @@ class SongFragment : Fragment() {
     CoroutineScope(Dispatchers.Main).launch {
       var list: List<SongDTO>?
       val retrofitService = Retrofit.getRetrofitClient(
-              getString(R.string.baseUrl),
-              SongService::class.java
+        getString(R.string.baseUrl),
+        SongService::class.java
       ) as SongService
 
       withContext(Dispatchers.IO) {
@@ -82,7 +82,7 @@ class SongFragment : Fragment() {
      */
     @JvmStatic
     fun newInstance(
-        param1: String,
+      param1: String,
     ) =
       SongFragment().apply {
         arguments = Bundle().apply {

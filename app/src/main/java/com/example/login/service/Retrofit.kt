@@ -14,8 +14,8 @@ class Retrofit {
   companion object {
 
     fun getRetrofitClient(
-        url: String,
-        javaClass: Class<*>
+      url: String,
+      javaClass: Class<*>
     ): Any {
       val httpClient = OkHttpClient.Builder().build()
 

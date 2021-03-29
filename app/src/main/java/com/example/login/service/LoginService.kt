@@ -18,7 +18,7 @@ interface LoginService {
    */
   @POST("/users/register")
   fun createUser(
-      @Body user: User
+    @Body user: User
   ): Call<User>
 
   /**
@@ -28,7 +28,7 @@ interface LoginService {
    */
   @POST("users/login")
   fun logInUser(
-      @Body user: User
+    @Body user: User
   ): Call<User>
 }
 
@@ -40,8 +40,8 @@ interface LoginService {
  * @param user the [User] with the credentials
  */
 fun createAccount(
-    service: LoginService,
-    user: User
+  service: LoginService,
+  user: User
 ): Response<User> = service
   .createUser(user)
   .execute()
@@ -54,8 +54,8 @@ fun createAccount(
  * @param user the [User] with the credentials
  */
 fun logIn(
-    service: LoginService,
-    user: User
+  service: LoginService,
+  user: User
 ): Response<User> = service
   .logInUser(user)
   .execute()

@@ -19,13 +19,13 @@ interface SongService {
 }
 
 fun getSongsList(
-    service: SongService,
-    songName: String?
+  service: SongService,
+  songName: String?
 ): Response<List<SongDTO>> =
   service.getSongs(songName = songName).execute()
 
 fun updateSongRatings(
-    service: SongService,
-    songDto: SongDTO
+  service: SongService,
+  songDto: SongDTO
 ): Response<Song> =
   service.updateSongRatings(songDTO = songDto).execute()

@@ -31,8 +31,8 @@ class SearchAdapter(
   }
 
   override fun onCreateViewHolder(
-      parent: ViewGroup,
-      viewType: Int
+    parent: ViewGroup,
+    viewType: Int
   ): SongSearchViewHolder {
     val layoutInflater = LayoutInflater.from(parent.context)
     val view = layoutInflater
@@ -42,13 +42,14 @@ class SearchAdapter(
   }
 
   override fun onBindViewHolder(
-      holder: SongSearchViewHolder,
-      position: Int
+    holder: SongSearchViewHolder,
+    position: Int
   ) {
     val song = songList[position]
 
     holder.itemView.setOnClickListener {
-      val rateDialog = RatingsDialog(context = this.context, associatedFunction =  toggleScreen, song = song)
+      val rateDialog =
+        RatingsDialog(context = this.context, associatedFunction = toggleScreen, song = song)
       rateDialog.show()
     }
 

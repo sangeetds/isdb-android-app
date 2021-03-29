@@ -1,4 +1,4 @@
-package com.example.login.models;
+package com.example.login.models
 
 import com.squareup.moshi.Json
 
