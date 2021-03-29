@@ -1,6 +1,5 @@
 package com.example.login.service
 
-import com.example.login.enums.Status
 import com.example.login.models.User
 import retrofit2.Call
 import retrofit2.Response
@@ -20,7 +19,7 @@ interface LoginService {
     @POST("/users/register")
     fun createUser(
         @Body user: User
-    ): Call<Status>
+    ): Call<User>
 
     /**
      * Function to make a post request which returns a response from the logging request.
@@ -30,7 +29,7 @@ interface LoginService {
     @POST("users/login")
     fun logInUser(
         @Body user: User
-    ): Call<Status>
+    ): Call<User>
 }
 
 /**
@@ -40,7 +39,7 @@ interface LoginService {
  * @param service the interface for making API requests
  * @param user the [User] with the credentials
  */
-fun createAccount(service: LoginService, user: User): Response<Status> = service
+fun createAccount(service: LoginService, user: User): Response<User> = service
     .createUser(user)
     .execute()
 
@@ -51,7 +50,7 @@ fun createAccount(service: LoginService, user: User): Response<Status> = service
  * @param service the interface for making API requests
  * @param user the [User] with the credentials
  */
-fun logIn(service: LoginService, user: User): Response<Status> = service
+fun logIn(service: LoginService, user: User): Response<User> = service
     .logInUser(user)
     .execute()
 

@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.login.R
 import com.example.login.enums.Log
-import com.example.login.enums.Status
 import com.example.login.models.User
 import com.example.login.service.LoginService
 import com.example.login.service.Retrofit
@@ -17,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 
 /**
  * Opens a dialog which tells user about the status of their login/register attempt
@@ -26,10 +26,10 @@ import kotlinx.coroutines.withContext
  */
 class LoadDialog(
     context: Context,
-    private val user: User,
+    private var user: User,
     private val url: String,
     private val type: Log,
-    private val finishActivity: () -> Unit
+    private val finishActivity: (User) -> Unit
 ) : Dialog(context) {
 
     var statusText: TextView? = null
@@ -51,7 +51,6 @@ class LoadDialog(
 
         val retrofitService =
             Retrofit.getRetrofitClient(url, LoginService::class.java) as LoginService
-
         update(retrofitService)
     }
 
@@ -63,23 +62,23 @@ class LoadDialog(
      */
     private fun update(retrofitService: LoginService) =
         CoroutineScope(Dispatchers.Main).launch {
-            var status: Status?
+            var response: Response<User>
             withContext(Dispatchers.IO) {
-                status = when (type) {
-                    Log.LOGIN -> logIn(retrofitService, user = user).body()
-                    else -> createAccount(retrofitService, user = user).body()
+                response = when (type) {
+                    Log.LOGIN -> logIn(retrofitService, user = user)
+                    else -> createAccount(retrofitService, user = user)
                 }
             }
 
-            when (status) {
-                Status.SUCCESS -> {
+            when (response.code()) {
+                200 -> {
                     statusText?.text =
                         if (type == Log.LOGIN) context.getString(R.string.loggedIn)
                         else context.getString(R.string.registerSuccess)
-                    finishActivity()
+                    finishActivity(response.body()!!)
                     dismiss()
                 }
-                Status.USER_ALREADY_EXISTS -> {
+                400 -> {
                     statusText?.text = context.getString(R.string.existAlready)
                     dismiss()
                 }

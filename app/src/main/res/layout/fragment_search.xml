@@ -3,18 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="50dp"
     android:layout_marginBottom="75dp"
     android:orientation="vertical"
-    tools:context=".fragments.SearchFragment"
->
-    <SearchView
-        android:id="@+id/song_search_view"
+    tools:context=".fragments.SearchFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="#FFF"
-        />
+        app:boxBackgroundColor="#FFF"
+        app:startIconDrawable="@drawable/ic_baseline_search_24">
+        <EditText
+            android:id="@+id/song_search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="#FFF"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:autofillHints="search value"
+            android:inputType="text"
+            android:hint="@string/search_for_a_song"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recycler_view"

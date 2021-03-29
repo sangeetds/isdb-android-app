@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var passwordText: TextInputEditText
     private lateinit var loginButton: FloatingActionButton
     private lateinit var backButton: ImageButton
-    private lateinit var loadSongList: () -> Unit
+    private lateinit var loadSongList: (User) -> Unit
 
     /**
      * On creation of the view, respective bindings are done and the button have been assigned
@@ -72,15 +72,19 @@ class LoginActivity : AppCompatActivity() {
         val password = passwordText.text.toString()
         val user = User(email = username, password = password)
 
-        loadSongList = {
+        loadSongList = { registeredUser ->
             val songsActivity = Intent(this, HomeScreenActivity::class.java)
-            songsActivity.putExtra("user", user)
+            songsActivity.putExtra("user", registeredUser)
             startActivity(songsActivity)
             finish()
         }
 
         val progressDialog = LoadDialog(this, user, getString(R.string.baseUrl), Log.LOGIN, loadSongList)
         progressDialog.show()
+
+        progressDialog.setOnDismissListener {
+            loginButton.isEnabled = true
+        }
     }
 
     /**

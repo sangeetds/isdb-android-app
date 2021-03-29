@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.login.R
 import com.example.login.adapters.SongAdapter
-import com.example.login.models.Song
+import com.example.login.models.SongDTO
 import com.example.login.service.Retrofit
 import com.example.login.service.SongService
 import com.example.login.service.getSongsList
@@ -18,7 +18,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.logging.Logger
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,7 +62,7 @@ class SongFragment : Fragment() {
 
     private fun getSongList() =
         CoroutineScope(Dispatchers.Main).launch {
-            var list: List<Song>?
+            var list: List<SongDTO>?
             val retrofitService = Retrofit.getRetrofitClient(
                 getString(R.string.baseUrl),
                 SongService::class.java

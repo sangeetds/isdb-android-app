@@ -4,12 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R
 import com.example.login.adapters.SearchAdapter
+import com.example.login.models.SongDTO
+import com.example.login.service.Retrofit
+import com.example.login.service.SongService
+import com.example.login.service.getSongsList
+import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.util.logging.Logger
 
 
@@ -51,24 +61,44 @@ class SearchFragment : Fragment() {
         recyclerView.adapter = songSearchAdapter
         recyclerView.layoutManager = LinearLayoutManager(context!!)
 
-        val songSearchView = container?.findViewById<SearchView>(R.id.song_search_view)
+        val songSearchView = inflate?.findViewById<EditText>(R.id.song_search_view)
+        val searchParentView = inflate?.findViewById<TextInputLayout>(R.id.search_parent)
 
-        songSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                Logger.getAnonymousLogger().info("Are we hitting submit?")
-                songSearchAdapter.filter.filter(query)
-                return false
+        songSearchView?.setOnClickListener {
+            searchParentView?.startIconDrawable?.setVisible(false, true)
+        }
+
+        songSearchView?.doOnTextChanged { text, _, _, _ ->
+            text?.toString()?.getSongList()
+        }
+
+        songSearchView?.setOnEditorActionListener { view, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                view.text.toString().getSongList()
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                Logger.getAnonymousLogger().info("Are we hitting change?")
-                songSearchAdapter.filter.filter(newText)
-                return false
-            }
-        })
+            true
+        }
 
         return inflate
     }
+
+    private fun String.getSongList() =
+        runBlocking {
+            val list: List<SongDTO>;
+            val retrofitService = Retrofit.getRetrofitClient(
+                context?.getString(R.string.baseUrl)!!,
+                SongService::class.java
+            ) as SongService
+
+            withContext(Dispatchers.IO) {
+                list = getSongsList(retrofitService, this@getSongList).body()!!
+                Logger.getAnonymousLogger().info("Can we get $list")
+            }
+
+            songSearchAdapter.songList.addAll(list)
+            songSearchAdapter.notifyDataSetChanged()
+        }
 
     companion object {
         /**

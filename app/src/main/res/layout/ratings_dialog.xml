@@ -14,11 +14,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_outline_cancel_24"
+        android:contentDescription="@string/loading_screen_image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/dialog"
         app:layout_constraintTop_toTopOf="@+id/dialog"
         app:layout_constraintVertical_bias="0.062"
-        android:contentDescription="@string/loading_screen_image" />
+        />
 
     <TextView
         android:id="@+id/dialog"

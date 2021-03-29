@@ -26,7 +26,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var nameText: EditText
     private lateinit var passwordText: EditText
     private lateinit var backButton: ImageButton
-    private lateinit var loadLoginScreen: () -> Unit
+    private lateinit var loadLoginScreen: (User) -> Unit
 
     /**
      * On creation of the view, respective bindings are done and the button have been assigned
@@ -73,9 +73,9 @@ class RegisterActivity : AppCompatActivity() {
         val email = emailText.text.toString()
         val user = User(username = username, password = password, email)
 
-        loadLoginScreen = {
+        loadLoginScreen = { registeredUser ->
             val songsActivity = Intent(this, HomeScreenActivity::class.java)
-            songsActivity.putExtra("user", user)
+            songsActivity.putExtra("user", registeredUser)
             startActivity(songsActivity)
             finish()
         }
@@ -89,9 +89,8 @@ class RegisterActivity : AppCompatActivity() {
         )
         progressDialog.show()
 
-        val statusText = progressDialog.statusText
-        while (statusText == null) {
-            Thread.sleep(1)
+        progressDialog.setOnDismissListener {
+            signUpButton.isEnabled = true
         }
     }
 

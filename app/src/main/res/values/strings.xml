@@ -43,4 +43,5 @@
     <string name="image_for_ratings">image for ratings</string>
     <string name="app_logo">app logo</string>
     <string name="user_image">user image</string>
+    <string name="search_for_a_song">search for a song...</string>
 </resources>
