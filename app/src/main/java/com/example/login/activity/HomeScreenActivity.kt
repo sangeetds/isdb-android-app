@@ -37,10 +37,10 @@ class HomeScreenActivity : AppCompatActivity() {
 
     val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
     bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener)
-    openFragment(SongFragment.newInstance(""))
+    openFragment(SongFragment.newInstance(user))
 
     val toggleHomeScreen = {
-      openFragment(SongFragment.newInstance(""))
+      openFragment(SongFragment.newInstance(user))
     }
     toggle = Toggle(toggleHomeScreen)
   }
@@ -67,11 +67,11 @@ class HomeScreenActivity : AppCompatActivity() {
     BottomNavigationView.OnNavigationItemSelectedListener { item ->
       when (item.itemId) {
         R.id.nav_home -> {
-          openFragment(SongFragment.newInstance(""))
+          openFragment(SongFragment.newInstance(user))
           return@OnNavigationItemSelectedListener true
         }
         R.id.nav_search -> {
-          openFragment(SearchFragment.newInstance(toggle))
+          openFragment(SearchFragment.newInstance(toggle, user))
           return@OnNavigationItemSelectedListener true
         }
         R.id.nav_user -> {

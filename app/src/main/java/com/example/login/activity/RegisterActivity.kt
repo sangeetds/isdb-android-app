@@ -72,7 +72,7 @@ class RegisterActivity : AppCompatActivity() {
     val username = nameText.text.toString()
     val password = passwordText.text.toString()
     val email = emailText.text.toString()
-    val user = User(username = username, password = password, email)
+    val user = User(username = username, password = password, email = email)
 
     loadLoginScreen = { registeredUser ->
       val songsActivity = Intent(this, HomeScreenActivity::class.java)

@@ -10,15 +10,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R
 import com.example.login.dialog.RatingsDialog
 import com.example.login.models.SongDTO
+import com.example.login.models.User
 import com.squareup.picasso.Picasso
 
 class SearchAdapter(
   val context: Context,
-  val toggleScreen: (() -> Unit)?
+  private val toggleScreen: (() -> Unit)?,
+  val user: User?
 ) :
   RecyclerView.Adapter<SearchAdapter.SongSearchViewHolder>() {
 
   var songList = mutableListOf<SongDTO>()
+    set(value) {
+      field = value
+      notifyDataSetChanged()
+    }
+  var songIdList = mutableListOf<String>()
     set(value) {
       field = value
       notifyDataSetChanged()
@@ -49,7 +56,7 @@ class SearchAdapter(
 
     holder.itemView.setOnClickListener {
       val rateDialog =
-        RatingsDialog(context = this.context, associatedFunction = toggleScreen, song = song)
+        RatingsDialog(context = this.context, associatedFunction = toggleScreen, song = song, user = user!!)
       rateDialog.show()
     }
 

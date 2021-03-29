@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="228dp"
     android:layout_margin="8dp"
     android:padding="6dp"
     app:cardCornerRadius="10dp">
@@ -23,7 +23,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="88dp"
             android:orientation="vertical">
 
             <!-- Title, secondary and supporting text -->
@@ -41,47 +41,55 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
             <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:layout_marginTop="12dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:contentDescription="@string/image_for_ratings"
                 android:src="@drawable/ic_star_icon"
-                android:contentDescription="@string/image_for_ratings" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/song_name"
+                />
 
             <TextView
                 android:id="@+id/fan_score_text"
-                style="@style/MyMaterialTheme"
-                android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:layout_marginStart="14dp"
+                android:maxLength="4"
+                android:text=""
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/song_name"
+                app:layout_constraintVertical_bias="0.529"
+                style="@style/MyMaterialTheme"
+                />
 
             <TextView
                 android:id="@+id/fan_score_text_2"
-                style="@style/MyMaterialTheme"
-                android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/full_score" />
-
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="74dp"
+                android:text="@string/full_score"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/song_name"
+                app:layout_constraintVertical_bias="1.0"
+                style="@style/MyMaterialTheme"
+                />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/rate"
-                style="?attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="120dp"
-                android:text="@string/rate" />
-        </LinearLayout>
+                android:text="@string/rate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="?attr/borderlessButtonStyle"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R
 import com.example.login.adapters.SongAdapter
 import com.example.login.models.SongDTO
+import com.example.login.models.User
 import com.example.login.service.Retrofit
 import com.example.login.service.SongService
+import com.example.login.service.getLikedSong
 import com.example.login.service.getSongsList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,14 +30,20 @@ private const val ARG_PARAM1 = "param1"
  * create an instance of this fragment.
  */
 class SongFragment : Fragment() {
-  private var param1: String? = null
+  private var user: User? = null
   private lateinit var songAdapter: SongAdapter
+  private lateinit var updateList: () -> Unit
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    getSongList()
     super.onCreate(savedInstanceState)
+
+    updateList = {
+      getSongList()
+    }
+    getSongList()
+
     arguments?.let {
-      param1 = it.getString(ARG_PARAM1)
+      user = it.getParcelable(ARG_PARAM1)
     }
   }
 
@@ -47,7 +55,7 @@ class SongFragment : Fragment() {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_song, container, false)
 
-    this.songAdapter = SongAdapter(context = context!!)
+    this.songAdapter = SongAdapter(context = context!!, updateList, user)
     val recyclerView = inflate.findViewById<RecyclerView>(R.id.song_recycler_view)
     recyclerView.adapter = songAdapter
     recyclerView.layoutManager = LinearLayoutManager(context!!)
@@ -59,6 +67,7 @@ class SongFragment : Fragment() {
   private fun getSongList() =
     CoroutineScope(Dispatchers.Main).launch {
       var list: List<SongDTO>?
+      var idList: List<String>?
       val retrofitService = Retrofit.getRetrofitClient(
         getString(R.string.baseUrl),
         SongService::class.java
@@ -66,10 +75,18 @@ class SongFragment : Fragment() {
 
       withContext(Dispatchers.IO) {
         list = getSongsList(retrofitService, null).body()
+        idList = getLikedSong(service = retrofitService, id = user!!.id).body()
       }
 
-      songAdapter.songList.addAll(list!!)
-      songAdapter.notifyDataSetChanged()
+      idList?.let {
+        songAdapter.idList.clear()
+        songAdapter.idList.addAll(it)
+      }
+
+      list?.let {
+        songAdapter.songList = it.toMutableList()
+        songAdapter.notifyDataSetChanged()
+      }
     }
 
   companion object {
@@ -82,11 +99,11 @@ class SongFragment : Fragment() {
      */
     @JvmStatic
     fun newInstance(
-      param1: String,
+      param1: User,
     ) =
       SongFragment().apply {
         arguments = Bundle().apply {
-          putString(ARG_PARAM1, param1)
+          putParcelable(ARG_PARAM1, param1)
         }
       }
   }

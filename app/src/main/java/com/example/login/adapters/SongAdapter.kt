@@ -13,11 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R
 import com.example.login.dialog.RatingsDialog
 import com.example.login.models.SongDTO
+import com.example.login.models.User
 import com.squareup.picasso.Picasso
 
-class SongAdapter(val context: Context) :
+class SongAdapter(
+  val context: Context,
+  val updateList: () -> Unit,
+  val user: User?
+) :
   ListAdapter<SongDTO, SongAdapter.SongViewHolder>(SongCallBack()) {
 
+  val idList = mutableSetOf<String>()
   var songList = mutableListOf<SongDTO>()
     set(value) {
       field = value
@@ -51,17 +57,23 @@ class SongAdapter(val context: Context) :
     holder.songName.text = song.name
     holder.fanScore.text = song.userRatings.toString()
 
+    if (song.id in idList) {
+      holder.rateButton.visibility = View.GONE
+    }
+
     val images = song.image
     val highestResolutionImage = images.maxByOrNull { (_, height, width) -> height / width }!!
 
     val removeRatingsButton = {
       holder.rateButton.visibility = View.GONE
-      notifyDataSetChanged()
+      updateList()
     }
 
     holder.rateButton.setOnClickListener {
       val rateDialog =
-        RatingsDialog(context = this.context, associatedFunction = removeRatingsButton, song = song)
+        RatingsDialog(
+          context = this.context, song = song, associatedFunction = removeRatingsButton, user = user!!
+        )
       rateDialog.show()
     }
 

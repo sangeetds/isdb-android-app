@@ -7,6 +7,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.example.login.R
 import com.example.login.models.SongDTO
+import com.example.login.models.User
+import com.example.login.models.UserSongDTO
 import com.example.login.service.Retrofit
 import com.example.login.service.SongService
 import com.example.login.service.updateSongRatings
@@ -19,7 +21,8 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar
 class RatingsDialog(
   context: Context,
   private val song: SongDTO,
-  val associatedFunction: (() -> Unit)?
+  val associatedFunction: (() -> Unit)?,
+  val user: User
 ) : Dialog(context) {
 
   private val url = context.getString(R.string.baseUrl)
@@ -46,19 +49,19 @@ class RatingsDialog(
     rating: Float,
     retrofitService: SongService
   ) {
+    val ratings = (((song.userRatings * song.votes) + rating) / (song.votes + 1))
+    song.userRatings = ratings
+    song.votes += 1
+
     associatedFunction?.let {
       CoroutineScope(Dispatchers.Main).launch {
-        val updatedSongDTO = SongDTO(
-          id = song.id,
-          name = song.name,
-          url = song.url,
-          album = song.album,
-          releaseDate = song.releaseDate,
-          image = song.image,
-          userRatings = (((song.userRatings * song.votes) + rating) / (song.votes + 1)),
+        val updatedSongDTO = UserSongDTO(
+          songId  = song.id,
+          userRatings = ratings,
           criticsRatings = song.criticsRatings,
           votes = song.votes + 1,
-          spotifyId = song.spotifyId
+          spotifyId = song.spotifyId,
+          userId = user.id
         )
 
         withContext(Dispatchers.IO) {

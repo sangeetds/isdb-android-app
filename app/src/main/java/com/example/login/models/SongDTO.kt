@@ -12,8 +12,8 @@ data class SongDTO(
   @Json(name = "albumName") val album: String = "",
   @Json(name = "releaseDate") val releaseDate: String = "",
   @Json(name = "image") val image: List<Image> = listOf(),
-  @Json(name = "userRatings") val userRatings: Double = 0.0,
+  @Json(name = "userRatings") var userRatings: Double = 0.0,
   @Json(name = "criticsRatings") val criticsRatings: Double = 0.0,
-  @Json(name = "votes") val votes: Int = 0,
+  @Json(name = "votes") var votes: Int = 0,
   @Json(name = "spotifyId") val spotifyId: String = ""
 ) : Parcelable
