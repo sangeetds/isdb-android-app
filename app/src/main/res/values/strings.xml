@@ -39,7 +39,7 @@
     <string name="home">home</string>
     <string name="search">search</string>
     <string name="user">user</string>
-    <string name="full_score">/5.0</string>
+    <string name="full_score">/5.00</string>
     <string name="image_for_ratings">image for ratings</string>
     <string name="app_logo">app logo</string>
     <string name="user_image">user image</string>

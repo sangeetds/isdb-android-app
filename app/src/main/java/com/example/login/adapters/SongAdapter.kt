@@ -15,6 +15,7 @@ import com.example.login.dialog.RatingsDialog
 import com.example.login.models.SongDTO
 import com.example.login.models.User
 import com.squareup.picasso.Picasso
+import java.text.DecimalFormat
 
 class SongAdapter(
   val context: Context,
@@ -55,7 +56,7 @@ class SongAdapter(
     val song = this.songList[position]
 
     holder.songName.text = song.name
-    holder.fanScore.text = song.userRatings.toString()
+    holder.fanScore.text = String.format("%.2f", song.userRatings)
 
     if (song.id in idList) {
       holder.rateButton.visibility = View.GONE
@@ -67,6 +68,7 @@ class SongAdapter(
     val removeRatingsButton = {
       holder.rateButton.visibility = View.GONE
       updateList()
+      notifyDataSetChanged()
     }
 
     holder.rateButton.setOnClickListener {

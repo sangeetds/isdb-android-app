@@ -71,11 +71,19 @@ class SearchFragment : Fragment() {
     }
 
     songSearchView?.doOnTextChanged { text, _, _, _ ->
-      text?.toString()?.getSongList()
+      if (text!!.isNotEmpty()) {
+        recyclerView.visibility = View.VISIBLE
+      }
+
+      text.toString().getSongList()
     }
 
     songSearchView?.setOnEditorActionListener { view, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
+        if (view.text.isNotEmpty()) {
+          recyclerView.visibility = View.VISIBLE
+        }
+
         view.text.toString().getSongList()
       }
 
