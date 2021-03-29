@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SongDTO(
-  @Json(name = "id") val id: String = "",
+  @Json(name = "id") val id: String? = "",
   @Json(name = "name") val name: String = "",
   @Json(name = "url") val url: String = "",
   @Json(name = "albumName") val album: String = "",

@@ -3,6 +3,7 @@ package com.example.login.service
 import com.example.login.models.SongDTO
 import retrofit2.Call
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -13,7 +14,7 @@ interface SongService {
   fun getSongs(@Query("search") songName: String?): Call<List<SongDTO>>
 
   @POST("/tracks")
-  fun updateSongRatings(songDTO: SongDTO): Call<SongDTO>
+  fun updateSongRatings(@Body songDTO: SongDTO): Call<SongDTO>
 }
 
 fun getSongsList(

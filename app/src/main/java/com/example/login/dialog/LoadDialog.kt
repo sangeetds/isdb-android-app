@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.login.R
+import com.example.login.R.string
 import com.example.login.enums.Log
 import com.example.login.models.User
 import com.example.login.service.LoginService
@@ -17,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import java.net.SocketTimeoutException
 
 /**
  * Opens a dialog which tells user about the status of their login/register attempt
@@ -62,27 +64,31 @@ class LoadDialog(
    */
   private fun update(retrofitService: LoginService) =
     CoroutineScope(Dispatchers.Main).launch {
-      var response: Response<User>
-      withContext(Dispatchers.IO) {
-        response = when (type) {
-          Log.LOGIN -> logIn(retrofitService, user = user)
-          else -> createAccount(retrofitService, user = user)
+      try {
+        var response: Response<User>
+        withContext(Dispatchers.IO) {
+          response = when (type) {
+            Log.LOGIN -> logIn(retrofitService, user = user)
+            else -> createAccount(retrofitService, user = user)
+          }
         }
-      }
 
-      when (response.code()) {
-        200 -> {
-          statusText?.text =
-            if (type == Log.LOGIN) context.getString(R.string.loggedIn)
-            else context.getString(R.string.registerSuccess)
-          finishActivity(response.body()!!)
-          dismiss()
+        when (response.code()) {
+          200 -> {
+            statusText?.text =
+              if (type == Log.LOGIN) context.getString(R.string.loggedIn)
+              else context.getString(R.string.registerSuccess)
+            finishActivity(response.body()!!)
+            dismiss()
+          }
+          400 -> {
+            statusText?.text = context.getString(R.string.existAlready)
+            dismiss()
+          }
+          else -> statusText?.text = context.getString(R.string.logInError)
         }
-        400 -> {
-          statusText?.text = context.getString(R.string.existAlready)
-          dismiss()
-        }
-        else -> statusText?.text = context.getString(R.string.logInError)
+      } catch (exception: SocketTimeoutException) {
+        statusText?.text = context.getString(string.server_down)
       }
     }
 }

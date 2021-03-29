@@ -44,4 +44,5 @@
     <string name="app_logo">app logo</string>
     <string name="user_image">user image</string>
     <string name="search_for_a_song">search for a song...</string>
+  <string name="server_down">Server down, please try again :(</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.login.activity
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -13,11 +14,13 @@ import com.example.login.fragments.UserFragment
 import com.example.login.models.User
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*
+import kotlinx.parcelize.Parcelize
 
 class HomeScreenActivity : AppCompatActivity() {
 
   private var toolbar: Toolbar? = null
   private lateinit var user: User
+  private lateinit var toggle: Toggle
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -34,7 +37,12 @@ class HomeScreenActivity : AppCompatActivity() {
 
     val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
     bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener)
-    openFragment(SongFragment.newInstance("", ""))
+    openFragment(SongFragment.newInstance(""))
+
+    val toggleHomeScreen = {
+      openFragment(SongFragment.newInstance(""))
+    }
+    toggle = Toggle(toggleHomeScreen)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -59,18 +67,23 @@ class HomeScreenActivity : AppCompatActivity() {
     BottomNavigationView.OnNavigationItemSelectedListener { item ->
       when (item.itemId) {
         R.id.nav_home -> {
-          openFragment(SongFragment.newInstance("", ""))
+          openFragment(SongFragment.newInstance(""))
           return@OnNavigationItemSelectedListener true
         }
         R.id.nav_search -> {
-          openFragment(SearchFragment.newInstance("", ""))
+          openFragment(SearchFragment.newInstance(toggle))
           return@OnNavigationItemSelectedListener true
         }
         R.id.nav_user -> {
-          openFragment(UserFragment.newInstance("", user))
+          openFragment(UserFragment.newInstance(user))
           return@OnNavigationItemSelectedListener true
         }
       }
       false
     }
+}
+
+@Parcelize
+class Toggle(private val switchFragment: () -> Unit) : Parcelable {
+  fun toggleScreen() = switchFragment
 }

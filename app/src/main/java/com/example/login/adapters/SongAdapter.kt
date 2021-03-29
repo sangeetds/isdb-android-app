@@ -1,6 +1,7 @@
 package com.example.login.adapters
 
 import android.content.Context
+import android.transition.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,10 +40,6 @@ class SongAdapter(val context: Context) :
     val view = layoutInflater
       .inflate(R.layout.song_item_view, parent, false)
 
-    view.setOnClickListener {
-
-    }
-
     return SongViewHolder(view)
   }
 
@@ -58,8 +55,12 @@ class SongAdapter(val context: Context) :
     val images = song.image
     val highestResolutionImage = images.maxByOrNull { (_, height, width) -> height / width }!!
 
+    val removeRatingsButton = {
+      holder.rateButton.visibility = View.GONE
+    }
+
     holder.rateButton.setOnClickListener {
-      val rateDialog = RatingsDialog(context = this.context)
+      val rateDialog = RatingsDialog(context = this.context, associatedFunction = removeRatingsButton, song = song)
       rateDialog.show()
     }
 

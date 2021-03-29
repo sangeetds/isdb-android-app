@@ -12,7 +12,10 @@ import com.example.login.dialog.RatingsDialog
 import com.example.login.models.SongDTO
 import com.squareup.picasso.Picasso
 
-class SearchAdapter(val context: Context) :
+class SearchAdapter(
+  val context: Context,
+  val toggleScreen: (() -> Unit)?
+) :
   RecyclerView.Adapter<SearchAdapter.SongSearchViewHolder>() {
 
   var songList = mutableListOf<SongDTO>()
@@ -35,11 +38,6 @@ class SearchAdapter(val context: Context) :
     val view = layoutInflater
       .inflate(R.layout.search_song_list_view, parent, false)
 
-    view.setOnClickListener {
-      val rateDialog = RatingsDialog(context = this.context)
-      rateDialog.show()
-    }
-
     return SongSearchViewHolder(view)
   }
 
@@ -48,6 +46,11 @@ class SearchAdapter(val context: Context) :
       position: Int
   ) {
     val song = songList[position]
+
+    holder.itemView.setOnClickListener {
+      val rateDialog = RatingsDialog(context = this.context, associatedFunction =  toggleScreen, song = song)
+      rateDialog.show()
+    }
 
     holder.songName.text = song.name
     holder.albumName.text = song.album
