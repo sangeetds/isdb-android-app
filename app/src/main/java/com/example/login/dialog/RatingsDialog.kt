@@ -15,6 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
+import java.util.logging.Level
+import java.util.logging.Logger
 
 class RatingsDialog(
   context: Context,
@@ -55,11 +57,14 @@ class RatingsDialog(
           album = song.album,
           releaseDate = song.releaseDate,
           image = song.image,
-          userRatings = (((song.userRatings * song.votes) + rating) / song.votes + 1),
+          userRatings = (((song.userRatings * song.votes) + rating) / (song.votes + 1)),
           criticsRatings = song.criticsRatings,
           votes = song.votes + 1,
           spotifyId = song.spotifyId
         )
+
+        Logger.getAnonymousLogger().info("$updatedSongDTO")
+        Logger.getAnonymousLogger().info("$song")
 
         withContext(Dispatchers.IO) {
           updateSongRatings(service = retrofitService, songDto = updatedSongDTO)

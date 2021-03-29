@@ -1,5 +1,6 @@
 package com.example.login.service
 
+import com.example.login.models.Song
 import com.example.login.models.SongDTO
 import retrofit2.Call
 import retrofit2.Response
@@ -14,7 +15,7 @@ interface SongService {
   fun getSongs(@Query("search") songName: String?): Call<List<SongDTO>>
 
   @POST("/tracks")
-  fun updateSongRatings(@Body songDTO: SongDTO): Call<SongDTO>
+  fun updateSongRatings(@Body songDTO: SongDTO): Call<Song>
 }
 
 fun getSongsList(
@@ -26,5 +27,5 @@ fun getSongsList(
 fun updateSongRatings(
     service: SongService,
     songDto: SongDTO
-): Response<SongDTO> =
+): Response<Song> =
   service.updateSongRatings(songDTO = songDto).execute()

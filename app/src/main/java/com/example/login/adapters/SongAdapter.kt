@@ -1,7 +1,6 @@
 package com.example.login.adapters
 
 import android.content.Context
-import android.transition.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,8 +32,8 @@ class SongAdapter(val context: Context) :
   }
 
   override fun onCreateViewHolder(
-      parent: ViewGroup,
-      viewType: Int
+    parent: ViewGroup,
+    viewType: Int
   ): SongViewHolder {
     val layoutInflater = LayoutInflater.from(parent.context)
     val view = layoutInflater
@@ -44,8 +43,8 @@ class SongAdapter(val context: Context) :
   }
 
   override fun onBindViewHolder(
-      holder: SongViewHolder,
-      position: Int
+    holder: SongViewHolder,
+    position: Int
   ) {
     val song = this.songList[position]
 
@@ -57,10 +56,12 @@ class SongAdapter(val context: Context) :
 
     val removeRatingsButton = {
       holder.rateButton.visibility = View.GONE
+      notifyDataSetChanged()
     }
 
     holder.rateButton.setOnClickListener {
-      val rateDialog = RatingsDialog(context = this.context, associatedFunction = removeRatingsButton, song = song)
+      val rateDialog =
+        RatingsDialog(context = this.context, associatedFunction = removeRatingsButton, song = song)
       rateDialog.show()
     }
 
@@ -72,14 +73,14 @@ class SongAdapter(val context: Context) :
 
 class SongCallBack : DiffUtil.ItemCallback<SongDTO>() {
   override fun areItemsTheSame(
-      oldItem: SongDTO,
-      newItem: SongDTO
+    oldItem: SongDTO,
+    newItem: SongDTO
   ) =
     oldItem.id == newItem.id
 
   override fun areContentsTheSame(
-      oldItem: SongDTO,
-      newItem: SongDTO
+    oldItem: SongDTO,
+    newItem: SongDTO
   ) =
     oldItem == newItem
 }
