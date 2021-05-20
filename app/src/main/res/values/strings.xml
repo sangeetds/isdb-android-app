@@ -46,4 +46,5 @@
     <string name="search_for_a_song">search for a song…</string>
     <string name="server_down">Server down, please try again :(</string>
     <string name="menuSearch">search</string>
+  <string name="logo_for_the_app">Logo for the app</string>
 </resources>

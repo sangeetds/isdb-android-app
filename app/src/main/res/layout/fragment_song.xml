@@ -10,5 +10,5 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/song_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="600dp" />
+        android:layout_height="605dp" />
 </FrameLayout>
