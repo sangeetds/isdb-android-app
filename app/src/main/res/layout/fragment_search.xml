@@ -7,7 +7,7 @@
     android:layout_marginTop="50dp"
     android:layout_marginBottom="75dp"
     android:orientation="vertical"
-    tools:context=".fragments.SearchFragment">
+    tools:context="com.isdb.fragments.SearchFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_parent"

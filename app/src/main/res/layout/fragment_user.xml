@@ -9,7 +9,7 @@
     android:background="#FFF"
     android:layout_marginTop="60dp"
     android:layout_marginBottom="85dp"
-    tools:context=".fragments.UserFragment">
+    tools:context="com.isdb.fragments.UserFragment">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/user_image"
