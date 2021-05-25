@@ -1,21 +1,26 @@
 package com.isdb.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Patterns
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.isdb.R
-import com.isdb.R.string
-import com.isdb.dialog.LoadDialog
-import com.isdb.enums.Log
-import com.isdb.models.User
+import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import com.isdb.R
+import com.isdb.dialog.LoadDialog
+import com.isdb.models.User
+import com.isdb.ui.login.LoginViewModel
+import com.isdb.ui.login.LoginViewModelFactory
 
 /**
  * Class where user enters isdb credentials to log in to the service
@@ -26,11 +31,12 @@ class LoginActivity : AppCompatActivity() {
    * View that will hold our isdb, password details along with buttons for logging, returning
    * and showing passwords.
    */
-  private lateinit var userNameText: EditText
-  private lateinit var passwordText: TextInputEditText
+  private lateinit var username: EditText
+  private lateinit var password: TextInputEditText
   private lateinit var loginButton: FloatingActionButton
   private lateinit var backButton: ImageButton
-  private lateinit var loadSongList: (User) -> Unit
+  private lateinit var progressDialog: LoadDialog
+  private lateinit var loginViewModel: LoginViewModel
 
   /**
    * On creation of the view, respective bindings are done and the button have been assigned
@@ -41,13 +47,75 @@ class LoginActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_login)
 
-    userNameText = findViewById(R.id.input_username)
-    passwordText = findViewById(R.id.input_password)
+    username = findViewById(R.id.input_username)
+    password = findViewById(R.id.input_password)
     loginButton = findViewById(R.id.btn_login)
     backButton = findViewById(R.id.btn_back)
 
+    loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+      .get(LoginViewModel::class.java)
+
+    loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
+      val loginState = it ?: return@Observer
+
+      // disable login button unless both username / password is valid
+      loginButton.isEnabled = loginState.isDataValid
+
+      if (loginState.usernameError != null) {
+        username.error = getString(loginState.usernameError)
+      }
+      if (loginState.passwordError != null) {
+        password.error = getString(loginState.passwordError)
+      }
+    })
+
+    loginViewModel.loginResult.observe(this@LoginActivity, Observer {
+      val loginResult = it ?: return@Observer
+
+      if (loginResult.error != null) {
+        showLoginFailed(loginResult.error)
+      }
+      if (loginResult.success != null) {
+        updateUiWithUser(loginResult.success)
+      }
+      setResult(Activity.RESULT_OK)
+
+      //Complete and destroy login activity once successful
+      finish()
+    })
+
+    username.doOnTextChanged { text, _, _, _ ->
+      loginViewModel.loginDataChanged(
+        text.toString(),
+        password.text.toString()
+      )
+    }
+
+    password.apply {
+      doOnTextChanged { text, _, _, _ ->
+        loginViewModel.loginDataChanged(
+          username.text.toString(),
+          text.toString()
+        )
+      }
+
+      setOnEditorActionListener { _, actionId, _ ->
+        when (actionId) {
+          EditorInfo.IME_ACTION_DONE -> {
+            showLoadDialog()
+            loginViewModel.login(
+              username.text.toString(),
+              password.text.toString()
+            )
+          }
+        }
+        false
+      }
+    }
+
     loginButton.setOnClickListener {
-      login()
+      showLoadDialog()
+      loginViewModel.login(username.text.toString(), password.text.toString())
     }
 
     backButton.setOnClickListener {
@@ -58,30 +126,8 @@ class LoginActivity : AppCompatActivity() {
   /**
    * Helper function to display the dialog and check the status of the isdb activity
    */
-  private fun login() {
-    /**
-     * A simple validation of the credentials
-     */
-    if (!validate()) {
-      onLoginFailed()
-      return
-    }
-
-    loginButton.isEnabled = false
-
-    val username = userNameText.text.toString()
-    val password = passwordText.text.toString()
-    val user = User(email = username, password = password)
-
-    loadSongList = { registeredUser ->
-      val songsActivity = Intent(this, HomeScreenActivity::class.java)
-      songsActivity.putExtra("user", registeredUser)
-      startActivity(songsActivity)
-      finish()
-    }
-
-    val progressDialog =
-      LoadDialog(this, user, getString(string.base_url), Log.LOGIN, loadSongList)
+  private fun showLoadDialog() {
+    progressDialog = LoadDialog(this)
     progressDialog.show()
 
     progressDialog.setOnDismissListener {
@@ -97,32 +143,25 @@ class LoginActivity : AppCompatActivity() {
     finish()
   }
 
-  private fun onLoginFailed() {
-    Toast.makeText(baseContext, "Check credentials", Toast.LENGTH_LONG).show()
-    loginButton.isEnabled = true
+  private fun updateUiWithUser(model: User) {
+    val welcome = getString(R.string.welcome)
+    val displayName = model.username
+
+    Toast.makeText(
+      applicationContext,
+      "$welcome $displayName",
+      Toast.LENGTH_LONG
+    ).show()
+
+    val songsActivity = Intent(this, HomeScreenActivity::class.java)
+    songsActivity.putExtra("user", model)
+    startActivity(songsActivity)
+    finish()
   }
 
-  /**
-   * Validates the credentials according to some pre-defined rules.
-   */
-  private fun validate(): Boolean {
-    var valid = true
-    val email = userNameText.text.toString()
-    val password = passwordText.text.toString()
-
-    if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-      userNameText.error = "enter a valid email address"
-      valid = false
-    } else {
-      userNameText.error = null
-    }
-    if (password.isEmpty() || password.length < 4 || password.length > 10) {
-      passwordText.error = "between 4 and 10 alphanumeric characters"
-      valid = false
-    } else {
-      passwordText.error = null
-    }
-
-    return valid
+  private fun showLoginFailed(@StringRes errorString: Int) {
+    Toast.makeText(applicationContext, errorString, Toast.LENGTH_LONG).show()
+    progressDialog.updateProgressText(getString(errorString))
+    loginButton.isEnabled = true
   }
 }

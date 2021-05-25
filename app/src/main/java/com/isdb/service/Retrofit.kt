@@ -12,11 +12,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  */
 class Retrofit {
   companion object {
+    private const val baseUrl = "https://pure-ridge-30175.herokuapp.com"
 
-    fun getRetrofitClient(
-      url: String,
-      javaClass: Class<*>
-    ): Any {
+    fun getRetrofitClient(javaClass: Class<*>): Any {
       val httpClient = OkHttpClient.Builder().build()
 
       /**
@@ -27,7 +25,7 @@ class Retrofit {
         .build()
 
       val retrofit = Retrofit.Builder()
-        .baseUrl(url)
+        .baseUrl(baseUrl)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(httpClient)
         .build()

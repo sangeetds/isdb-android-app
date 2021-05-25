@@ -1,14 +1,20 @@
 package com.isdb.data
 
-import com.isdb.data.model.LoggedInUser
+import com.isdb.data.Result.Error
 import com.isdb.data.Result.Success
+import com.isdb.data.model.LoggedInUser
+import com.isdb.models.User
+import com.isdb.service.LoginService
+import com.isdb.service.Retrofit
+import com.isdb.service.logIn
+import java.net.SocketTimeoutException
 
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val dataSource: LoginDataSource) {
+class LoginRepository {
 
   // in-memory cache of the loggedInUser object
   var user: LoggedInUser? = null
@@ -25,26 +31,27 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
   fun logout() {
     user = null
-    dataSource.logout()
   }
 
-  fun login(
-    username: String,
-    password: String
-  ): Result<LoggedInUser> {
+  fun login(user: User): Result<User> {
     // handle login
-    val result = dataSource.login(username, password)
+    val retrofitService =
+      Retrofit.getRetrofitClient(LoginService::class.java) as LoginService
 
-    if (result is Success) {
-      setLoggedInUser(result.data)
-    }
-
-    return result
+    return update(retrofitService, user)
   }
 
-  private fun setLoggedInUser(loggedInUser: LoggedInUser) {
-    this.user = loggedInUser
-    // If user credentials will be cached in local storage, it is recommended it be encrypted
-    // @see https://developer.android.com/training/articles/keystore
+  private fun update(retrofitService: LoginService, user: User): Result<User> = try {
+    val response = logIn(retrofitService, user = user)
+    when (response.code()) {
+      200 -> {
+        Success(response.body()!!)
+      }
+      else -> {
+        Error(Exception(response.errorBody().toString()))
+      }
+    }
+  } catch (exception: SocketTimeoutException) {
+    Error(Exception("Server Down. Please try again."))
   }
 }

@@ -7,6 +7,7 @@ import android.util.Patterns
 import com.isdb.data.LoginRepository
 import com.isdb.data.Result
 import com.isdb.R.string
+import com.isdb.models.User
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -16,25 +17,20 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
   private val _loginResult = MutableLiveData<LoginResult>()
   val loginResult: LiveData<LoginResult> = _loginResult
 
-  fun login(
-    username: String,
-    password: String
-  ) {
+  fun login(username: String, password: String) {
     // can be launched in a separate asynchronous job
-    val result = loginRepository.login(username, password)
+    val user = User(email = username, password = password)
+    val result = loginRepository.login(user)
 
     if (result is Result.Success) {
       _loginResult.value =
-        LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+        LoginResult(success = result.data)
     } else {
       _loginResult.value = LoginResult(error = string.login_failed)
     }
   }
 
-  fun loginDataChanged(
-    username: String,
-    password: String
-  ) {
+  fun loginDataChanged(username: String, password: String) {
     if (!isUserNameValid(username)) {
       _loginForm.value = LoginFormState(usernameError = string.invalid_username)
     } else if (!isPasswordValid(password)) {
