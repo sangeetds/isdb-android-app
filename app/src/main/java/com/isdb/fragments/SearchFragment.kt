@@ -51,11 +51,11 @@ class SearchFragment : Fragment() {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_search, container, false)
 
-    songSearchAdapter = SearchAdapter(context = context!!, param1)
+    songSearchAdapter = SearchAdapter(context = requireContext(), param1)
     val recyclerView = inflate.findViewById<RecyclerView>(R.id.search_recycler_view)
     recyclerView.setHasFixedSize(true)
     recyclerView.adapter = songSearchAdapter
-    recyclerView.layoutManager = LinearLayoutManager(context!!)
+    recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
     val songSearchView = inflate?.findViewById<EditText>(R.id.song_search_view)
     val searchParentView = inflate?.findViewById<TextInputLayout>(R.id.search_parent)
@@ -91,7 +91,6 @@ class SearchFragment : Fragment() {
     runBlocking {
       val list: List<SongDTO>
       val retrofitService = Retrofit.getRetrofitClient(
-        context?.getString(R.string.base_url)!!,
         SongService::class.java
       ) as SongService
 

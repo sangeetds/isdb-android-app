@@ -1,18 +1,23 @@
 package com.isdb.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.isdb.R
-import com.isdb.R.string
-import com.isdb.dialog.LoadDialog
-import com.isdb.enums.Log
-import com.isdb.models.User
+import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.isdb.R
+import com.isdb.dialog.LoadDialog
+import com.isdb.models.User
+import com.isdb.ui.register.RegisterViewModel
+import com.isdb.ui.register.RegisterViewModelFactory
 
 /**
  * Class where user enter his/her isdb credentials to register to the service
@@ -28,7 +33,8 @@ class RegisterActivity : AppCompatActivity() {
   private lateinit var nameText: EditText
   private lateinit var passwordText: EditText
   private lateinit var backButton: ImageButton
-  private lateinit var loadLoginScreen: (User) -> Unit
+  private lateinit var registerViewModel: RegisterViewModel
+  private lateinit var progressDialog: LoadDialog
 
   /**
    * On creation of the view, respective bindings are done and the button have been assigned
@@ -44,7 +50,80 @@ class RegisterActivity : AppCompatActivity() {
     passwordText = findViewById(R.id.input_password)
     backButton = findViewById(R.id.btn_back)
 
-    signUpButton.setOnClickListener { signUp() }
+    registerViewModel = ViewModelProvider(this, RegisterViewModelFactory())
+      .get(RegisterViewModel::class.java)
+
+    registerViewModel.registerFormState.observe(this@RegisterActivity, Observer {
+      val registerState = it ?: return@Observer
+
+      // disable login button unless both username / password is valid
+      signUpButton.isEnabled = registerState.isDataValid
+
+      registerState.emailError?.let {
+        emailText.error = getString(registerState.emailError)
+      }
+
+      registerState.usernameError?.let {
+        nameText.error = getString(registerState.usernameError)
+      }
+      registerState.passwordError?.let {
+        passwordText.error = getString(registerState.passwordError)
+      }
+    })
+
+    registerViewModel.registerResult.observe(this@RegisterActivity, Observer {
+      val loginResult = it ?: return@Observer
+
+      if (loginResult.error != null) {
+        showLoginFailed(loginResult.error)
+      }
+      if (loginResult.success != null) {
+        updateUiWithUser(loginResult.success)
+      }
+      setResult(Activity.RESULT_OK)
+
+      finish()
+    })
+
+    nameText.doOnTextChanged { text, _, _, _ ->
+      registerViewModel.registerDataChanged(
+        emailText.text.toString(),
+        text.toString(),
+        passwordText.text.toString()
+      )
+    }
+
+    passwordText.apply {
+      doOnTextChanged { text, _, _, _ ->
+        registerViewModel.registerDataChanged(
+          emailText.text.toString(),
+          nameText.text.toString(),
+          text.toString()
+        )
+      }
+
+      setOnEditorActionListener { _, actionId, _ ->
+        when (actionId) {
+          EditorInfo.IME_ACTION_DONE -> {
+            showLoadDialog()
+            registerViewModel.register(
+              emailText.text.toString(),
+              nameText.text.toString(),
+              passwordText.text.toString()
+            )
+          }
+        }
+        false
+      }
+    }
+
+    signUpButton.setOnClickListener {
+      showLoadDialog()
+      registerViewModel.register(
+        emailText.text.toString(), nameText.text.toString(), passwordText.text.toString()
+      )
+    }
+
     backButton.setOnClickListener { onBackPressed() }
   }
 
@@ -59,36 +138,8 @@ class RegisterActivity : AppCompatActivity() {
   /**
    * Helper function to display the dialog and check the status of the sign-up activity
    */
-  private fun signUp() {
-    /**
-     * A simple validation of the credentials
-     */
-    if (!validate()) {
-      onSignUpFailed()
-      return
-    }
-
-    signUpButton.isEnabled = false
-
-    val username = nameText.text.toString()
-    val password = passwordText.text.toString()
-    val email = emailText.text.toString()
-    val user = User(username = username, password = password, email = email)
-
-    loadLoginScreen = { registeredUser ->
-      val songsActivity = Intent(this, HomeScreenActivity::class.java)
-      songsActivity.putExtra("user", registeredUser)
-      startActivity(songsActivity)
-      finish()
-    }
-
-    val progressDialog = LoadDialog(
-      this,
-      user,
-      getString(string.base_url),
-      Log.REGISTER,
-      loadLoginScreen
-    )
+  private fun showLoadDialog() {
+    val progressDialog = LoadDialog(context = this)
     progressDialog.show()
 
     progressDialog.setOnDismissListener {
@@ -96,42 +147,24 @@ class RegisterActivity : AppCompatActivity() {
     }
   }
 
-  private fun onSignUpFailed() {
-    Toast.makeText(baseContext, "Check credentials", Toast.LENGTH_LONG).show()
-    signUpButton.isEnabled = true
+  private fun updateUiWithUser(model: User) {
+    val welcome = getString(R.string.welcome)
+    val displayName = model.username
+
+    Toast.makeText(
+      applicationContext,
+      "$welcome $displayName",
+      Toast.LENGTH_LONG
+    ).show()
+
+    val songsActivity = Intent(this, HomeScreenActivity::class.java)
+    songsActivity.putExtra("user", model)
+    startActivity(songsActivity)
   }
 
-  /**
-   * Returns true or false depending on whether the credentials are according to some
-   * pre-defined rules.
-   */
-  private fun validate(): Boolean {
-    var valid = true
-    val name = nameText.text.toString()
-    val email = emailText.text.toString()
-    val password = passwordText.text.toString()
-
-    if (name.isEmpty() || name.length < 3) {
-      nameText.error = "at least 3 characters"
-      valid = false
-    } else {
-      nameText.error = null
-    }
-
-    if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-      emailText.error = "enter a valid email address"
-      valid = false
-    } else {
-      emailText.error = null
-    }
-
-    if (password.isEmpty() || password.length < 4 || password.length > 10) {
-      passwordText.error = "between 4 and 10 alphanumeric characters"
-      valid = false
-    } else {
-      passwordText.error = null
-    }
-
-    return valid
+  private fun showLoginFailed(@StringRes errorString: Int) {
+    Toast.makeText(applicationContext, errorString, Toast.LENGTH_LONG).show()
+    progressDialog.updateProgressText(getString(errorString))
+    signUpButton.isEnabled = true
   }
 }

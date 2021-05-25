@@ -54,10 +54,10 @@ class SongFragment : Fragment() {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_song, container, false)
 
-    this.songAdapter = SongAdapter(context = context!!, updateList, user)
+    this.songAdapter = SongAdapter(context = requireContext(), updateList, user)
     val recyclerView = inflate.findViewById<RecyclerView>(R.id.song_recycler_view)
     recyclerView.adapter = songAdapter
-    recyclerView.layoutManager = LinearLayoutManager(context!!)
+    recyclerView.layoutManager = LinearLayoutManager(requireContext())
     recyclerView.setHasFixedSize(true)
 
     return inflate
@@ -68,7 +68,6 @@ class SongFragment : Fragment() {
       var list: List<SongDTO>?
       var idList: List<String>?
       val retrofitService = Retrofit.getRetrofitClient(
-        getString(R.string.base_url),
         SongService::class.java
       ) as SongService
 

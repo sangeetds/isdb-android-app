@@ -34,7 +34,7 @@ class RatingsDialog(
     val cancelButton = findViewById<ImageView>(R.id.cancel_ratings_button)
     val songRating = findViewById<MaterialRatingBar>(R.id.star_ratings)
     val retrofitService =
-      Retrofit.getRetrofitClient(url, SongService::class.java) as SongService
+      Retrofit.getRetrofitClient(SongService::class.java) as SongService
 
     cancelButton.setOnClickListener {
       dismiss()

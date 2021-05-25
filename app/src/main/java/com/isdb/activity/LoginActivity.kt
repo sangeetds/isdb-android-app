@@ -156,7 +156,6 @@ class LoginActivity : AppCompatActivity() {
     val songsActivity = Intent(this, HomeScreenActivity::class.java)
     songsActivity.putExtra("user", model)
     startActivity(songsActivity)
-    finish()
   }
 
   private fun showLoginFailed(@StringRes errorString: Int) {
