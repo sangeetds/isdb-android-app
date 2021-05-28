@@ -38,42 +38,47 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.2.0'
+  def kotlinCoroutineVersion = '1.4.2'
+  def moshiVersion = "1.11.0"
+  def retrofitVersion = "2.9.0"
+
+  // kotlin
+  implementation fileTree(dir: "libs", include: ["*.jar"])
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
+
+  // android
+  implementation 'androidx.annotation:annotation:1.2.0'
   implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
   implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-  def kotlinCoroutineVersion = '1.4.2'
-    def moshiVersion = "1.11.0"
-    def retrofitVersion = "2.9.0"
+  implementation 'androidx.core:core-ktx:1.5.0'
+  implementation 'androidx.appcompat:appcompat:1.3.0'
+  implementation "androidx.fragment:fragment-ktx:1.3.4"
+  implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+  implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+  implementation 'androidx.recyclerview:recyclerview:1.2.0'
+  implementation 'androidx.cardview:cardview:1.0.0'
 
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+  // Coroutine
+  implementation 'com.google.android.material:material:1.3.0'
+  implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
+  // coroutine
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
 
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation "androidx.fragment:fragment-ktx:1.3.4"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.3.0'
+  // retrofit and moshi
+  implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+  implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+  implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+  implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+  implementation "com.squareup.moshi:moshi:$moshiVersion"
+  kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
-    implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
+  // picasso
+  implementation 'com.squareup.picasso:picasso:2.8'
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
-
-    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
-    implementation "com.squareup.moshi:moshi:$moshiVersion"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
-
-    implementation 'com.squareup.picasso:picasso:2.8'
-
-    testImplementation 'junit:junit:4.13.2'
-
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+  // test
+  testImplementation 'junit:junit:4.13.2'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

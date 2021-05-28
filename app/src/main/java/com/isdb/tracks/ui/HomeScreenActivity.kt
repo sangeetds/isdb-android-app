@@ -7,9 +7,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.isdb.R
-import com.isdb.fragments.SearchFragment
-import com.isdb.fragments.SongFragment
-import com.isdb.fragments.UserFragment
 import com.isdb.login.data.model.User
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*

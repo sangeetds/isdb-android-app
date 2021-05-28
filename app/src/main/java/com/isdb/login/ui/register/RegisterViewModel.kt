@@ -4,10 +4,13 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.isdb.R.string
 import com.isdb.login.data.RegisterRepository
 import com.isdb.login.data.Result
 import com.isdb.login.data.model.User
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class RegisterViewModel(private val registerRepository: RegisterRepository) : ViewModel() {
 
@@ -21,18 +24,19 @@ class RegisterViewModel(private val registerRepository: RegisterRepository) : Vi
     email: String,
     username: String,
     password: String
-  ) {
-    // can be launched in a separate asynchronous job
-    val user = User(email = email, username = username, password = password)
-    val result = registerRepository.register(user)
-
-    if (result is Result.Success) {
-      _registerResult.value =
-        RegisterResult(success = result.data)
-    } else {
-      _registerResult.value = RegisterResult(error = string.login_failed)
+  ) =
+    viewModelScope.launch {
+      // can be launched in a separate asynchronous job
+      val user = User(email = email, username = username, password = password)
+      registerRepository.register(user).collect { result ->
+        if (result is Result.Success) {
+          _registerResult.value =
+            RegisterResult(success = result.data)
+        } else {
+          _registerResult.value = RegisterResult(error = string.login_failed)
+        }
+      }
     }
-  }
 
   fun registerDataChanged(
     email: String,

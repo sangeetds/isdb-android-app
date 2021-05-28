@@ -5,7 +5,7 @@ import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
 import com.isdb.retrofit.LoginService
 import com.isdb.retrofit.Retrofit
-import com.isdb.retrofit.logIn
+import kotlinx.coroutines.flow.flow
 import java.net.SocketTimeoutException
 
 /**
@@ -28,26 +28,26 @@ class LoginRepository {
     user = null
   }
 
-  fun logout() {
-    user = null
-  }
-
-  fun login(user: User): Result<User> {
+  fun login(user: User) = flow {
     // handle login
     val retrofitService =
       Retrofit.getRetrofitClient(LoginService::class.java) as LoginService
 
-    return update(retrofitService, user)
+    emit(update(retrofitService, user))
   }
 
-  private fun update(retrofitService: LoginService, user: User): Result<User> = try {
-    val response = logIn(retrofitService, user = user)
-    when (response.code()) {
-      200 -> {
-        Success(response.body()!!)
-      }
-      else -> {
-        Error(Exception(response.errorBody().toString()))
+  private suspend fun update(
+    retrofitService: LoginService,
+    user: User
+  ): Result<User> = try {
+    retrofitService.logInUser(user = user).run {
+      when {
+        isSuccessful && body() != null -> {
+          Success(body()!!)
+        }
+        else -> {
+          Error(Exception(errorBody().toString()))
+        }
       }
     }
   } catch (exception: SocketTimeoutException) {

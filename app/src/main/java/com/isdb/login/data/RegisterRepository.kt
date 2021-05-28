@@ -5,7 +5,7 @@ import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
 import com.isdb.retrofit.LoginService
 import com.isdb.retrofit.Retrofit
-import com.isdb.retrofit.createAccount
+import kotlinx.coroutines.flow.flow
 import java.net.SocketTimeoutException
 
 class RegisterRepository {
@@ -19,23 +19,27 @@ class RegisterRepository {
     user = null
   }
 
-  fun register(user: User): Result<User> {
+  fun register(user: User) = flow {
     val retrofit = Retrofit.getRetrofitClient(LoginService::class.java) as LoginService
-
-    return update(retrofit, user)
+    emit(update(retrofit, user))
   }
 
-  private fun update(retrofitService: LoginService, user: User): Result<User> = try {
-    val response = createAccount(retrofitService, user = user)
-    when (response.code()) {
-      200 -> {
-        Success(response.body()!!)
+  private suspend fun update(
+    retrofitService: LoginService,
+    user: User
+  ) =
+    try {
+      retrofitService.createUser(user).run {
+        when {
+          isSuccessful && body() != null -> {
+            Success(body()!!)
+          }
+          else -> {
+            Error(Exception(errorBody().toString()))
+          }
+        }
       }
-      else -> {
-        Error(Exception(response.errorBody().toString()))
-      }
+    } catch (exception: SocketTimeoutException) {
+      Error(Exception("Server Down. Please try again."))
     }
-  } catch (exception: SocketTimeoutException) {
-    Error(Exception("Server Down. Please try again."))
-  }
 }
