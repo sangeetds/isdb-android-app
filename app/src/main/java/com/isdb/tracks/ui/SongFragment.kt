@@ -5,19 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
-import com.isdb.tracks.data.models.SongDTO
+import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
-import com.isdb.retrofit.Retrofit
-import com.isdb.retrofit.SongService
-import com.isdb.retrofit.getLikedSong
-import com.isdb.retrofit.getSongsList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.isdb.tracks.data.models.SongDTO
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -30,16 +25,11 @@ private const val ARG_PARAM1 = "param1"
 class SongFragment : Fragment() {
   private var user: User? = null
   private lateinit var songAdapter: SongAdapter
+  private lateinit var viewModel: SongViewModel
   private lateinit var updateList: () -> Unit
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-    updateList = {
-      getSongList()
-    }
-    getSongList()
-
     arguments?.let {
       user = it.getParcelable(ARG_PARAM1)
     }
@@ -62,29 +52,21 @@ class SongFragment : Fragment() {
     return inflate
   }
 
-  private fun getSongList() =
-    CoroutineScope(Dispatchers.Main).launch {
-      var list: List<SongDTO>?
-      var idList: List<String>?
-      val retrofitService = Retrofit.getRetrofitClient(
-        SongService::class.java
-      ) as SongService
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
+    super.onViewCreated(view, savedInstanceState)
+    viewModel = ViewModelProvider(this, SongViewModelFactory()).get(SongViewModel::class.java)
 
-      withContext(Dispatchers.IO) {
-        list = getSongsList(retrofitService, null).body()
-        idList = getLikedSong(service = retrofitService, id = user!!.id).body()
-      }
+    viewModel.songs.observe(viewLifecycleOwner, Observer {
+      val song = it ?: return@Observer
 
-      idList?.let {
-        songAdapter.idList.clear()
-        songAdapter.idList.addAll(it)
+      if (song is Success<List<SongDTO>>) {
+        songAdapter.songList = song.data.toMutableList()
       }
-
-      list?.let {
-        songAdapter.songList = it.toMutableList()
-        songAdapter.notifyDataSetChanged()
-      }
-    }
+    })
+  }
 
   companion object {
     /**

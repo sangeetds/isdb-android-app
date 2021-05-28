@@ -60,10 +60,10 @@ class LoginActivity : AppCompatActivity() {
       // disable login button unless both username / password is valid
       loginButton.isEnabled = loginState.isDataValid
 
-      if (loginState.usernameError != null) {
+      loginState.usernameError?.let {
         username.error = getString(loginState.usernameError)
       }
-      if (loginState.passwordError != null) {
+      loginState.passwordError?.let {
         password.error = getString(loginState.passwordError)
       }
     })
@@ -71,10 +71,10 @@ class LoginActivity : AppCompatActivity() {
     loginViewModel.loginResult.observe(this@LoginActivity, Observer {
       val loginResult = it ?: return@Observer
 
-      if (loginResult.error != null) {
+      loginResult.error?.let {
         showLoginFailed(loginResult.error)
       }
-      if (loginResult.success != null) {
+      loginResult.success?.let {
         updateUiWithUser(loginResult.success)
       }
       setResult(Activity.RESULT_OK)
