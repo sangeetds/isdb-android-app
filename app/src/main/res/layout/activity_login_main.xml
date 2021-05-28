@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    tools:context="com.isdb.activity.LoginMainActivity">
+    tools:context="com.isdb.login.ui.LoginMainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
