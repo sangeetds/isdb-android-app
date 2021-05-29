@@ -14,15 +14,16 @@ import com.isdb.login.data.model.User
 import com.isdb.tracks.data.dto.UserSongDTO
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Job
+import timber.log.Timber
 
 class SearchAdapter(
   val context: Context,
   val user: User?,
-  val update: (UserSongDTO) -> Job
+  private val update: (UserSongDTO) -> Job
 ) :
   RecyclerView.Adapter<SongSearchViewHolder>() {
 
-  val songList = mutableListOf<SongDTO>()
+  var songList = mutableListOf<SongDTO>()
 
   class SongSearchViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
     val image: ImageView = cardView.findViewById(R.id.small_song_image)
@@ -48,6 +49,7 @@ class SearchAdapter(
     val song = songList[position]
 
     holder.itemView.setOnClickListener {
+      Timber.i("Rating song ${song.name} and opening up the rating dialog")
       val rateDialog =
         RatingsDialog(
           context = this.context, song = song, associatedFunction = update, user = user!!,

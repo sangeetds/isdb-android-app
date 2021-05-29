@@ -11,6 +11,7 @@ import com.isdb.login.data.Result
 import com.isdb.login.data.model.User
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -24,9 +25,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     username: String,
     password: String
   ) = viewModelScope.launch {
-
-    // can be launched in a separate asynchronous job
     val user = User(email = username, password = password)
+    Timber.i("Making request to the server for user: $user")
+
     loginRepository.login(user).collect { result ->
       if (result is Result.Success) {
         _loginResult.value =

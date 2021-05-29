@@ -5,6 +5,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 
 /**
  * Retrofit client class which has an companion function that returns the client to make
@@ -16,6 +17,7 @@ class Retrofit {
 
     fun getRetrofitClient(javaClass: Class<*>): Any {
       val httpClient = OkHttpClient.Builder().build()
+      Timber.i("Creating retrofit client for $javaClass")
 
       /**
        * Moshi helps in converting JSON objects into Java Classes and parameters.
@@ -30,6 +32,7 @@ class Retrofit {
         .client(httpClient)
         .build()
 
+      Timber.i("Retrofit client successfully created.")
       return retrofit.create(javaClass)
     }
   }

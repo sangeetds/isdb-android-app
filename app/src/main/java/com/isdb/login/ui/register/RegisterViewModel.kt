@@ -11,6 +11,7 @@ import com.isdb.login.data.Result
 import com.isdb.login.data.model.User
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class RegisterViewModel(private val registerRepository: RegisterRepository) : ViewModel() {
 
@@ -26,8 +27,9 @@ class RegisterViewModel(private val registerRepository: RegisterRepository) : Vi
     password: String
   ) =
     viewModelScope.launch {
-      // can be launched in a separate asynchronous job
       val user = User(email = email, username = username, password = password)
+      Timber.i("Making request to the server for user: $user")
+
       registerRepository.register(user).collect { result ->
         if (result is Result.Success) {
           _registerResult.value =

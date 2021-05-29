@@ -1,7 +1,6 @@
 package com.isdb.retrofit
 
 import com.isdb.login.data.model.User
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

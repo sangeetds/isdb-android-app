@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.isdb.R
 import com.isdb.login.data.model.User
 import com.isdb.tracks.data.dto.UserSongDTO
+import timber.log.Timber
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -45,6 +46,7 @@ class SearchFragment : Fragment() {
   ): View? {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_search, container, false)
+    Timber.i("Switched to user fragment for $user")
 
     val update = { userSongDTO: UserSongDTO ->
       viewModel.updateRatings(userSongDTO)
@@ -54,6 +56,7 @@ class SearchFragment : Fragment() {
     recyclerView.adapter = songSearchAdapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
     recyclerView.setHasFixedSize(true)
+    Timber.i("Recycler view laid out.")
 
     val songSearchView = inflate.findViewById<EditText>(R.id.song_search_view)
     val searchParentView = inflate.findViewById<TextInputLayout>(R.id.search_parent)
@@ -63,7 +66,7 @@ class SearchFragment : Fragment() {
     }
 
     songSearchView?.doOnTextChanged { text, _, _, _ ->
-      if (text!!.isNotEmpty() && text.length > 3) {
+      if (text!!.isNotEmpty() && text.length > 1) {
         recyclerView.visibility = View.VISIBLE
         viewModel.getSongs(text.toString(), userId = user!!.id)
       }
@@ -88,13 +91,15 @@ class SearchFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
     viewModel =
-      ViewModelProvider(this, SongSearchViewModelFactory()).get(SearchSongViewModel::class.java)
+      ViewModelProvider(this, SearchSongViewModelFactory()).get(SearchSongViewModel::class.java)
 
     viewModel.searchedSongs.observe(viewLifecycleOwner, Observer {
       val song = it ?: return@Observer
+      Timber.i("New songs loaded up.")
 
       if (song.isNotEmpty()) {
-        songSearchAdapter.songList.addAll(song)
+        Timber.i("New songs load up: ${song.map { s -> s.name }}")
+        songSearchAdapter.songList = song.toMutableList()
         songSearchAdapter.notifyDataSetChanged()
       }
     })

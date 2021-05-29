@@ -17,6 +17,7 @@ import com.isdb.tracks.data.dto.UserSongDTO
 import com.isdb.tracks.ui.SongAdapter.SongViewHolder
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Job
+import timber.log.Timber
 
 class SongAdapter(
   val context: Context,
@@ -58,14 +59,12 @@ class SongAdapter(
       holder.rateButton.visibility = View.GONE
     }
 
-    val images = song.image
-    val highestResolutionImage = images.maxByOrNull { (_, height, width) -> height / width }!!
-
     val removeRatingsButton = {
       holder.rateButton.visibility = View.GONE
     }
 
     holder.rateButton.setOnClickListener {
+      Timber.i("Rating song ${song.name} and opening up the rating dialog")
       val rateDialog =
         RatingsDialog(
           context = this.context, song = song, associatedFunction = update,
@@ -74,6 +73,7 @@ class SongAdapter(
       rateDialog.show()
     }
 
+    val highestResolutionImage = song.image.maxByOrNull { (_, height, width) -> height / width }!!
     Picasso.get().load(highestResolutionImage.url).into(holder.image)
   }
 

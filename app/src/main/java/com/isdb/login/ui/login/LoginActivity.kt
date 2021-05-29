@@ -17,17 +17,18 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.isdb.R
-import com.isdb.tracks.ui.HomeScreenActivity
-import com.isdb.login.ui.LoadDialog
 import com.isdb.login.data.model.User
+import com.isdb.login.ui.LoadDialog
+import com.isdb.tracks.ui.HomeScreenActivity
+import timber.log.Timber
 
 /**
- * Class where user enters isdb credentials to log in to the service
+ * Class where user enters login credentials to log in to the service
  */
 class LoginActivity : AppCompatActivity() {
 
   /**
-   * View that will hold our isdb, password details along with buttons for logging, returning
+   * View that will hold our email and password details along with buttons for logging, returning
    * and showing passwords.
    */
   private lateinit var username: EditText
@@ -37,14 +38,11 @@ class LoginActivity : AppCompatActivity() {
   private lateinit var progressDialog: LoadDialog
   private lateinit var loginViewModel: LoginViewModel
 
-  /**
-   * On creation of the view, respective bindings are done and the button have been assigned
-   * their respective responsibilities.
-   */
   @RequiresApi(Build.VERSION_CODES.O)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_login)
+    Timber.i("Login activity created. Layout set.")
 
     username = findViewById(R.id.input_username)
     password = findViewById(R.id.input_password)
@@ -56,31 +54,33 @@ class LoginActivity : AppCompatActivity() {
 
     loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
       val loginState = it ?: return@Observer
-
+      Timber.i("Change in login form state.")
       // disable login button unless both username / password is valid
       loginButton.isEnabled = loginState.isDataValid
 
       loginState.usernameError?.let {
+        Timber.d("Username not correct")
         username.error = getString(loginState.usernameError)
       }
       loginState.passwordError?.let {
+        Timber.d("Password not correct")
         password.error = getString(loginState.passwordError)
       }
     })
 
     loginViewModel.loginResult.observe(this@LoginActivity, Observer {
       val loginResult = it ?: return@Observer
+      Timber.i("Change in login result state.")
 
       loginResult.error?.let {
+        Timber.e("Login not successful")
         showLoginFailed(loginResult.error)
       }
       loginResult.success?.let {
+        Timber.i("Successfully logged in")
         updateUiWithUser(loginResult.success)
       }
       setResult(Activity.RESULT_OK)
-
-      //Complete and destroy login activity once successful
-      finish()
     })
 
     username.doOnTextChanged { text, _, _, _ ->
@@ -101,6 +101,7 @@ class LoginActivity : AppCompatActivity() {
       setOnEditorActionListener { _, actionId, _ ->
         when (actionId) {
           EditorInfo.IME_ACTION_DONE -> {
+            Timber.i("User requested log in")
             showLoadDialog()
             loginViewModel.login(
               username.text.toString(),
@@ -113,21 +114,24 @@ class LoginActivity : AppCompatActivity() {
     }
 
     loginButton.setOnClickListener {
+      Timber.i("User requested log in")
       showLoadDialog()
       loginViewModel.login(username.text.toString(), password.text.toString())
     }
 
     backButton.setOnClickListener {
+      Timber.i("User chose to close the login screen")
       onBackPressed()
     }
   }
 
   /**
-   * Helper function to display the dialog and check the status of the isdb activity
+   * Helper function to display the dialog and check the status of the login activity
    */
   private fun showLoadDialog() {
     progressDialog = LoadDialog(this)
     progressDialog.show()
+    Timber.i("Load dialog requested.")
 
     progressDialog.setOnDismissListener {
       loginButton.isEnabled = true
@@ -138,6 +142,7 @@ class LoginActivity : AppCompatActivity() {
    * To go back to the screen
    */
   override fun onBackPressed() {
+    Timber.i("User chose to close the screen")
     super.onBackPressed()
     finish()
   }
@@ -145,6 +150,7 @@ class LoginActivity : AppCompatActivity() {
   private fun updateUiWithUser(model: User) {
     val welcome = getString(R.string.welcome)
     val displayName = model.username
+    Timber.i("Login successful for $model")
 
     Toast.makeText(
       applicationContext,
@@ -152,12 +158,17 @@ class LoginActivity : AppCompatActivity() {
       Toast.LENGTH_LONG
     ).show()
 
+    Timber.i("Starting HomeScreenActivity")
     val songsActivity = Intent(this, HomeScreenActivity::class.java)
     songsActivity.putExtra("user", model)
     startActivity(songsActivity)
+
+    //Complete and destroy login activity once successful
+    finish()
   }
 
   private fun showLoginFailed(@StringRes errorString: Int) {
+    Timber.d("Logging failed.")
     Toast.makeText(applicationContext, errorString, Toast.LENGTH_LONG).show()
     progressDialog.updateProgressText(getString(errorString))
     loginButton.isEnabled = true

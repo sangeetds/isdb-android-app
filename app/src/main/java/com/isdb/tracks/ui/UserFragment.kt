@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.isdb.R
 import com.isdb.login.data.model.User
+import timber.log.Timber
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM2 = "param2"
@@ -34,6 +35,7 @@ class UserFragment : Fragment() {
   ): View? {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_user, container, false)
+    Timber.i("Switched to user fragment for $user")
 
     val userEmail = inflate.findViewById<TextView>(R.id.user_email)
     userEmail.text = user?.email

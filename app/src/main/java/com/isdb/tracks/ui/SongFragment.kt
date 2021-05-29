@@ -14,6 +14,7 @@ import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
 import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO
+import timber.log.Timber
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -42,6 +43,7 @@ class SongFragment : Fragment() {
   ): View? {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_song, container, false)
+    Timber.i("Switched to user fragment for $user")
 
     val update = { userSongDTO: UserSongDTO ->
       viewModel.updateRatings(userSongDTO)
@@ -52,6 +54,7 @@ class SongFragment : Fragment() {
     recyclerView.adapter = songAdapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
     recyclerView.setHasFixedSize(true)
+    Timber.i("Recycler view laid out.")
 
     return inflate
   }
@@ -66,8 +69,10 @@ class SongFragment : Fragment() {
 
     viewModel.songs.observe(viewLifecycleOwner, Observer {
       val song = it ?: return@Observer
+      Timber.i("New songs loaded up.")
 
-      if (song is Success<List<SongDTO>>) {
+      if (song is Success<List<SongDTO>> && song.data.isNotEmpty()) {
+        Timber.i("New songs load up: ${song.data.map { s -> s.name }}")
         songAdapter.songList.addAll(song.data)
         songAdapter.notifyDataSetChanged()
       }

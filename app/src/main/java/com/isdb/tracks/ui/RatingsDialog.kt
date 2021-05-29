@@ -11,6 +11,7 @@ import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO
 import kotlinx.coroutines.Job
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
+import timber.log.Timber
 
 class RatingsDialog(
   context: Context,
@@ -23,15 +24,18 @@ class RatingsDialog(
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.ratings_dialog)
+    Timber.i("Ratings dialog started for ${song.name}. Layout set.")
 
     val cancelButton = findViewById<ImageView>(R.id.cancel_ratings_button)
     val songRating = findViewById<MaterialRatingBar>(R.id.star_ratings)
 
     cancelButton.setOnClickListener {
+      Timber.i("User didn't rate the song")
       dismiss()
     }
 
     songRating.setOnRatingChangeListener { _, rating ->
+      Timber.i("User rated the song $rating")
       updateRating(rating)
     }
   }
@@ -40,6 +44,7 @@ class RatingsDialog(
     val updateRating = (((song.userRatings * song.votes) + rating) / (song.votes + 1))
     song.userRatings = updateRating
     song.votes += 1
+    Timber.i("Rating the song $song")
 
     val updatedSongDTO = UserSongDTO(
       songId = song.id,

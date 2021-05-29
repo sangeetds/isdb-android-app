@@ -10,6 +10,7 @@ import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class SearchSongViewModel(private val searchSongRepository: SearchSongRepository) : ViewModel() {
 
@@ -20,6 +21,8 @@ class SearchSongViewModel(private val searchSongRepository: SearchSongRepository
     songName: String,
     userId: String
   ) = viewModelScope.launch {
+    Timber.i("Making request to the server for user: $userId")
+
     searchSongRepository.getSongs(songName, userId).collect { result ->
       if (result is Result.Success) {
         _searchedSongs.value = result.data
@@ -30,6 +33,7 @@ class SearchSongViewModel(private val searchSongRepository: SearchSongRepository
   }
 
   fun updateRatings(userSongDTO: UserSongDTO) = viewModelScope.launch {
+    Timber.i("Updating ratings for $userSongDTO")
     searchSongRepository.updateRatings(userSongDTO)
   }
 }

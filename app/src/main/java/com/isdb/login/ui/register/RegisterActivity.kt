@@ -14,17 +14,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.isdb.R
-import com.isdb.tracks.ui.HomeScreenActivity
-import com.isdb.login.ui.LoadDialog
 import com.isdb.login.data.model.User
+import com.isdb.login.ui.LoadDialog
+import com.isdb.tracks.ui.HomeScreenActivity
+import timber.log.Timber
 
 /**
- * Class where user enter his/her isdb credentials to register to the service
+ * Class where user enter their login credentials to register to the service
  */
 class RegisterActivity : AppCompatActivity() {
 
   /**
-   * View that will hold our isdb, password and email details along with buttons for sign-up,
+   * View that will hold our username, password and email details along with buttons for sign-up,
    * returning and showing passwords.
    */
   private lateinit var emailText: EditText
@@ -35,13 +36,10 @@ class RegisterActivity : AppCompatActivity() {
   private lateinit var registerViewModel: RegisterViewModel
   private lateinit var progressDialog: LoadDialog
 
-  /**
-   * On creation of the view, respective bindings are done and the button have been assigned
-   * their respective responsibilities.
-   */
   public override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_register)
+    Timber.i("Register Activity created. Layout set.")
 
     signUpButton = findViewById(R.id.btn_signup)
     nameText = findViewById(R.id.input_name)
@@ -54,34 +52,39 @@ class RegisterActivity : AppCompatActivity() {
 
     registerViewModel.registerFormState.observe(this@RegisterActivity, Observer {
       val registerState = it ?: return@Observer
+      Timber.i("Change in register state")
 
       // disable login button unless both username / password is valid
       signUpButton.isEnabled = registerState.isDataValid
 
       registerState.emailError?.let {
+        Timber.d("Invalid email entered")
         emailText.error = getString(registerState.emailError)
       }
 
       registerState.usernameError?.let {
+        Timber.d("Invalid username entered")
         nameText.error = getString(registerState.usernameError)
       }
       registerState.passwordError?.let {
+        Timber.d("Invalid password entered")
         passwordText.error = getString(registerState.passwordError)
       }
     })
 
     registerViewModel.registerResult.observe(this@RegisterActivity, Observer {
-      val loginResult = it ?: return@Observer
+      val registerResult = it ?: return@Observer
+      Timber.i("Change in register result")
 
-      if (loginResult.error != null) {
-        showLoginFailed(loginResult.error)
+      if (registerResult.error != null) {
+        Timber.e("Error while registering")
+        showLoginFailed(registerResult.error)
       }
-      if (loginResult.success != null) {
-        updateUiWithUser(loginResult.success)
+      if (registerResult.success != null) {
+        Timber.i("Registration successful")
+        updateUiWithUser(registerResult.success)
       }
       setResult(Activity.RESULT_OK)
-
-      finish()
     })
 
     nameText.doOnTextChanged { text, _, _, _ ->
@@ -104,6 +107,7 @@ class RegisterActivity : AppCompatActivity() {
       setOnEditorActionListener { _, actionId, _ ->
         when (actionId) {
           EditorInfo.IME_ACTION_DONE -> {
+            Timber.i("User requested sign up")
             showLoadDialog()
             registerViewModel.register(
               emailText.text.toString(),
@@ -117,21 +121,17 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     signUpButton.setOnClickListener {
+      Timber.i("User requested sign up")
       showLoadDialog()
       registerViewModel.register(
         emailText.text.toString(), nameText.text.toString(), passwordText.text.toString()
       )
     }
 
-    backButton.setOnClickListener { onBackPressed() }
-  }
-
-  /**
-   * To go back to the screen
-   */
-  override fun onBackPressed() {
-    super.onBackPressed()
-    finish()
+    backButton.setOnClickListener {
+      Timber.i("User chose to close the sign up screen")
+      onBackPressed()
+    }
   }
 
   /**
@@ -140,15 +140,29 @@ class RegisterActivity : AppCompatActivity() {
   private fun showLoadDialog() {
     val progressDialog = LoadDialog(context = this)
     progressDialog.show()
+    Timber.i("Load dialog requested.")
 
     progressDialog.setOnDismissListener {
       signUpButton.isEnabled = true
     }
   }
 
+  /**
+   * To go back to the screen
+   */
+  override fun onBackPressed() {
+    Timber.i("User chose to close the screen")
+    super.onBackPressed()
+    finish()
+  }
+
+  /**
+   * Updating the UI on a successful registration
+   */
   private fun updateUiWithUser(model: User) {
     val welcome = getString(R.string.welcome)
     val displayName = model.username
+    Timber.i("Signup successful for $model")
 
     Toast.makeText(
       applicationContext,
@@ -156,12 +170,16 @@ class RegisterActivity : AppCompatActivity() {
       Toast.LENGTH_LONG
     ).show()
 
+    Timber.i("Starting HomeScreenActivity")
     val songsActivity = Intent(this, HomeScreenActivity::class.java)
     songsActivity.putExtra("user", model)
     startActivity(songsActivity)
+
+    finish()
   }
 
   private fun showLoginFailed(@StringRes errorString: Int) {
+    Timber.d("Registration failed.")
     Toast.makeText(applicationContext, errorString, Toast.LENGTH_LONG).show()
     progressDialog.updateProgressText(getString(errorString))
     signUpButton.isEnabled = true
