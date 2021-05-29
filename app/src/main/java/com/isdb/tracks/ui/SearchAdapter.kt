@@ -22,7 +22,7 @@ class SearchAdapter(
 ) :
   RecyclerView.Adapter<SongSearchViewHolder>() {
 
-  var songList = mutableListOf<SongDTO>()
+  val songList = mutableListOf<SongDTO>()
 
   class SongSearchViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
     val image: ImageView = cardView.findViewById(R.id.small_song_image)

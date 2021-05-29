@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import com.isdb.R
-import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
-import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,13 +87,15 @@ class SearchFragment : Fragment() {
   ) {
     super.onViewCreated(view, savedInstanceState)
 
-    viewModel = ViewModelProvider(this, SongSearchViewModelFactory()).get(SearchSongViewModel::class.java)
+    viewModel =
+      ViewModelProvider(this, SongSearchViewModelFactory()).get(SearchSongViewModel::class.java)
 
     viewModel.searchedSongs.observe(viewLifecycleOwner, Observer {
       val song = it ?: return@Observer
 
-      if (song is Success<List<SongDTO>>) {
-        songSearchAdapter.songList = song.data.toMutableList()
+      if (song.isNotEmpty()) {
+        songSearchAdapter.songList.addAll(song)
+        songSearchAdapter.notifyDataSetChanged()
       }
     })
   }

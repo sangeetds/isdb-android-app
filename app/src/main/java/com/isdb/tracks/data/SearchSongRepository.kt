@@ -4,12 +4,13 @@ import com.isdb.login.data.Result
 import com.isdb.login.data.Result.Success
 import com.isdb.retrofit.Retrofit.Companion.getRetrofitClient
 import com.isdb.retrofit.SongService
+import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO
 import kotlinx.coroutines.flow.flow
 import java.lang.Error
 import java.net.SocketTimeoutException
 
-class SongSearchRepository {
+class SearchSongRepository {
   private val songService = getRetrofitClient(SongService::class.java) as SongService
 
   fun getSongs(songName: String, userId: String) = flow {
@@ -20,7 +21,7 @@ class SongSearchRepository {
             emit(Success(body()!!))
           }
           else -> {
-            emit(Error(errorBody().toString()))
+            emit(Result.Error(Exception(errorBody().toString())))
           }
         }
       }

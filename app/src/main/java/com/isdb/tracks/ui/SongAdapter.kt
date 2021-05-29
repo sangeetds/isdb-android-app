@@ -25,7 +25,7 @@ class SongAdapter(
 ) :
   ListAdapter<SongDTO, SongViewHolder>(SongCallBack()) {
 
-  var songList = mutableListOf<SongDTO>()
+  val songList = mutableListOf<SongDTO>()
 
   class SongViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
     val image: ImageView = cardView.findViewById(R.id.song_image)
