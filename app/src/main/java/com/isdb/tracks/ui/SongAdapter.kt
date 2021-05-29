@@ -11,20 +11,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
-import com.isdb.tracks.ui.SongAdapter.SongViewHolder
-import com.isdb.tracks.data.models.SongDTO
 import com.isdb.login.data.model.User
+import com.isdb.tracks.data.dto.SongDTO
+import com.isdb.tracks.data.dto.UserSongDTO
+import com.isdb.tracks.ui.SongAdapter.SongViewHolder
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Job
 
 class SongAdapter(
   val context: Context,
-  val updateList: () -> Unit,
+  private val update: (UserSongDTO) -> Job,
   val user: User?
 ) :
   ListAdapter<SongDTO, SongViewHolder>(SongCallBack()) {
 
-  val idList = mutableSetOf<String>()
-  var songList = mutableListOf<SongDTO>()
+  val songList = mutableListOf<SongDTO>()
 
   class SongViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
     val image: ImageView = cardView.findViewById(R.id.song_image)
@@ -53,7 +54,7 @@ class SongAdapter(
     holder.songName.text = song.name
     holder.fanScore.text = String.format("%.2f", song.userRatings)
 
-    if (song.id in idList) {
+    if (!song.isUserRated) {
       holder.rateButton.visibility = View.GONE
     }
 
@@ -62,15 +63,13 @@ class SongAdapter(
 
     val removeRatingsButton = {
       holder.rateButton.visibility = View.GONE
-      updateList()
-      notifyDataSetChanged()
     }
 
     holder.rateButton.setOnClickListener {
       val rateDialog =
         RatingsDialog(
-          context = this.context, song = song, associatedFunction = removeRatingsButton,
-          user = user!!
+          context = this.context, song = song, associatedFunction = update,
+          user = user!!, removeRatingsButton
         )
       rateDialog.show()
     }

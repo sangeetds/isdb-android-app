@@ -8,19 +8,14 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.isdb.R
-import com.isdb.tracks.data.models.SongDTO
-import com.isdb.login.data.model.User
-import com.isdb.retrofit.Retrofit
-import com.isdb.retrofit.SongService
-import com.isdb.retrofit.getSongsList
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import java.util.logging.Logger
+import com.isdb.R
+import com.isdb.login.data.model.User
+import com.isdb.tracks.data.dto.UserSongDTO
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -32,13 +27,14 @@ private const val ARG_PARAM1 = "param1"
  */
 class SearchFragment : Fragment() {
 
-  private var param1: User? = null
+  private var user: User? = null
+  private lateinit var viewModel: SearchSongViewModel
   private lateinit var songSearchAdapter: SearchAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     arguments?.let {
-      param1 = it.getParcelable(ARG_PARAM1)
+      user = it.getParcelable(ARG_PARAM1)
     }
   }
 
@@ -50,34 +46,33 @@ class SearchFragment : Fragment() {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_search, container, false)
 
-    songSearchAdapter = SearchAdapter(context = requireContext(), param1)
+    val update = { userSongDTO: UserSongDTO ->
+      viewModel.updateRatings(userSongDTO)
+    }
+    songSearchAdapter = SearchAdapter(context = requireContext(), user, update)
     val recyclerView = inflate.findViewById<RecyclerView>(R.id.search_recycler_view)
-    recyclerView.setHasFixedSize(true)
     recyclerView.adapter = songSearchAdapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    recyclerView.setHasFixedSize(true)
 
-    val songSearchView = inflate?.findViewById<EditText>(R.id.song_search_view)
-    val searchParentView = inflate?.findViewById<TextInputLayout>(R.id.search_parent)
+    val songSearchView = inflate.findViewById<EditText>(R.id.song_search_view)
+    val searchParentView = inflate.findViewById<TextInputLayout>(R.id.search_parent)
 
     songSearchView?.setOnClickListener {
       searchParentView?.startIconDrawable?.setVisible(false, true)
     }
 
     songSearchView?.doOnTextChanged { text, _, _, _ ->
-      if (text!!.isNotEmpty()) {
+      if (text!!.isNotEmpty() && text.length > 3) {
         recyclerView.visibility = View.VISIBLE
+        viewModel.getSongs(text.toString(), userId = user!!.id)
       }
-
-      text.toString().getSongList()
     }
 
     songSearchView?.setOnEditorActionListener { view, actionId, _ ->
-      if (actionId == EditorInfo.IME_ACTION_DONE) {
-        if (view.text.isNotEmpty()) {
-          recyclerView.visibility = View.VISIBLE
-        }
-
-        view.text.toString().getSongList()
+      if (actionId == EditorInfo.IME_ACTION_DONE && view.text.isNotEmpty()) {
+        recyclerView.visibility = View.VISIBLE
+        viewModel.getSongs(view.text.toString(), userId = user!!.id)
       }
 
       true
@@ -86,21 +81,24 @@ class SearchFragment : Fragment() {
     return inflate
   }
 
-  private fun String.getSongList() =
-    runBlocking {
-      val list: List<SongDTO>
-      val retrofitService = Retrofit.getRetrofitClient(
-        SongService::class.java
-      ) as SongService
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
+    super.onViewCreated(view, savedInstanceState)
 
-      withContext(Dispatchers.IO) {
-        list = getSongsList(retrofitService, this@getSongList).body()!!
-        Logger.getAnonymousLogger().info("Can we get $list")
+    viewModel =
+      ViewModelProvider(this, SongSearchViewModelFactory()).get(SearchSongViewModel::class.java)
+
+    viewModel.searchedSongs.observe(viewLifecycleOwner, Observer {
+      val song = it ?: return@Observer
+
+      if (song.isNotEmpty()) {
+        songSearchAdapter.songList.addAll(song)
+        songSearchAdapter.notifyDataSetChanged()
       }
-
-      songSearchAdapter.songList.addAll(list)
-      songSearchAdapter.notifyDataSetChanged()
-    }
+    })
+  }
 
   companion object {
     /**

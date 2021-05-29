@@ -2,14 +2,14 @@ package com.isdb.tracks.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.isdb.tracks.data.SongRepository
+import com.isdb.tracks.data.SearchSongRepository
 
-class SongViewModelFactory(val id: String) : ViewModelProvider.Factory {
+class SongSearchViewModelFactory : ViewModelProvider.Factory {
 
   @Suppress("UNCHECKED_CAST")
   override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-    if (modelClass.isAssignableFrom(SongViewModel::class.java)) {
-      return SongViewModel(songRepository = SongRepository(), id = id) as T
+    if (modelClass.isAssignableFrom(SearchSongViewModel::class.java)) {
+      return SearchSongViewModel(searchSongRepository = SearchSongRepository()) as T
     }
     throw IllegalArgumentException("Unknown ViewModel class")
   }
