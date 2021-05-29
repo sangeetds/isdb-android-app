@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
 import com.isdb.login.data.Result.Success
+import com.isdb.tracks.data.dto.UserSongDTO
 import com.isdb.login.data.model.User
 import com.isdb.tracks.data.dto.SongDTO
 
@@ -42,7 +43,11 @@ class SongFragment : Fragment() {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_song, container, false)
 
-    this.songAdapter = SongAdapter(context = requireContext(), user)
+    val update = { userSongDTO: UserSongDTO ->
+      viewModel.updateRatings(userSongDTO)
+    }
+
+    this.songAdapter = SongAdapter(context = requireContext(), update, user)
     val recyclerView = inflate.findViewById<RecyclerView>(R.id.song_recycler_view)
     recyclerView.adapter = songAdapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -56,7 +61,7 @@ class SongFragment : Fragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel = ViewModelProvider(this, SongViewModelFactory()).get(SongViewModel::class.java)
+    viewModel = ViewModelProvider(this, SongViewModelFactory(user!!.id)).get(SongViewModel::class.java)
 
     viewModel.songs.observe(viewLifecycleOwner, Observer {
       val song = it ?: return@Observer

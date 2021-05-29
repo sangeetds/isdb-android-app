@@ -11,19 +11,18 @@ import com.isdb.R
 import com.isdb.tracks.ui.SearchAdapter.SongSearchViewHolder
 import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.login.data.model.User
+import com.isdb.tracks.data.dto.UserSongDTO
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Job
 
 class SearchAdapter(
   val context: Context,
-  val user: User?
+  val user: User?,
+  val update: (UserSongDTO) -> Job
 ) :
   RecyclerView.Adapter<SongSearchViewHolder>() {
 
   var songList = mutableListOf<SongDTO>()
-    set(value) {
-      field = value
-      notifyDataSetChanged()
-    }
 
   class SongSearchViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
     val image: ImageView = cardView.findViewById(R.id.small_song_image)
@@ -50,7 +49,10 @@ class SearchAdapter(
 
     holder.itemView.setOnClickListener {
       val rateDialog =
-        RatingsDialog(context = this.context, associatedFunction = null, song = song, user = user!!)
+        RatingsDialog(
+          context = this.context, song = song, associatedFunction = update, user = user!!,
+          removeRatingsButton = null
+        )
       rateDialog.show()
     }
 

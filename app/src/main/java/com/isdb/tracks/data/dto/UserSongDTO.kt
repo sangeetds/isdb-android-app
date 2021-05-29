@@ -1,4 +1,4 @@
-package com.isdb.login.data.dto
+package com.isdb.tracks.data.dto
 
 data class UserSongDTO(
   val songId: String? = "",

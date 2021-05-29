@@ -13,11 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
 import com.isdb.login.data.model.User
 import com.isdb.tracks.data.dto.SongDTO
+import com.isdb.tracks.data.dto.UserSongDTO
 import com.isdb.tracks.ui.SongAdapter.SongViewHolder
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Job
 
 class SongAdapter(
   val context: Context,
+  private val update: (UserSongDTO) -> Job,
   val user: User?
 ) :
   ListAdapter<SongDTO, SongViewHolder>(SongCallBack()) {
@@ -65,8 +68,8 @@ class SongAdapter(
     holder.rateButton.setOnClickListener {
       val rateDialog =
         RatingsDialog(
-          context = this.context, song = song, associatedFunction = removeRatingsButton,
-          user = user!!
+          context = this.context, song = song, associatedFunction = update,
+          user = user!!, removeRatingsButton
         )
       rateDialog.show()
     }
