@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.isdb.login.data.Result
 import com.isdb.tracks.data.SongRepository
-import com.isdb.tracks.data.models.SongDTO
+import com.isdb.tracks.data.dto.SongDTO
 
 class SongViewModel(songRepository: SongRepository) : ViewModel() {
   private val _songs = liveData {

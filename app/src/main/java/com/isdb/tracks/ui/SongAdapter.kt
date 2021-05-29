@@ -11,19 +11,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
-import com.isdb.tracks.ui.SongAdapter.SongViewHolder
-import com.isdb.tracks.data.models.SongDTO
 import com.isdb.login.data.model.User
+import com.isdb.tracks.data.dto.SongDTO
+import com.isdb.tracks.ui.SongAdapter.SongViewHolder
 import com.squareup.picasso.Picasso
 
 class SongAdapter(
   val context: Context,
-  val updateList: () -> Unit,
   val user: User?
 ) :
   ListAdapter<SongDTO, SongViewHolder>(SongCallBack()) {
 
-  val idList = mutableSetOf<String>()
   var songList = mutableListOf<SongDTO>()
 
   class SongViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
@@ -53,7 +51,7 @@ class SongAdapter(
     holder.songName.text = song.name
     holder.fanScore.text = String.format("%.2f", song.userRatings)
 
-    if (song.id in idList) {
+    if (!song.isUserRated) {
       holder.rateButton.visibility = View.GONE
     }
 
@@ -62,8 +60,6 @@ class SongAdapter(
 
     val removeRatingsButton = {
       holder.rateButton.visibility = View.GONE
-      updateList()
-      notifyDataSetChanged()
     }
 
     holder.rateButton.setOnClickListener {

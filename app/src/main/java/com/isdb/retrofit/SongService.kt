@@ -1,7 +1,7 @@
 package com.isdb.retrofit
 
 import com.isdb.tracks.data.models.Song
-import com.isdb.tracks.data.models.SongDTO
+import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.login.data.dto.UserSongDTO
 import retrofit2.Response
 import retrofit2.http.Body

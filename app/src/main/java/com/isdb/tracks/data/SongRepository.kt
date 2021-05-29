@@ -5,7 +5,7 @@ import com.isdb.login.data.Result.Error
 import com.isdb.login.data.Result.Success
 import com.isdb.retrofit.Retrofit.Companion.getRetrofitClient
 import com.isdb.retrofit.SongService
-import com.isdb.tracks.data.models.SongDTO
+import com.isdb.tracks.data.dto.SongDTO
 import java.net.SocketTimeoutException
 
 class SongRepository {

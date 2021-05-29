@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import com.isdb.R
-import com.isdb.tracks.data.models.SongDTO
+import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.login.data.model.User
 import com.isdb.login.data.dto.UserSongDTO
 import com.isdb.retrofit.Retrofit

@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
-import com.isdb.tracks.data.models.SongDTO
+import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.login.data.model.User
 import com.isdb.retrofit.Retrofit
 import com.isdb.retrofit.SongService

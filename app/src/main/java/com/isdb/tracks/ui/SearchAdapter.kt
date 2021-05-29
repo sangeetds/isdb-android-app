@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
 import com.isdb.tracks.ui.SearchAdapter.SongSearchViewHolder
-import com.isdb.tracks.data.models.SongDTO
+import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.login.data.model.User
 import com.squareup.picasso.Picasso
 
