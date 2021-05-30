@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.isdb.R
 import com.isdb.login.data.model.User
 import com.isdb.tracks.data.dto.UserSongDTO
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,10 +28,11 @@ private const val ARG_PARAM1 = "param1"
  * Use the [SearchFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
   private var user: User? = null
-  private lateinit var viewModel: SearchSongViewModel
+  private val viewModel: SearchSongViewModel by viewModels()
   private lateinit var songSearchAdapter: SearchAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,9 +92,6 @@ class SearchFragment : Fragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-
-    viewModel =
-      ViewModelProvider(this, SearchSongViewModelFactory()).get(SearchSongViewModel::class.java)
 
     viewModel.searchedSongs.observe(viewLifecycleOwner, Observer {
       val song = it ?: return@Observer

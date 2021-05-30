@@ -1,4 +1,4 @@
-package com.isdb.retrofit
+package com.isdb.tracks.data.api
 
 import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO

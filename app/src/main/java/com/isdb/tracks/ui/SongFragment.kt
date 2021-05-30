@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
 import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,10 +26,11 @@ private const val ARG_PARAM1 = "param1"
  * Use the [SongFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class SongFragment : Fragment() {
   private var user: User? = null
   private lateinit var songAdapter: SongAdapter
-  private lateinit var viewModel: SongViewModel
+  private val viewModel: SongViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -64,8 +67,6 @@ class SongFragment : Fragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel =
-      ViewModelProvider(this, SongViewModelFactory(user!!.id)).get(SongViewModel::class.java)
 
     viewModel.songs.observe(viewLifecycleOwner, Observer {
       val song = it ?: return@Observer

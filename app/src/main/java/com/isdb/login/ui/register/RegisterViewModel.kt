@@ -9,11 +9,15 @@ import com.isdb.R.string
 import com.isdb.login.data.RegisterRepository
 import com.isdb.login.data.Result
 import com.isdb.login.data.model.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class RegisterViewModel(private val registerRepository: RegisterRepository) : ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(private val registerRepository: RegisterRepository) :
+  ViewModel() {
 
   private val _registerForm = MutableLiveData<RegisterFormState>()
   val registerFormState: LiveData<RegisterFormState> = _registerForm

@@ -1,4 +1,4 @@
-package com.isdb.retrofit
+package com.isdb.login.data.api
 
 import com.isdb.login.data.model.User
 import retrofit2.Response

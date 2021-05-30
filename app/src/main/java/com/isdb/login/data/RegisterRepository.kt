@@ -3,13 +3,13 @@ package com.isdb.login.data
 import com.isdb.login.data.Result.Error
 import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
-import com.isdb.retrofit.LoginService
-import com.isdb.retrofit.Retrofit
+import com.isdb.login.data.api.LoginService
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import java.net.SocketTimeoutException
+import javax.inject.Inject
 
-class RegisterRepository {
+class RegisterRepository @Inject constructor(private val loginService: LoginService) {
 
   var user: User? = null
     private set
@@ -21,16 +21,12 @@ class RegisterRepository {
   }
 
   fun register(user: User) = flow {
-    val retrofit = Retrofit.getRetrofitClient(LoginService::class.java) as LoginService
-    emit(update(retrofit, user))
+    emit(update(user))
   }
 
-  private suspend fun update(
-    retrofitService: LoginService,
-    user: User
-  ) =
+  private suspend fun update(user: User) =
     try {
-      retrofitService.createUser(user).run {
+      loginService.createUser(user).run {
         when {
           isSuccessful && body() != null -> {
             Timber.i("Login successful with response: ${raw()} ")

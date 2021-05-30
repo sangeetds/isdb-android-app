@@ -5,16 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.isdb.login.data.Result
-import com.isdb.tracks.data.dto.UserSongDTO
 import com.isdb.tracks.data.SongRepository
 import com.isdb.tracks.data.dto.SongDTO
+import com.isdb.tracks.data.dto.UserSongDTO
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class SongViewModel(private val songRepository: SongRepository, id: String) : ViewModel() {
+@HiltViewModel
+class SongViewModel @Inject constructor(private val songRepository: SongRepository) : ViewModel() {
   private val _songs = liveData {
-    Timber.i("Fetching songs for for user: $id")
-    emit(songRepository.getSongs(null, id))
+    Timber.i("Fetching all rated songs")
+    emit(songRepository.getSongs(null, "1"))
   }
   val songs: LiveData<Result<List<SongDTO>>> = _songs
 

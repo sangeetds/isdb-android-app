@@ -3,15 +3,14 @@ package com.isdb.tracks.data
 import com.isdb.login.data.Result
 import com.isdb.login.data.Result.Error
 import com.isdb.login.data.Result.Success
-import com.isdb.retrofit.Retrofit.Companion.getRetrofitClient
-import com.isdb.retrofit.SongService
+import com.isdb.tracks.data.api.SongService
 import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO
 import timber.log.Timber
 import java.net.SocketTimeoutException
+import javax.inject.Inject
 
-class SongRepository {
-  private val songService = getRetrofitClient(SongService::class.java) as SongService
+class SongRepository @Inject constructor(private val songService: SongService) {
 
   suspend fun getSongs(
     songName: String?,

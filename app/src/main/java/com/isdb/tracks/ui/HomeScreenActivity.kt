@@ -9,8 +9,10 @@ import androidx.fragment.app.FragmentTransaction
 import com.isdb.R
 import com.isdb.login.data.model.User
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
+@AndroidEntryPoint
 class HomeScreenActivity : AppCompatActivity() {
 
   private var toolbar: Toolbar? = null

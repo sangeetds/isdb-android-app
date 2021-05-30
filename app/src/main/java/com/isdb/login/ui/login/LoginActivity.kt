@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -20,23 +21,25 @@ import com.isdb.R
 import com.isdb.login.data.model.User
 import com.isdb.login.ui.LoadDialog
 import com.isdb.tracks.ui.HomeScreenActivity
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
  * Class where user enters login credentials to log in to the service
  */
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
   /**
    * View that will hold our email and password details along with buttons for logging, returning
    * and showing passwords.
    */
+  private val loginViewModel: LoginViewModel by viewModels()
   private lateinit var username: EditText
   private lateinit var password: TextInputEditText
   private lateinit var loginButton: FloatingActionButton
   private lateinit var backButton: ImageButton
   private lateinit var progressDialog: LoadDialog
-  private lateinit var loginViewModel: LoginViewModel
 
   @RequiresApi(Build.VERSION_CODES.O)
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,9 +51,6 @@ class LoginActivity : AppCompatActivity() {
     password = findViewById(R.id.input_password)
     loginButton = findViewById(R.id.btn_login)
     backButton = findViewById(R.id.btn_back)
-
-    loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-      .get(LoginViewModel::class.java)
 
     loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
       val loginState = it ?: return@Observer
@@ -163,7 +163,7 @@ class LoginActivity : AppCompatActivity() {
     songsActivity.putExtra("user", model)
     startActivity(songsActivity)
 
-    //Complete and destroy login activity once successful
+    progressDialog.cancel()
     finish()
   }
 

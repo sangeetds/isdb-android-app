@@ -8,11 +8,15 @@ import com.isdb.login.data.Result
 import com.isdb.tracks.data.SearchSongRepository
 import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class SearchSongViewModel(private val searchSongRepository: SearchSongRepository) : ViewModel() {
+@HiltViewModel
+class SearchSongViewModel @Inject constructor(private val searchSongRepository: SearchSongRepository) :
+  ViewModel() {
 
   private val _searchedSongs = MutableLiveData<List<SongDTO>>()
   val searchedSongs: LiveData<List<SongDTO>> = _searchedSongs

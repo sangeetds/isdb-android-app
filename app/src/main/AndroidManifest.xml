@@ -3,6 +3,7 @@
     package="com.isdb">
 
   <application
+      android:name=".IsdbApplication"
       android:allowBackup="true"
       android:icon="@mipmap/isdb_launcher"
       android:label="@string/app_name"

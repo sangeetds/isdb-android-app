@@ -7,33 +7,35 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.isdb.R
 import com.isdb.login.data.model.User
 import com.isdb.login.ui.LoadDialog
 import com.isdb.tracks.ui.HomeScreenActivity
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
  * Class where user enter their login credentials to register to the service
  */
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
   /**
    * View that will hold our username, password and email details along with buttons for sign-up,
    * returning and showing passwords.
    */
+  private val registerViewModel: RegisterViewModel by viewModels()
   private lateinit var emailText: EditText
   private lateinit var signUpButton: FloatingActionButton
   private lateinit var nameText: EditText
   private lateinit var passwordText: EditText
   private lateinit var backButton: ImageButton
-  private lateinit var registerViewModel: RegisterViewModel
   private lateinit var progressDialog: LoadDialog
 
   public override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +48,6 @@ class RegisterActivity : AppCompatActivity() {
     emailText = findViewById(R.id.input_email)
     passwordText = findViewById(R.id.input_password)
     backButton = findViewById(R.id.btn_back)
-
-    registerViewModel = ViewModelProvider(this, RegisterViewModelFactory())
-      .get(RegisterViewModel::class.java)
 
     registerViewModel.registerFormState.observe(this@RegisterActivity, Observer {
       val registerState = it ?: return@Observer
@@ -175,6 +174,7 @@ class RegisterActivity : AppCompatActivity() {
     songsActivity.putExtra("user", model)
     startActivity(songsActivity)
 
+    progressDialog.cancel()
     finish()
   }
 
