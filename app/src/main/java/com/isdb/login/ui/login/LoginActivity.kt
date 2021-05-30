@@ -52,6 +52,11 @@ class LoginActivity : AppCompatActivity() {
     loginButton = findViewById(R.id.btn_login)
     backButton = findViewById(R.id.btn_back)
 
+    setUpObserver()
+    setUpButtons()
+  }
+
+  private fun setUpObserver() {
     loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
       val loginState = it ?: return@Observer
       Timber.i("Change in login form state.")
@@ -80,9 +85,11 @@ class LoginActivity : AppCompatActivity() {
         Timber.i("Successfully logged in")
         updateUiWithUser(loginResult.success)
       }
-      setResult(Activity.RESULT_OK)
+      setResult(RESULT_OK)
     })
+  }
 
+  private fun setUpButtons() {
     username.doOnTextChanged { text, _, _, _ ->
       loginViewModel.loginDataChanged(
         text.toString(),

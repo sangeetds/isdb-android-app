@@ -49,43 +49,11 @@ class RegisterActivity : AppCompatActivity() {
     passwordText = findViewById(R.id.input_password)
     backButton = findViewById(R.id.btn_back)
 
-    registerViewModel.registerFormState.observe(this@RegisterActivity, Observer {
-      val registerState = it ?: return@Observer
-      Timber.i("Change in register state")
+    setUpObserver()
+    setUpButtons()
+  }
 
-      // disable login button unless both username / password is valid
-      signUpButton.isEnabled = registerState.isDataValid
-
-      registerState.emailError?.let {
-        Timber.d("Invalid email entered")
-        emailText.error = getString(registerState.emailError)
-      }
-
-      registerState.usernameError?.let {
-        Timber.d("Invalid username entered")
-        nameText.error = getString(registerState.usernameError)
-      }
-      registerState.passwordError?.let {
-        Timber.d("Invalid password entered")
-        passwordText.error = getString(registerState.passwordError)
-      }
-    })
-
-    registerViewModel.registerResult.observe(this@RegisterActivity, Observer {
-      val registerResult = it ?: return@Observer
-      Timber.i("Change in register result")
-
-      if (registerResult.error != null) {
-        Timber.e("Error while registering")
-        showLoginFailed(registerResult.error)
-      }
-      if (registerResult.success != null) {
-        Timber.i("Registration successful")
-        updateUiWithUser(registerResult.success)
-      }
-      setResult(Activity.RESULT_OK)
-    })
-
+  private fun setUpButtons() {
     nameText.doOnTextChanged { text, _, _, _ ->
       registerViewModel.registerDataChanged(
         emailText.text.toString(),
@@ -131,6 +99,45 @@ class RegisterActivity : AppCompatActivity() {
       Timber.i("User chose to close the sign up screen")
       onBackPressed()
     }
+  }
+
+  private fun setUpObserver() {
+    registerViewModel.registerFormState.observe(this@RegisterActivity, Observer {
+      val registerState = it ?: return@Observer
+      Timber.i("Change in register state")
+
+      // disable login button unless both username / password is valid
+      signUpButton.isEnabled = registerState.isDataValid
+
+      registerState.emailError?.let {
+        Timber.d("Invalid email entered")
+        emailText.error = getString(registerState.emailError)
+      }
+
+      registerState.usernameError?.let {
+        Timber.d("Invalid username entered")
+        nameText.error = getString(registerState.usernameError)
+      }
+      registerState.passwordError?.let {
+        Timber.d("Invalid password entered")
+        passwordText.error = getString(registerState.passwordError)
+      }
+    })
+
+    registerViewModel.registerResult.observe(this@RegisterActivity, Observer {
+      val registerResult = it ?: return@Observer
+      Timber.i("Change in register result")
+
+      if (registerResult.error != null) {
+        Timber.e("Error while registering")
+        showLoginFailed(registerResult.error)
+      }
+      if (registerResult.success != null) {
+        Timber.i("Registration successful")
+        updateUiWithUser(registerResult.success)
+      }
+      setResult(RESULT_OK)
+    })
   }
 
   /**
