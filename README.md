@@ -2,7 +2,7 @@
 
 The IMDb for Songs. Find, rate and share your favorite songs.
 
-You can check out the Backend Application for the same at <a href = "https://github.com/sangeetds/isdb"> here </a>
+This app is written in Kotlin following MVVM architecture. You can check out the Backend Application for the same at <a href = "https://github.com/sangeetds/isdb"> here </a>
 
 <p align="center">
   <img src="https://github.com/sangeetds/isdb-android-app/blob/master/images/Login%20Screen.jpeg" alt="Login Screen" width="32%">
