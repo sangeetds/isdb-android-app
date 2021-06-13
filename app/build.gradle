@@ -39,11 +39,6 @@ android {
 }
 
 dependencies {
-  def kotlinCoroutineVersion = '1.4.3'
-  def moshiVersion = "1.12.0"
-  def retrofitVersion = "2.9.0"
-  def hiltVersion = "2.36"
-
   // kotlin
   implementation fileTree(dir: "libs", include: ["*.jar"])
   implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
@@ -87,6 +82,14 @@ dependencies {
 
   // test
   testImplementation 'junit:junit:4.13.2'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.8.0-M1'
+  testImplementation "io.mockk:mockk:1.11.0"
+  testImplementation "com.google.truth:truth:1.1.3"
+  testImplementation 'androidx.arch.core:core-testing:2.1.0'
+  testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
+  testImplementation 'org.robolectric:robolectric:4.4'
+
+  // Android tests
   androidTestImplementation 'androidx.test.ext:junit:1.1.2'
   androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

@@ -25,38 +25,26 @@ class RegisterViewModel @Inject constructor(private val registerRepository: Regi
   private val _registerResult = MutableLiveData<RegisterResult>()
   val registerResult: LiveData<RegisterResult> = _registerResult
 
-  fun register(
-    email: String,
-    username: String,
-    password: String
-  ) =
+  fun register(email: String, username: String, password: String) =
     viewModelScope.launch {
       val user = User(email = email, username = username, password = password)
       Timber.i("Making request to the server for user: $user")
 
       registerRepository.register(user).collect { result ->
-        if (result is Result.Success) {
-          _registerResult.value =
-            RegisterResult(success = result.data)
+        _registerResult.value = if (result is Result.Success) {
+          RegisterResult(success = result.data)
         } else {
-          _registerResult.value = RegisterResult(error = string.login_failed)
+          RegisterResult(error = string.login_failed)
         }
       }
     }
 
-  fun registerDataChanged(
-    email: String,
-    username: String,
-    password: String
-  ) {
-    if (!isEmailValid(email)) {
-      _registerForm.value = RegisterFormState(emailError = string.invalid_email)
-    } else if (!isUserNameValid(username)) {
-      _registerForm.value = RegisterFormState(usernameError = string.invalid_username)
-    } else if (!isPasswordValid(password)) {
-      _registerForm.value = RegisterFormState(passwordError = string.invalid_password)
-    } else {
-      _registerForm.value = RegisterFormState(isDataValid = true)
+  fun registerDataChanged(email: String, username: String, password: String) {
+    _registerForm.value = when {
+      !isEmailValid(email) -> RegisterFormState(emailError = string.invalid_email)
+      !isUserNameValid(username) -> RegisterFormState(usernameError = string.invalid_username)
+      !isPasswordValid(password) -> RegisterFormState(passwordError = string.invalid_password)
+      else -> RegisterFormState(isDataValid = true)
     }
   }
 
@@ -67,7 +55,5 @@ class RegisterViewModel @Inject constructor(private val registerRepository: Regi
     Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
   // A placeholder password validation check
-  private fun isPasswordValid(password: String): Boolean {
-    return password.length > 5
-  }
+  private fun isPasswordValid(password: String) = password.length > 5
 }
