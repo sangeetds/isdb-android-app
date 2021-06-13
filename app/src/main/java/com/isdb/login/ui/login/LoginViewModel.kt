@@ -25,47 +25,33 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
   private val _loginResult = MutableLiveData<LoginResult>()
   val loginResult: LiveData<LoginResult> = _loginResult
 
-  fun login(
-    username: String,
-    password: String
-  ) = viewModelScope.launch {
+  fun login(username: String, password: String) = viewModelScope.launch {
     val user = User(email = username, password = password)
     Timber.i("Making request to the server for user: $user")
 
     loginRepository.login(user).collect { result ->
-      if (result is Result.Success) {
-        _loginResult.value =
-          LoginResult(success = result.data)
+      _loginResult.value = if (result is Result.Success) {
+        LoginResult(success = result.data)
       } else {
-        _loginResult.value = LoginResult(error = string.login_failed)
+        LoginResult(error = string.login_failed)
       }
     }
   }
 
-  fun loginDataChanged(
-    username: String,
-    password: String
-  ) {
-    if (!isUserNameValid(username)) {
-      _loginForm.value = LoginFormState(usernameError = string.invalid_email)
+  fun loginDataChanged(username: String, password: String) {
+    _loginForm.value = if (!isUserNameValid(username)) {
+       LoginFormState(usernameError = string.invalid_email)
     } else if (!isPasswordValid(password)) {
-      _loginForm.value = LoginFormState(passwordError = string.invalid_password)
+       LoginFormState(passwordError = string.invalid_password)
     } else {
-      _loginForm.value = LoginFormState(isDataValid = true)
+       LoginFormState(isDataValid = true)
     }
   }
 
   // A placeholder username validation check
-  private fun isUserNameValid(username: String): Boolean {
-    return if (username.contains('@')) {
+  private fun isUserNameValid(username: String) =
       Patterns.EMAIL_ADDRESS.matcher(username).matches()
-    } else {
-      username.isNotBlank()
-    }
-  }
 
   // A placeholder password validation check
-  private fun isPasswordValid(password: String): Boolean {
-    return password.length > 5
-  }
+  private fun isPasswordValid(password: String) = password.length > 5
 }
