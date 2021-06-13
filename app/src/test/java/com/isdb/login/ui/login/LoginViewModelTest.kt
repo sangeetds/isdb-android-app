@@ -2,7 +2,7 @@ package com.isdb.login.ui.login
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
-import com.google.common.truth.Truth
+import androidx.lifecycle.Observer
 import com.isdb.R.string
 import com.isdb.TestCoroutineRule
 import com.isdb.login.data.LoginRepository
@@ -11,6 +11,7 @@ import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -35,6 +36,8 @@ class LoginViewModelTest {
   private lateinit var loginViewModel: LoginViewModel
   private lateinit var loginResult: LiveData<LoginResult>
   private lateinit var loginForm: LiveData<LoginFormState>
+  private val loginResultObserver: Observer<LoginResult> = spyk()
+  private val loginFormObserver: Observer<LoginFormState> = spyk()
   private val loginRepository: LoginRepository = mockk()
   private val user = User(password = "sangeet", email = "sangeet@gmail.com")
 
@@ -50,14 +53,12 @@ class LoginViewModelTest {
     every { loginRepository.login(user) } returns flowOf(Success(user))
 
     loginViewModel.login(user.email, user.password)
+    loginViewModel.loginResult.observeForever(loginResultObserver)
 
     verify { loginRepository.login(user = user) }
+    verify { loginResultObserver.onChanged(LoginResult(success = user, error = null)) }
 
-    val loginResultState = loginResult.value
-    Truth.assertThat(loginResultState).isNotNull()
-    Truth.assertThat(loginResultState?.error).isNull()
-    Truth.assertThat(loginResultState?.success).isNotNull()
-    Truth.assertThat(loginResultState?.success).isEqualTo(user)
+    loginViewModel.loginResult.removeObserver(loginResultObserver)
   }
 
   @Test
@@ -69,26 +70,28 @@ class LoginViewModelTest {
     )
 
     loginViewModel.login(user.email, user.password)
+    loginViewModel.loginResult.observeForever(loginResultObserver)
 
     verify { loginRepository.login(user = user) }
+    verify {
+      loginResultObserver.onChanged(LoginResult(error = string.login_failed, success = null))
+    }
 
-    val loginResultState = loginResult.value
-    Truth.assertThat(loginResultState).isNotNull()
-    Truth.assertThat(loginResultState?.error).isNotNull()
-    Truth.assertThat(loginResultState?.error).isEqualTo(string.login_failed)
-    Truth.assertThat(loginResultState?.success).isNull()
+    loginViewModel.loginResult.removeObserver(loginResultObserver)
   }
 
   @Test
   fun `validate credentials when email not valid`() {
     val invalidUser = User(username = "sangeet", password = "sang", email = "sangeet")
     loginViewModel.loginDataChanged(invalidUser.email, invalidUser.password)
+    loginViewModel.loginFormState.observeForever(loginFormObserver)
 
-    val loginFormState = loginForm.value
-    Truth.assertThat(loginFormState).isNotNull()
-    Truth.assertThat(loginFormState?.isDataValid).isFalse()
-    Truth.assertThat(loginFormState?.usernameError).isEqualTo(string.invalid_email)
-    Truth.assertThat(loginFormState?.passwordError).isNull()
+    verify {
+      loginFormObserver.onChanged(
+        LoginFormState(isDataValid = false, usernameError = null, passwordError = null))
+    }
+
+    loginViewModel.loginFormState.removeObserver(loginFormObserver)
   }
 
   @Test
@@ -96,10 +99,27 @@ class LoginViewModelTest {
     val invalidUser = User(username = "sangeet", email = "sang@gmail.com", password = "sang")
     loginViewModel.loginDataChanged(invalidUser.email, invalidUser.password)
 
-    val registerFormState = loginForm.value
-    Truth.assertThat(registerFormState).isNotNull()
-    Truth.assertThat(registerFormState?.isDataValid).isFalse()
-    Truth.assertThat(registerFormState?.usernameError).isNull()
-    Truth.assertThat(registerFormState?.passwordError).isEqualTo(string.invalid_password)
+    loginViewModel.loginFormState.observeForever(loginFormObserver)
+
+    verify {
+      loginFormObserver.onChanged(LoginFormState(isDataValid = false, usernameError = null,
+        passwordError = string.invalid_password))
+    }
+
+    loginViewModel.loginFormState.removeObserver(loginFormObserver)
+  }
+
+  @Test
+  fun `validate credentials when data valid`() {
+    loginViewModel.loginDataChanged(user.email, user.password)
+
+    loginViewModel.loginFormState.observeForever(loginFormObserver)
+
+    verify {
+      loginFormObserver.onChanged(
+        LoginFormState(isDataValid = true, usernameError = null, passwordError = null))
+    }
+
+    loginViewModel.loginFormState.removeObserver(loginFormObserver)
   }
 }
