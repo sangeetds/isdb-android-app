@@ -11,10 +11,15 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:supportsRtl="true"
       android:theme="@style/MyMaterialTheme">
-    <activity android:name="com.isdb.login.ui.register.RegisterActivity" />
-    <activity android:name="com.isdb.login.ui.login.LoginActivity" />
-    <activity android:name="com.isdb.tracks.ui.HomeScreenActivity" />
-    <activity android:name="com.isdb.login.ui.LoginMainActivity">
+    <activity
+        android:name=".AActivity"
+        android:exported="true"
+        android:label="@string/title_activity_aactivity"
+        android:theme="@style/MyMaterialTheme.NoActionBar" />
+    <activity android:name=".login.ui.register.RegisterActivity" />
+    <activity android:name=".login.ui.login.LoginActivity" />
+    <activity android:name=".tracks.ui.HomeScreenActivity" />
+    <activity android:name=".login.ui.LoginMainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
