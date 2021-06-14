@@ -1,4 +1,4 @@
-package com.isdb.login.ui.login
+package com.isdb.login.ui
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -11,7 +11,6 @@ import com.isdb.login.data.Result
 import com.isdb.login.data.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.switchMap
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject

@@ -1,11 +1,10 @@
-package com.isdb.login.ui.register
+package com.isdb.login.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
@@ -15,11 +14,9 @@ import androidx.lifecycle.Observer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.isdb.R
 import com.isdb.login.data.model.User
-import com.isdb.login.ui.LoadDialog
 import com.isdb.tracks.ui.HomeScreenActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import kotlin.reflect.KClass
 
 /**
  * Class where user enter their login credentials to register to the service

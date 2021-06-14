@@ -2,8 +2,8 @@ package com.isdb.login.data
 
 import com.isdb.login.data.Result.Error
 import com.isdb.login.data.Result.Success
-import com.isdb.login.data.model.User
 import com.isdb.login.data.api.LoginService
+import com.isdb.login.data.model.User
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import java.net.SocketTimeoutException
@@ -11,20 +11,11 @@ import javax.inject.Inject
 
 class RegisterRepository @Inject constructor(private val loginService: LoginService) {
 
-  var user: User? = null
-    private set
-
-  init {
-    // If user credentials will be cached in local storage, it is recommended it be encrypted
-    // @see https://developer.android.com/training/articles/keystore
-    user = null
-  }
-
   fun register(user: User) = flow {
     emit(update(user))
   }
 
-  private suspend fun update(user: User) =
+  private suspend fun update(user: User): Result<User> =
     try {
       loginService.createUser(user).run {
         when {

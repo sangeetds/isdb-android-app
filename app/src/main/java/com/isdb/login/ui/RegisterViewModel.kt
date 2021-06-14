@@ -1,4 +1,4 @@
-package com.isdb.login.ui.register
+package com.isdb.login.ui
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData

@@ -1,4 +1,4 @@
-package com.isdb.login.ui.register
+package com.isdb.login.ui
 
 data class RegisterFormState (
   val emailError: Int? = null,

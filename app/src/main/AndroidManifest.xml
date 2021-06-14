@@ -16,8 +16,8 @@
         android:exported="true"
         android:label="@string/title_activity_aactivity"
         android:theme="@style/MyMaterialTheme.NoActionBar" />
-    <activity android:name=".login.ui.register.RegisterActivity" />
-    <activity android:name=".login.ui.login.LoginActivity" />
+    <activity android:name=".login.ui.RegisterActivity" />
+    <activity android:name=".login.ui.LoginActivity" />
     <activity android:name=".tracks.ui.HomeScreenActivity" />
     <activity android:name=".login.ui.LoginMainActivity">
       <intent-filter>

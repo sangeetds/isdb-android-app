@@ -6,8 +6,6 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.isdb.R
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.isdb.login.ui.login.LoginActivity
-import com.isdb.login.ui.register.RegisterActivity
 import timber.log.Timber
 
 /**

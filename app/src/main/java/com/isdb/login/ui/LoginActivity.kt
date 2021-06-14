@@ -1,25 +1,20 @@
-package com.isdb.login.ui.login
+package com.isdb.login.ui
 
-import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.isdb.R
 import com.isdb.login.data.model.User
-import com.isdb.login.ui.LoadDialog
 import com.isdb.tracks.ui.HomeScreenActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber

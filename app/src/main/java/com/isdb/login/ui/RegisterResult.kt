@@ -1,4 +1,4 @@
-package com.isdb.login.ui.register
+package com.isdb.login.ui
 
 import com.isdb.login.data.model.User
 

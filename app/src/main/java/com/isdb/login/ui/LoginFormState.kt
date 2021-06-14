@@ -1,4 +1,4 @@
-package com.isdb.login.ui.login
+package com.isdb.login.ui
 
 /**
  * Data validation state of the login form.

@@ -1,4 +1,4 @@
-package com.isdb.login.ui.login
+package com.isdb.login.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
@@ -9,6 +9,9 @@ import com.isdb.login.data.LoginRepository
 import com.isdb.login.data.Result.Error
 import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
+import com.isdb.login.ui.LoginFormState
+import com.isdb.login.ui.LoginResult
+import com.isdb.login.ui.LoginViewModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
