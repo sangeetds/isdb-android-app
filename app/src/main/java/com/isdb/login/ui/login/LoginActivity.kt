@@ -41,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
   private lateinit var backButton: ImageButton
   private lateinit var progressDialog: LoadDialog
 
-  @RequiresApi(Build.VERSION_CODES.O)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_login)
@@ -57,52 +56,52 @@ class LoginActivity : AppCompatActivity() {
   }
 
   private fun setUpObserver() {
-    loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
-      val loginState = it ?: return@Observer
-      Timber.i("Change in login form state.")
-      // disable login button unless both username / password is valid
-      loginButton.isEnabled = loginState.isDataValid
+    loginViewModel.apply {
+      loginFormState.observe(this@LoginActivity, Observer {
+        val loginState = it ?: return@Observer
+        Timber.i("Change in login form state.")
+        // disable login button unless both username / password is valid
+        loginButton.isEnabled = loginState.isDataValid
 
-      loginState.usernameError?.let {
-        Timber.d("Username not correct")
-        username.error = getString(loginState.usernameError)
-      }
-      loginState.passwordError?.let {
-        Timber.d("Password not correct")
-        password.error = getString(loginState.passwordError)
-      }
-    })
+        loginState.apply {
+          usernameError?.let {
+            Timber.d("Username not correct")
+            username.error = getString(usernameError)
+          }
+          passwordError?.let {
+            Timber.d("Password not correct")
+            password.error = getString(passwordError)
+          }
+        }
+      })
 
-    loginViewModel.loginResult.observe(this@LoginActivity, Observer {
-      val loginResult = it ?: return@Observer
-      Timber.i("Change in login result state.")
+      loginResult.observe(this@LoginActivity, Observer {
+        val loginResult = it ?: return@Observer
+        Timber.i("Change in login result state.")
 
-      loginResult.error?.let {
-        Timber.e("Login not successful")
-        showLoginFailed(loginResult.error)
-      }
-      loginResult.success?.let {
-        Timber.i("Successfully logged in")
-        updateUiWithUser(loginResult.success)
-      }
-      setResult(RESULT_OK)
-    })
+        loginResult.apply {
+          error?.let {
+            Timber.e("Login not successful")
+            showLoginFailed(error)
+          }
+          success?.let {
+            Timber.i("Successfully logged in")
+            updateUiWithUser(success)
+          }
+          setResult(RESULT_OK)
+        }
+      })
+    }
   }
 
   private fun setUpButtons() {
     username.doOnTextChanged { text, _, _, _ ->
-      loginViewModel.loginDataChanged(
-        text.toString(),
-        password.text.toString()
-      )
+      loginViewModel.loginDataChanged(text.toString(), password.text.toString())
     }
 
     password.apply {
       doOnTextChanged { text, _, _, _ ->
-        loginViewModel.loginDataChanged(
-          username.text.toString(),
-          text.toString()
-        )
+        loginViewModel.loginDataChanged(username.text.toString(), text.toString())
       }
 
       setOnEditorActionListener { _, actionId, _ ->
@@ -110,10 +109,7 @@ class LoginActivity : AppCompatActivity() {
           EditorInfo.IME_ACTION_DONE -> {
             Timber.i("User requested log in")
             showLoadDialog()
-            loginViewModel.login(
-              username.text.toString(),
-              password.text.toString()
-            )
+            loginViewModel.login(username.text.toString(), password.text.toString())
           }
         }
         false
@@ -159,11 +155,7 @@ class LoginActivity : AppCompatActivity() {
     val displayName = model.username
     Timber.i("Login successful for $model")
 
-    Toast.makeText(
-      applicationContext,
-      "$welcome $displayName",
-      Toast.LENGTH_LONG
-    ).show()
+    Toast.makeText(applicationContext, "$welcome $displayName", Toast.LENGTH_LONG).show()
 
     Timber.i("Starting HomeScreenActivity")
     val songsActivity = Intent(this, HomeScreenActivity::class.java)

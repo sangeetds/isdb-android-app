@@ -1,11 +1,11 @@
 package com.isdb.login.ui.register
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
@@ -19,6 +19,7 @@ import com.isdb.login.ui.LoadDialog
 import com.isdb.tracks.ui.HomeScreenActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import kotlin.reflect.KClass
 
 /**
  * Class where user enter their login credentials to register to the service
@@ -55,18 +56,13 @@ class RegisterActivity : AppCompatActivity() {
 
   private fun setUpButtons() {
     nameText.doOnTextChanged { text, _, _, _ ->
-      registerViewModel.registerDataChanged(
-        emailText.text.toString(),
-        text.toString(),
-        passwordText.text.toString()
-      )
+      registerViewModel.registerDataChanged(emailText.text.toString(), text.toString(),
+        passwordText.text.toString())
     }
 
     passwordText.apply {
       doOnTextChanged { text, _, _, _ ->
-        registerViewModel.registerDataChanged(
-          emailText.text.toString(),
-          nameText.text.toString(),
+        registerViewModel.registerDataChanged(emailText.text.toString(), nameText.text.toString(),
           text.toString()
         )
       }
@@ -77,9 +73,7 @@ class RegisterActivity : AppCompatActivity() {
             Timber.i("User requested sign up")
             showLoadDialog()
             registerViewModel.register(
-              emailText.text.toString(),
-              nameText.text.toString(),
-              passwordText.text.toString()
+              emailText.text.toString(), nameText.text.toString(), passwordText.text.toString()
             )
           }
         }
@@ -102,42 +96,47 @@ class RegisterActivity : AppCompatActivity() {
   }
 
   private fun setUpObserver() {
-    registerViewModel.registerFormState.observe(this@RegisterActivity, Observer {
-      val registerState = it ?: return@Observer
-      Timber.i("Change in register state")
+    registerViewModel.apply {
+      registerFormState.observe(this@RegisterActivity, Observer {
+        val registerState = it ?: return@Observer
+        Timber.i("Change in register state")
 
-      // disable login button unless both username / password is valid
-      signUpButton.isEnabled = registerState.isDataValid
+        // disable login button unless both username / password is valid
+        signUpButton.isEnabled = registerState.isDataValid
 
-      registerState.emailError?.let {
-        Timber.d("Invalid email entered")
-        emailText.error = getString(registerState.emailError)
-      }
+        registerState.apply {
+          emailError?.let {
+            Timber.d("Invalid email entered")
+            emailText.error = getString(emailError)
+          }
+          usernameError?.let {
+            Timber.d("Invalid username entered")
+            nameText.error = getString(usernameError)
+          }
+          passwordError?.let {
+            Timber.d("Invalid password entered")
+            passwordText.error = getString(passwordError)
+          }
+        }
+      })
 
-      registerState.usernameError?.let {
-        Timber.d("Invalid username entered")
-        nameText.error = getString(registerState.usernameError)
-      }
-      registerState.passwordError?.let {
-        Timber.d("Invalid password entered")
-        passwordText.error = getString(registerState.passwordError)
-      }
-    })
+      registerResult.observe(this@RegisterActivity, Observer {
+        val registerResult = it ?: return@Observer
+        Timber.i("Change in register result")
 
-    registerViewModel.registerResult.observe(this@RegisterActivity, Observer {
-      val registerResult = it ?: return@Observer
-      Timber.i("Change in register result")
-
-      if (registerResult.error != null) {
-        Timber.e("Error while registering")
-        showLoginFailed(registerResult.error)
-      }
-      if (registerResult.success != null) {
-        Timber.i("Registration successful")
-        updateUiWithUser(registerResult.success)
-      }
-      setResult(RESULT_OK)
-    })
+        registerResult.apply {
+          error?.let {
+            Timber.e("Error while registering")
+            showLoginFailed(error)
+          }
+          success?.let {
+            Timber.i("Registration successful")
+            updateUiWithUser(success)
+          }
+          setResult(RESULT_OK)
+        }
+      })
+    }
   }
 
   /**
@@ -170,11 +169,7 @@ class RegisterActivity : AppCompatActivity() {
     val displayName = model.username
     Timber.i("Signup successful for $model")
 
-    Toast.makeText(
-      applicationContext,
-      "$welcome $displayName",
-      Toast.LENGTH_LONG
-    ).show()
+    Toast.makeText(applicationContext, "$welcome $displayName", Toast.LENGTH_LONG).show()
 
     Timber.i("Starting HomeScreenActivity")
     val songsActivity = Intent(this, HomeScreenActivity::class.java)

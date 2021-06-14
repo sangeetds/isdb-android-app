@@ -88,7 +88,7 @@ class LoginViewModelTest {
 
     verify {
       loginFormObserver.onChanged(
-        LoginFormState(isDataValid = false, usernameError = null, passwordError = null))
+        LoginFormState(isDataValid = false, usernameError = string.invalid_email, passwordError = null))
     }
 
     loginViewModel.loginFormState.removeObserver(loginFormObserver)
