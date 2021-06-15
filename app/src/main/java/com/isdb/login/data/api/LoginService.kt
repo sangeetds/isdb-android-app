@@ -16,9 +16,7 @@ interface LoginService {
    * @param user which takes in [User] with the registering credentials
    */
   @POST("/users/register")
-  suspend fun createUser(
-    @Body user: User
-  ): Response<User>
+  suspend fun createUser(@Body user: User): Response<User>
 
   /**
    * Function to make a post request which returns a response from the logging request.
@@ -26,9 +24,7 @@ interface LoginService {
    * @param user which takes in [User] with the logging credentials
    */
   @POST("users/login")
-  suspend fun logInUser(
-    @Body user: User
-  ): Response<User>
+  suspend fun logInUser(@Body user: User): Response<User>
 }
 
 

@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
-import com.isdb.tracks.ui.SearchAdapter.SongSearchViewHolder
-import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.login.data.model.User
+import com.isdb.tracks.data.dto.SongDTO
 import com.isdb.tracks.data.dto.UserSongDTO
+import com.isdb.tracks.ui.SearchAdapter.SongSearchViewHolder
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Job
 import timber.log.Timber
@@ -19,7 +20,7 @@ import timber.log.Timber
 class SearchAdapter(
   val context: Context,
   val user: User?,
-  private val update: (UserSongDTO) -> Job
+  private val update: (UserSongDTO) -> Job,
 ) :
   RecyclerView.Adapter<SongSearchViewHolder>() {
 
@@ -33,7 +34,7 @@ class SearchAdapter(
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
-    viewType: Int
+    viewType: Int,
   ): SongSearchViewHolder {
     val layoutInflater = LayoutInflater.from(parent.context)
     val view = layoutInflater
@@ -44,7 +45,7 @@ class SearchAdapter(
 
   override fun onBindViewHolder(
     holder: SongSearchViewHolder,
-    position: Int
+    position: Int,
   ) {
     val song = songList[position]
 
@@ -52,10 +53,10 @@ class SearchAdapter(
       Timber.i("Rating song ${song.name} and opening up the rating dialog")
       val rateDialog =
         RatingsDialog(
-          context = this.context, song = song, associatedFunction = update, user = user!!,
-          removeRatingsButton = null
+          song = song, associatedFunction = update, user = user!!, removeRatingsButton = null
         )
-      rateDialog.show()
+      rateDialog.show((context as AppCompatActivity).supportFragmentManager.beginTransaction(),
+        "RatingDialog")
     }
 
     holder.songName.text = song.name

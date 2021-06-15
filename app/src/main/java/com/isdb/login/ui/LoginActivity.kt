@@ -54,17 +54,14 @@ class LoginActivity : AppCompatActivity() {
     loginViewModel.apply {
       loginFormState.observe(this@LoginActivity, Observer {
         val loginState = it ?: return@Observer
-        Timber.i("Change in login form state.")
         // disable login button unless both username / password is valid
         loginButton.isEnabled = loginState.isDataValid
 
         loginState.apply {
           usernameError?.let {
-            Timber.d("Username not correct")
             username.error = getString(usernameError)
           }
           passwordError?.let {
-            Timber.d("Password not correct")
             password.error = getString(passwordError)
           }
         }
@@ -127,11 +124,11 @@ class LoginActivity : AppCompatActivity() {
    * Helper function to display the dialog and check the status of the login activity
    */
   private fun showLoadDialog() {
-    progressDialog = LoadDialog(this)
-    progressDialog.show()
+    progressDialog = LoadDialog()
+    progressDialog.show(supportFragmentManager.beginTransaction(), "LoginDialog")
     Timber.i("Load dialog requested.")
 
-    progressDialog.setOnDismissListener {
+    progressDialog.dialog?.setOnDismissListener {
       loginButton.isEnabled = true
     }
   }
@@ -157,7 +154,7 @@ class LoginActivity : AppCompatActivity() {
     songsActivity.putExtra("user", model)
     startActivity(songsActivity)
 
-    progressDialog.cancel()
+    progressDialog.dismiss()
     finish()
   }
 

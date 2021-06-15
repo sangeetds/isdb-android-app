@@ -28,12 +28,11 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
     val user = User(email = username, password = password)
     Timber.i("Making request to the server for user: $user")
 
-    loginRepository.login(user).collect { result ->
-      _loginResult.value = if (result is Result.Success) {
-        LoginResult(success = result.data)
-      } else {
-        LoginResult(error = string.login_failed)
-      }
+    val result =  loginRepository.login(user)
+    _loginResult.value = if (result is Result.Success) {
+      LoginResult(success = result.data)
+    } else {
+      LoginResult(error = string.login_failed)
     }
   }
 

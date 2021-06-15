@@ -96,22 +96,18 @@ class RegisterActivity : AppCompatActivity() {
     registerViewModel.apply {
       registerFormState.observe(this@RegisterActivity, Observer {
         val registerState = it ?: return@Observer
-        Timber.i("Change in register state")
 
         // disable login button unless both username / password is valid
         signUpButton.isEnabled = registerState.isDataValid
 
         registerState.apply {
           emailError?.let {
-            Timber.d("Invalid email entered")
             emailText.error = getString(emailError)
           }
           usernameError?.let {
-            Timber.d("Invalid username entered")
             nameText.error = getString(usernameError)
           }
           passwordError?.let {
-            Timber.d("Invalid password entered")
             passwordText.error = getString(passwordError)
           }
         }
@@ -140,11 +136,11 @@ class RegisterActivity : AppCompatActivity() {
    * Helper function to display the dialog and check the status of the sign-up activity
    */
   private fun showLoadDialog() {
-    val progressDialog = LoadDialog(context = this)
-    progressDialog.show()
+    val progressDialog = LoadDialog()
+    progressDialog.show(supportFragmentManager.beginTransaction(), "Register Dialog")
     Timber.i("Load dialog requested.")
 
-    progressDialog.setOnDismissListener {
+    progressDialog.dialog?.setOnDismissListener {
       signUpButton.isEnabled = true
     }
   }
@@ -173,7 +169,7 @@ class RegisterActivity : AppCompatActivity() {
     songsActivity.putExtra("user", model)
     startActivity(songsActivity)
 
-    progressDialog.cancel()
+    progressDialog.dismiss()
     finish()
   }
 

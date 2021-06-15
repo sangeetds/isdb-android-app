@@ -11,11 +11,7 @@ import javax.inject.Inject
 
 class RegisterRepository @Inject constructor(private val loginService: LoginService) {
 
-  fun register(user: User) = flow {
-    emit(update(user))
-  }
-
-  private suspend fun update(user: User): Result<User> =
+  suspend fun register(user: User) =
     try {
       loginService.createUser(user).run {
         when {

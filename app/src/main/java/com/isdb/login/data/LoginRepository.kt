@@ -16,11 +16,7 @@ import javax.inject.Inject
 
 class LoginRepository @Inject constructor(private val loginService: LoginService) {
 
-  fun login(user: User) = flow {
-    emit(update(user))
-  }
-
-  private suspend fun update(user: User): Result<User> =
+  suspend fun login(user: User) =
     try {
       this.loginService.logInUser(user = user).run {
         when {

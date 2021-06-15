@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,7 @@ import timber.log.Timber
 class SongAdapter(
   val context: Context,
   private val update: (UserSongDTO) -> Job,
-  val user: User?
+  val user: User?,
 ) :
   ListAdapter<SongDTO, SongViewHolder>(SongCallBack()) {
 
@@ -37,7 +38,7 @@ class SongAdapter(
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
-    viewType: Int
+    viewType: Int,
   ): SongViewHolder {
     val layoutInflater = LayoutInflater.from(parent.context)
     val view = layoutInflater
@@ -48,7 +49,7 @@ class SongAdapter(
 
   override fun onBindViewHolder(
     holder: SongViewHolder,
-    position: Int
+    position: Int,
   ) {
     val song = this.songList[position]
 
@@ -67,10 +68,10 @@ class SongAdapter(
       Timber.i("Rating song ${song.name} and opening up the rating dialog")
       val rateDialog =
         RatingsDialog(
-          context = this.context, song = song, associatedFunction = update,
-          user = user!!, removeRatingsButton
+          song = song, associatedFunction = update, user = user!!, removeRatingsButton
         )
-      rateDialog.show()
+      rateDialog.show((context as AppCompatActivity).supportFragmentManager.beginTransaction(),
+        "RatingDialog")
     }
 
     val highestResolutionImage = song.image.maxByOrNull { (_, height, width) -> height / width }!!
@@ -83,13 +84,13 @@ class SongAdapter(
 class SongCallBack : DiffUtil.ItemCallback<SongDTO>() {
   override fun areItemsTheSame(
     oldItem: SongDTO,
-    newItem: SongDTO
+    newItem: SongDTO,
   ) =
     oldItem.id == newItem.id
 
   override fun areContentsTheSame(
     oldItem: SongDTO,
-    newItem: SongDTO
+    newItem: SongDTO,
   ) =
     oldItem == newItem
 }
