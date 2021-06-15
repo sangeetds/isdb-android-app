@@ -10,7 +10,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
@@ -45,7 +44,7 @@ class SearchFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View? {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_search, container, false)
@@ -64,32 +63,39 @@ class SearchFragment : Fragment() {
     val songSearchView = inflate.findViewById<EditText>(R.id.song_search_view)
     val searchParentView = inflate.findViewById<TextInputLayout>(R.id.search_parent)
 
-    songSearchView?.setOnClickListener {
-      searchParentView?.startIconDrawable?.setVisible(false, true)
+    setUpViews(songSearchView, searchParentView, recyclerView)
+
+    return inflate
+  }
+
+  private fun setUpViews(
+    songSearchView: EditText,
+    searchParentView: TextInputLayout,
+    recyclerView: RecyclerView,
+  ) {
+    songSearchView.setOnClickListener {
+      searchParentView.startIconDrawable?.setVisible(false, true)
     }
 
-    songSearchView?.doOnTextChanged { text, _, _, _ ->
-      if (text!!.isNotEmpty() && text.length > 1) {
+    songSearchView.doOnTextChanged { text, _, _, _ ->
+      if (text!!.isNotEmpty()) {
         recyclerView.visibility = View.VISIBLE
         viewModel.getSongs(text.toString(), userId = user!!.id)
       }
     }
 
-    songSearchView?.setOnEditorActionListener { view, actionId, _ ->
+    songSearchView.setOnEditorActionListener { view, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE && view.text.isNotEmpty()) {
         recyclerView.visibility = View.VISIBLE
         viewModel.getSongs(view.text.toString(), userId = user!!.id)
       }
-
       true
     }
-
-    return inflate
   }
 
   override fun onViewCreated(
     view: View,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ) {
     super.onViewCreated(view, savedInstanceState)
 
@@ -99,8 +105,7 @@ class SearchFragment : Fragment() {
 
       if (song.isNotEmpty()) {
         Timber.i("New songs load up: ${song.map { s -> s.name }}")
-        songSearchAdapter.songList = song.toMutableList()
-        songSearchAdapter.notifyDataSetChanged()
+        songSearchAdapter.submitList(song.toMutableList())
       }
     })
   }
@@ -115,7 +120,7 @@ class SearchFragment : Fragment() {
      */
     @JvmStatic
     fun newInstance(
-      user: User
+      user: User,
     ) =
       SearchFragment().apply {
         arguments = Bundle().apply {

@@ -15,7 +15,7 @@ import kotlinx.coroutines.*
 @AndroidEntryPoint
 class HomeScreenActivity : AppCompatActivity() {
 
-  private var toolbar: Toolbar? = null
+  private lateinit var toolbar: Toolbar
   private lateinit var user: User
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,11 +25,8 @@ class HomeScreenActivity : AppCompatActivity() {
     user = intent.extras?.getParcelable("user")!!
 
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
     toolbar = findViewById(R.id.toolbar)
     setSupportActionBar(toolbar)
-
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
     bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener)

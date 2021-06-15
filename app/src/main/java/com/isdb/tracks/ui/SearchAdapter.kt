@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
 import com.isdb.login.data.model.User
@@ -22,9 +24,7 @@ class SearchAdapter(
   val user: User?,
   private val update: (UserSongDTO) -> Job,
 ) :
-  RecyclerView.Adapter<SongSearchViewHolder>() {
-
-  var songList = mutableListOf<SongDTO>()
+  ListAdapter<SongDTO, SongSearchViewHolder>(SongItemDiffCallback()) {
 
   class SongSearchViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
     val image: ImageView = cardView.findViewById(R.id.small_song_image)
@@ -47,7 +47,7 @@ class SearchAdapter(
     holder: SongSearchViewHolder,
     position: Int,
   ) {
-    val song = songList[position]
+    val song = getItem(position)
 
     holder.itemView.setOnClickListener {
       Timber.i("Rating song ${song.name} and opening up the rating dialog")
@@ -62,10 +62,20 @@ class SearchAdapter(
     holder.songName.text = song.name
     holder.albumName.text = song.album
 
-    val smallestResolutionImage = song.image.minByOrNull { (_, height, width) -> height / width }!!
-
-    Picasso.get().load(smallestResolutionImage.url).into(holder.image)
+    val smallestResolutionImage = song.image.minByOrNull { (_, height, width) -> height / width }
+    Picasso.get().load(smallestResolutionImage?.url).into(holder.image)
   }
+}
 
-  override fun getItemCount(): Int = this.songList.size
+class SongItemDiffCallback : DiffUtil.ItemCallback<SongDTO>() {
+
+  override fun areItemsTheSame(
+    oldItem: SongDTO,
+    newItem: SongDTO,
+  ): Boolean = oldItem == newItem
+
+  override fun areContentsTheSame(
+    oldItem: SongDTO,
+    newItem: SongDTO,
+  ): Boolean = oldItem == newItem
 }

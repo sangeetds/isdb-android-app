@@ -27,8 +27,6 @@ class SongAdapter(
 ) :
   ListAdapter<SongDTO, SongViewHolder>(SongCallBack()) {
 
-  val songList = mutableListOf<SongDTO>()
-
   class SongViewHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
     val image: ImageView = cardView.findViewById(R.id.song_image)
     val songName: TextView = cardView.findViewById(R.id.song_name)
@@ -51,7 +49,7 @@ class SongAdapter(
     holder: SongViewHolder,
     position: Int,
   ) {
-    val song = this.songList[position]
+    val song = getItem(position)
 
     holder.songName.text = song.name
     holder.fanScore.text = String.format("%.2f", song.userRatings)
@@ -77,8 +75,6 @@ class SongAdapter(
     val highestResolutionImage = song.image.maxByOrNull { (_, height, width) -> height / width }
     Picasso.get().load(highestResolutionImage?.url).into(holder.image)
   }
-
-  override fun getItemCount(): Int = this.songList.size
 }
 
 class SongCallBack : DiffUtil.ItemCallback<SongDTO>() {

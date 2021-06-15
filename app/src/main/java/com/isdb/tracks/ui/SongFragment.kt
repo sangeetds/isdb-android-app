@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.isdb.R
@@ -42,7 +41,7 @@ class SongFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View? {
     // Inflate the layout for this fragment
     val inflate = inflater.inflate(R.layout.fragment_song, container, false)
@@ -64,7 +63,7 @@ class SongFragment : Fragment() {
 
   override fun onViewCreated(
     view: View,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ) {
     super.onViewCreated(view, savedInstanceState)
 
@@ -74,8 +73,7 @@ class SongFragment : Fragment() {
 
       if (song is Success<List<SongDTO>> && song.data.isNotEmpty()) {
         Timber.i("New songs load up: ${song.data.map { s -> s.name }}")
-        songAdapter.songList.addAll(song.data)
-        songAdapter.notifyDataSetChanged()
+        songAdapter.submitList(song.data)
       }
     })
   }
