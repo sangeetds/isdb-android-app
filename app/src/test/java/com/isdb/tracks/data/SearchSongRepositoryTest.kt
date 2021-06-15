@@ -24,7 +24,7 @@ import java.net.SocketTimeoutException
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class SongRepositoryTest {
+class SearchSongRepositoryTest {
 
   @get:Rule
   val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -32,12 +32,12 @@ class SongRepositoryTest {
   @get:Rule
   val testCoroutineRule = TestCoroutineRule()
 
-  private lateinit var songRepository: SongRepository
+  private lateinit var searchSongRepository: SearchSongRepository
   private val songService: SongService = mockk()
 
   @Before
   fun setup() {
-    songRepository = SongRepository(songService)
+    searchSongRepository = SearchSongRepository(songService)
   }
 
   @Test
@@ -48,7 +48,7 @@ class SongRepositoryTest {
       SongDTO(name = songName, isUserRated = true))
     coEvery { songService.getSongs(songName, userId) } returns Response.success(songDTOs)
 
-    val login = songRepository.getSongs(songName, userId)
+    val login = searchSongRepository.getSongs(songName, userId)
 
     Truth.assertThat(login).isNotNull()
     Truth.assertThat(login).isInstanceOf(Success::class.java)
@@ -65,7 +65,7 @@ class SongRepositoryTest {
         .toResponseBody("application/json".toMediaTypeOrNull())
     )
 
-    val login = songRepository.getSongs(songName, userId)
+    val login = searchSongRepository.getSongs(songName, userId)
 
     Truth.assertThat(login).isNotNull()
     Truth.assertThat(login).isInstanceOf(Error::class.java)
@@ -77,7 +77,7 @@ class SongRepositoryTest {
     val userId = "userId"
     coEvery { songService.getSongs(songName, userId) } throws SocketTimeoutException()
 
-    val login = songRepository.getSongs(songName, userId)
+    val login = searchSongRepository.getSongs(songName, userId)
 
     Truth.assertThat(login).isNotNull()
     Truth.assertThat(login).isInstanceOf(Error::class.java)
