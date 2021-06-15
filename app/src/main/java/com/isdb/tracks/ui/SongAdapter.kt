@@ -74,8 +74,8 @@ class SongAdapter(
         "RatingDialog")
     }
 
-    val highestResolutionImage = song.image.maxByOrNull { (_, height, width) -> height / width }!!
-    Picasso.get().load(highestResolutionImage.url).into(holder.image)
+    val highestResolutionImage = song.image.maxByOrNull { (_, height, width) -> height / width }
+    Picasso.get().load(highestResolutionImage?.url).into(holder.image)
   }
 
   override fun getItemCount(): Int = this.songList.size

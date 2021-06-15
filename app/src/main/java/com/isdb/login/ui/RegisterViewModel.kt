@@ -10,7 +10,6 @@ import com.isdb.login.data.RegisterRepository
 import com.isdb.login.data.Result
 import com.isdb.login.data.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -30,13 +29,13 @@ class RegisterViewModel @Inject constructor(private val registerRepository: Regi
       val user = User(email = email, username = username, password = password)
       Timber.i("Making request to the server for user: $user")
 
-      registerRepository.register(user).collect { result ->
-        _registerResult.value = if (result is Result.Success) {
+      val result = registerRepository.register(user)
+      _registerResult.value = if (result is Result.Success) {
           RegisterResult(success = result.data)
         } else {
           RegisterResult(error = string.login_failed)
         }
-      }
+
     }
 
   fun registerDataChanged(email: String, username: String, password: String) {

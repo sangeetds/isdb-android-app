@@ -1,9 +1,8 @@
 package com.isdb.login.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.google.common.truth.Truth.assertThat
+import com.google.common.truth.Truth
 import com.isdb.TestCoroutineRule
-import com.isdb.login.data.Result.Error
 import com.isdb.login.data.Result.Success
 import com.isdb.login.data.api.LoginService
 import com.isdb.login.data.model.User
@@ -24,7 +23,7 @@ import java.net.SocketTimeoutException
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class LoginRepositoryTest {
+class RegisterRepositoryTest {
 
   @get:Rule
   val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -32,24 +31,24 @@ class LoginRepositoryTest {
   @get:Rule
   val testCoroutineRule = TestCoroutineRule()
 
-  private lateinit var loginRepository: LoginRepository
+  private lateinit var registerRepository: RegisterRepository
   private val loginService: LoginService = mockk()
   private val user = User(username = "Sangeet", password = "sangeet", email = "sangeet@gmail.com")
 
   @Before
   fun setup() {
-    loginRepository = LoginRepository(loginService)
+    registerRepository = RegisterRepository(loginService)
   }
 
   @Test
   fun `login user when success network call`() = testCoroutineRule.runBlockingTest {
     coEvery { loginService.logInUser(user) } returns Response.success(user)
 
-    val login = loginRepository.login(user)
+    val register = registerRepository.register(user)
 
-    assertThat(login).isNotNull()
-    assertThat(login).isInstanceOf(Success::class.java)
-    assertThat(login).isEqualTo(Success(user))
+    Truth.assertThat(register).isNotNull()
+    Truth.assertThat(register).isInstanceOf(Success::class.java)
+    Truth.assertThat(register).isEqualTo(Success(user))
   }
 
   @Test
@@ -60,19 +59,19 @@ class LoginRepositoryTest {
         .toResponseBody("application/json".toMediaTypeOrNull())
     )
 
-    val login = loginRepository.login(user)
+    val register = registerRepository.register(user)
 
-    assertThat(login).isNotNull()
-    assertThat(login).isInstanceOf(Error::class.java)
+    Truth.assertThat(register).isNotNull()
+    Truth.assertThat(register).isInstanceOf(Error::class.java)
   }
 
   @Test
   fun `login user when failed network call throws exception`() = testCoroutineRule.runBlockingTest {
     coEvery { loginService.logInUser(user) } throws SocketTimeoutException()
 
-    val login = loginRepository.login(user)
+    val login = registerRepository.register(user)
 
-    assertThat(login).isNotNull()
-    assertThat(login).isInstanceOf(Error::class.java)
+    Truth.assertThat(login).isNotNull()
+    Truth.assertThat(login).isInstanceOf(Error::class.java)
   }
 }

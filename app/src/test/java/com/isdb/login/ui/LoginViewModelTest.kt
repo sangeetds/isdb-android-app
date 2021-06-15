@@ -9,12 +9,12 @@ import com.isdb.login.data.LoginRepository
 import com.isdb.login.data.Result.Error
 import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -50,12 +50,12 @@ class LoginViewModelTest {
 
   @Test
   fun `register user when successful registration`() = testCoroutineRule.runBlockingTest {
-    every { loginRepository.login(user) } returns flowOf(Success(user))
+    coEvery { loginRepository.login(user) } returns Success(user)
 
     loginViewModel.login(user.email, user.password)
     loginViewModel.loginResult.observeForever(loginResultObserver)
 
-    verify { loginRepository.login(user = user) }
+    coVerify { loginRepository.login(user = user) }
     verify { loginResultObserver.onChanged(LoginResult(success = user, error = null)) }
 
     loginViewModel.loginResult.removeObserver(loginResultObserver)
@@ -63,16 +63,12 @@ class LoginViewModelTest {
 
   @Test
   fun `register user when unsuccessful registration`() = testCoroutineRule.runBlockingTest {
-    every { loginRepository.login(user) } returns flowOf(
-      Error(
-        Exception("Unsuccessful Registration")
-      )
-    )
+    coEvery { loginRepository.login(user) } returns Error(Exception("Unsuccessful Registration"))
 
     loginViewModel.login(user.email, user.password)
     loginViewModel.loginResult.observeForever(loginResultObserver)
 
-    verify { loginRepository.login(user = user) }
+    coVerify { loginRepository.login(user = user) }
     verify {
       loginResultObserver.onChanged(LoginResult(error = string.login_failed, success = null))
     }

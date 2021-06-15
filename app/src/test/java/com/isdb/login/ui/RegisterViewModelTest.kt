@@ -9,15 +9,12 @@ import com.isdb.login.data.RegisterRepository
 import com.isdb.login.data.Result.Error
 import com.isdb.login.data.Result.Success
 import com.isdb.login.data.model.User
-import com.isdb.login.ui.RegisterFormState
-import com.isdb.login.ui.RegisterResult
-import com.isdb.login.ui.RegisterViewModel
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -53,12 +50,12 @@ class RegisterViewModelTest {
 
   @Test
   fun `register user when successful registration`() = testCoroutineRule.runBlockingTest {
-    every { registerRepository.register(user) } returns flowOf(Success(user))
+    coEvery { registerRepository.register(user) } returns Success(user)
 
     registerViewModel.register(user.email, user.username, user.password)
     registerViewModel.registerResult.observeForever(registerResultObserver)
 
-    verify { registerRepository.register(user = user) }
+    coVerify { registerRepository.register(user = user) }
     verify { registerResultObserver.onChanged(RegisterResult(success = user, error = null)) }
 
     registerViewModel.registerResult.removeObserver(registerResultObserver)
@@ -66,16 +63,12 @@ class RegisterViewModelTest {
 
   @Test
   fun `register user when unsuccessful registration`() = testCoroutineRule.runBlockingTest {
-    every { registerRepository.register(user) } returns flowOf(
-      Error(
-        Exception("Unsuccessful Registration")
-      )
-    )
+    coEvery { registerRepository.register(user) } returns Error(Exception("Unsuccessful Registration"))
 
     registerViewModel.register(user.email, user.username, user.password)
     registerViewModel.registerResult.observeForever(registerResultObserver)
 
-    verify { registerRepository.register(user = user) }
+    coVerify { registerRepository.register(user = user) }
     verify {
       registerResultObserver.onChanged(RegisterResult(error = string.login_failed, success = null))
     }
