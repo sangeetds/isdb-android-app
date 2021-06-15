@@ -34,8 +34,6 @@ class LoginViewModelTest {
   val testCoroutineRule = TestCoroutineRule()
 
   private lateinit var loginViewModel: LoginViewModel
-  private lateinit var loginResult: LiveData<LoginResult>
-  private lateinit var loginForm: LiveData<LoginFormState>
   private val loginResultObserver: Observer<LoginResult> = spyk()
   private val loginFormObserver: Observer<LoginFormState> = spyk()
   private val loginRepository: LoginRepository = mockk()
@@ -44,8 +42,6 @@ class LoginViewModelTest {
   @Before
   fun setUp() {
     loginViewModel = LoginViewModel(loginRepository)
-    loginResult = loginViewModel.loginResult
-    loginForm = loginViewModel.loginFormState
   }
 
   @Test

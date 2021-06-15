@@ -34,8 +34,6 @@ class RegisterViewModelTest {
   val testCoroutineRule = TestCoroutineRule()
 
   private lateinit var registerViewModel: RegisterViewModel
-  private lateinit var registerResult: LiveData<RegisterResult>
-  private lateinit var registerForm: LiveData<RegisterFormState>
   private val registerResultObserver: Observer<RegisterResult> = spyk()
   private val registerFormObserver: Observer<RegisterFormState> = spyk()
   private val registerRepository: RegisterRepository = mockk()
@@ -44,8 +42,6 @@ class RegisterViewModelTest {
   @Before
   fun setUp() {
     registerViewModel = RegisterViewModel(registerRepository)
-    registerResult = registerViewModel.registerResult
-    registerForm = registerViewModel.registerFormState
   }
 
   @Test
